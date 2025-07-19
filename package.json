@@ -6,7 +6,8 @@
   "type": "module",
     "workspaces": [
     "root",
-    "footer"
+    "footer",
+    "finance-project-react"
   ],
   "scripts": {
     "start:root": "npm --workspace root start",
