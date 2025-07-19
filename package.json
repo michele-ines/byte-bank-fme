@@ -3,10 +3,24 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-    "type": "module",
-
+  "type": "module",
+    "workspaces": [
+    "root",
+    "footer"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:root": "npm --workspace root start",
+    "start:footer": "npm --workspace footer start",
+    "build:root": "npm --workspace root run build",
+    "build:footer": "npm --workspace footer run build",
+    "lint:root": "npm --workspace root run lint",
+    "lint:footer": "npm --workspace footer run lint",
+    "test:root": "npm --workspace root test",
+    "test:footer": "npm --workspace footer test",
+    "start:all": "concurrently \"npm run start:root\" \"npm run start:footer\""
+  },
+    "devDependencies": {
+    "concurrently": "^8.0.1"
   },
   "author": "pos graduacao",
   "license": "ISC"
