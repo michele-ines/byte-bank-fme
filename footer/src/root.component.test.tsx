@@ -8,6 +8,6 @@ describe("Root component", () => {
     const { getByText } = render(<Root name="Testapp" />);
 
     // 👇 Change this line to look for the correct text
-    expect(getByText(/Hello World!!/i)).toBeInTheDocument();
+    expect(getByText(/Footer/i)).toBeInTheDocument();
   });
 });

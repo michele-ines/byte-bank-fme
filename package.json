@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "type": "module",
-    "workspaces": [
+  "workspaces": [
     "root",
     "footer",
     "finance-project-react"
@@ -12,15 +12,19 @@
   "scripts": {
     "start:root": "npm --workspace root start",
     "start:footer": "npm --workspace footer start",
+    "start:finance": "npm --workspace finance-project-react start",
     "build:root": "npm --workspace root run build",
     "build:footer": "npm --workspace footer run build",
+    "build:finance": "npm --workspace finance-project-react run build",
     "lint:root": "npm --workspace root run lint",
     "lint:footer": "npm --workspace footer run lint",
+    "lint:finance": "npm --workspace finance-project-react run lint",
     "test:root": "npm --workspace root test",
     "test:footer": "npm --workspace footer test",
-    "start:all": "concurrently \"npm run start:root\" \"npm run start:footer\""
+    "test:finance": "npm --workspace finance-project-react test",
+    "start:all": "concurrently \"npm run start:root\" \"npm run start:footer\" \"npm run start:finance\""
   },
-    "devDependencies": {
+  "devDependencies": {
     "concurrently": "^8.0.1"
   },
   "author": "pos graduacao",
