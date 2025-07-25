@@ -7,25 +7,41 @@ module.exports = {
   devServer: {
     port: 3001,
     historyApiFallback: true,
-    headers: {
-      "Access-Control-Allow-Origin": "*"
-    }
+    headers: { 'Access-Control-Allow-Origin': '*' }
   },
-  output: {
-    publicPath: "auto"
-  },
+  output: { publicPath: 'auto' },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js']
+    extensions: ['.tsx', '.ts', '.js', '.scss'],
+    alias: {
+      'react/jsx-runtime': require.resolve('react/jsx-runtime')
+    }
   },
   module: {
     rules: [
       {
+        test: /\.m?js$/,
+        resolve: { fullySpecified: false }
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              implementation: require('sass'),
+          
+            }
+          }
+        ]
+      },
+      {
         test: /\.tsx?$/,
         loader: 'ts-loader',
-        options: {
-          transpileOnly: true
-        },
-        exclude: /node_modules/,
+        options: { transpileOnly: true },
+        exclude: /node_modules/
       },
       {
         test: /\.css$/i,
@@ -38,20 +54,16 @@ module.exports = {
       name: 'header',
       filename: 'remoteEntry.js',
       exposes: {
-       "./HeaderPublic": "./src/shared/HeaderPublic.tsx",
-        "./HeaderPrivate": "./src/shared/HeaderPrivate.tsx"
+        './HeaderPublic': './src/shared/HeaderPublic.tsx',
+        './HeaderPrivate': './src/shared/HeaderPrivate.tsx'
       },
-      remotes: {
-
-      },
+      remotes: {},
       shared: {
-        react: { singleton: true, eager: false, requiredVersion: '^17.0.2' },
-        'react-dom': { singleton: true, eager: false, requiredVersion: '^17.0.2' },
-        'react-router-dom': { singleton: true, eager: false }
+        react:             { singleton: true, requiredVersion: '^17.0.2' },
+        'react-dom':       { singleton: true, requiredVersion: '^17.0.2' },
+        'react-router-dom':{ singleton: true }
       }
     }),
-    new HtmlWebpackPlugin({
-      template: './public/index.html'
-    })
+    new HtmlWebpackPlugin({ template: './public/index.html' })
   ]
 };
