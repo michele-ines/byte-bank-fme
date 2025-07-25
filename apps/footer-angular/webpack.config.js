@@ -1,10 +1,11 @@
-// webpack.config.js
+// apps/footer-angular/webpack.config.js
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { container: { ModuleFederationPlugin } } = require('webpack');
 
 module.exports = {
-  entry: './src/index.ts',
+  // agora aponta para o arquivo em src/shared
+  entry: './src/shared/define-footer.ts',
   mode: 'development',
 
   // Faz o dev-server rodar em localhost:4200
@@ -30,9 +31,7 @@ module.exports = {
   // Aqui dizemos ao Webpack para silenciar especificamente esse warning
   ignoreWarnings: [
     {
-      // qualquer módulo que venha do sass‑loader…
       module: /sass-loader/,
-      // …com a mensagem “legacy JS API is deprecated”
       message: /legacy JS API is deprecated/
     }
   ],
@@ -53,12 +52,8 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
-              // garante que use Dart Sass
               implementation: require('sass'),
-              // suprime warnings de dependências
-              sassOptions: {
-                quietDeps: true
-              }
+              sassOptions: { quietDeps: true }
             }
           }
         ]
@@ -71,7 +66,8 @@ module.exports = {
       name: 'footer',
       filename: 'remoteEntry.js',
       exposes: {
-        './define': './src/define-footer.ts'
+        // também ajustado para src/shared
+        './define': './src/shared/define-footer.ts'
       }
     }),
     new HtmlWebpackPlugin({
