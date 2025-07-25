@@ -1,14 +1,13 @@
-// apps/footer-angular/webpack.config.js
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { container: { ModuleFederationPlugin } } = require('webpack');
 
 module.exports = {
-  // agora aponta para o arquivo em src/shared
+  // Entrada principal do microfrontend
   entry: './src/shared/define-footer.ts',
   mode: 'development',
 
-  // Faz o dev-server rodar em localhost:4200
+  // Configurações do servidor de desenvolvimento
   devServer: {
     port: 4200,
     historyApiFallback: true,
@@ -17,18 +16,19 @@ module.exports = {
     }
   },
 
-  // Pasta de saída e publicPath automático para microfrontends
+  // Saída e publicPath automático (recomendado para MFEs)
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
     publicPath: 'auto'
   },
 
+  // Adiciona suporte à extensão .scss
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: ['.ts', '.js', '.scss']
   },
 
-  // Aqui dizemos ao Webpack para silenciar especificamente esse warning
+  // Ignora warnings do sass-loader legacy
   ignoreWarnings: [
     {
       module: /sass-loader/,
@@ -42,13 +42,14 @@ module.exports = {
         test: /\.ts$/,
         loader: 'ts-loader',
         options: { transpileOnly: true },
-        exclude: /node_modules/,
+        exclude: /node_modules/
       },
       {
-        test: /\.scss$/,
+        test: /\.s[ac]ss$/i,
         use: [
           'style-loader',
           'css-loader',
+          'postcss-loader', // adicionado postcss para compatibilidade com Tailwind, autoprefixer etc.
           {
             loader: 'sass-loader',
             options: {
@@ -66,7 +67,6 @@ module.exports = {
       name: 'footer',
       filename: 'remoteEntry.js',
       exposes: {
-        // também ajustado para src/shared
         './define': './src/shared/define-footer.ts'
       }
     }),

@@ -15,7 +15,7 @@ module.exports = {
     publicPath: "auto"
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js']
+    extensions: ['.tsx', '.ts', '.js', '.scss'] // ✅ Adiciona .scss
   },
   module: {
     rules: [
@@ -26,6 +26,20 @@ module.exports = {
           transpileOnly: true
         },
         exclude: /node_modules/,
+      },
+      {
+        test: /\.s[ac]ss$/i, // ✅ Sass e SCSS
+        use: [
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              implementation: require('sass')
+            }
+          }
+        ]
       },
       {
         test: /\.css$/i,
@@ -42,9 +56,7 @@ module.exports = {
         "./Cadastro": "./src/pages/Cadastro.tsx",
         "./Login": "./src/pages/Login.tsx"
       },
-      remotes: {
-
-      },
+      remotes: {},
       shared: {
         react: { singleton: true, eager: false, requiredVersion: '^17.0.2' },
         'react-dom': { singleton: true, eager: false, requiredVersion: '^17.0.2' },
