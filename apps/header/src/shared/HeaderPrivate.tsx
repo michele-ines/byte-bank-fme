@@ -1,28 +1,108 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { useNavigate, useLocation, NavLink } from "react-router-dom";
+import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
 
-type Props = { currentPath?: string };
+const ROUTES = {
+  ROOT: "/",
+  DASHBOARD: "/dashboard",
+  REGISTER: "/cadastro",
+  LOGIN: "/login",
+};
 
-export default function HeaderPrivate({ currentPath }: Props) {
-  const linkCls = (path: string) =>
-    `mx-4 ${currentPath === path ? 'underline' : ''} text-brandGreen font-medium`;
+export default function HeaderPrivate() {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  
+
+  const isActive = (route: string) =>
+    pathname === route || pathname.startsWith(route + "/");
+
+  const linkStyle = (path: string) => ({
+    color: "#47a138",
+    fontWeight: 500,
+    textTransform: "none",
+    marginLeft: "16px",
+    marginRight: "16px",
+    textDecoration: isActive(path) ? "underline" : "none",
+  });
 
   return (
-    <header className="w-full p-4 flex justify-between items-center" style={{ background: '#004D61' }}>
-      <div className="flex items-center gap-8">
-        <div className="text-xl font-bold" style={{ color: '#47a138' }}>Bytebank</div>
-        <nav className="hidden md:flex items-center">
-          <Link to="/dashboard" className={linkCls('/dashboard')}>Início</Link>
-          <Link to="/meus-cartoes" className={linkCls('/meus-cartoes')}>Meus cartões</Link>
-          <Link to="/investimentos" className={linkCls('/investimentos')}>Investimentos</Link>
-          <Link to="/outros-servicos" className={linkCls('/outros-servicos')}>Outros serviços</Link>
-        </nav>
-      </div>
+    <AppBar position="static" elevation={0} sx={{ backgroundColor: "#004D61" }}>
+      <Toolbar sx={{ justifyContent: "space-between", padding: 2 }}>
+        {/* Logo + Menu */}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+          {/* Logo texto ou imagem */}
+          <NavLink
+            to={ROUTES.ROOT}
+            className={({ isActive }) => (isActive ? "activeLink" : "")}
+          >
+            <img
+              src="/header/header-logo.svg"
+              alt="Logo Bytebank"
+              style={{ height: 32, cursor: "pointer", paddingLeft: 10 }}
+            />
+          </NavLink>
 
-      <div className="hidden md:flex items-center gap-2 text-white">
-        <span className="mr-2">Joana da Silva Oliveira</span>
-        <span className="w-8 h-8 rounded-full bg-brandGreen flex items-center justify-center text-black font-bold">J</span>
-      </div>
-    </header>
+          {/* Navegação */}
+          <Box
+            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
+          >
+            <Button
+              sx={linkStyle("/dashboard")}
+              onClick={() => navigate("/dashboard")}
+            >
+              Início
+            </Button>
+            <Button
+              sx={linkStyle("/meus-cartoes")}
+              onClick={() => navigate("/meus-cartoes")}
+            >
+              Meus cartões
+            </Button>
+            <Button
+              sx={linkStyle("/investimentos")}
+              onClick={() => navigate("/investimentos")}
+            >
+              Investimentos
+            </Button>
+            <Button
+              sx={linkStyle("/outros-servicos")}
+              onClick={() => navigate("/outros-servicos")}
+            >
+              Outros serviços
+            </Button>
+          </Box>
+        </Box>
+
+        {/* Usuário */}
+        <Box
+          sx={{
+            display: { xs: "none", md: "flex" },
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <Typography sx={{ color: "#ffffff", marginRight: 1 }}>
+            Joana da Silva Oliveira
+          </Typography>
+          <Box
+            sx={{
+              width: 32,
+              height: 32,
+              borderRadius: "50%",
+              backgroundColor: "#47a138",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#000000",
+              fontWeight: "bold",
+              fontSize: "0.9rem",
+            }}
+          >
+            J
+          </Box>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 }
