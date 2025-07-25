@@ -1,0 +1,37 @@
+{
+  "name": "byte-bank-fme",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "start": "npm run start:all",
+    "start:all": "concurrently -n \"ROOT,HEADER,HOME,DASH,FOOTER\" -c \"blue,magenta,green,yellow,cyan\" \"npm run start -w apps/root\" \"npm run start -w apps/header\" \"npm run start -w apps/home\" \"npm run start -w apps/dashboard\" \"npm run start -w apps/footer-angular\""
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.16",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.10.0",
+    "html-webpack-plugin": "^5.6.0",
+    "postcss": "^8.4.31",
+    "postcss-loader": "^7.3.3",
+    "style-loader": "^3.3.4",
+    "stylelint": "^16.22.0",
+    "stylelint-config-standard": "^38.0.0",
+    "stylelint-config-tailwindcss": "^1.0.0",
+    "tailwindcss": "^3.4.4",
+    "ts-loader": "^9.2.6",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.2.0",
+    "@mui/material": "^7.2.0",
+    "@mui/styles": "^6.5.0"
+  }
+}
