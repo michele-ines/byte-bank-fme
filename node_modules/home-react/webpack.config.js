@@ -53,8 +53,8 @@ module.exports = {
       filename: 'remoteEntry.js',
       exposes: {
         "./Home": "./src/pages/Home.tsx",
-        "./Cadastro": "./src/pages/Cadastro.tsx",
-        "./Login": "./src/pages/Login.tsx"
+        "./Cadastro": "./src/pages/cadastro/Cadastro.tsx",
+        "./Login": "./src/pages/login/Login.tsx"
       },
       remotes: {},
       shared: {

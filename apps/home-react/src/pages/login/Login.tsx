@@ -1,6 +1,6 @@
 import React from 'react';
-import { AbrirContaButton, JaTenhoContaButton } from '../components/Buttons';
 import { Link, useNavigate } from 'react-router-dom';
+import { AbrirContaButton, JaTenhoContaButton } from '../../../../components/Buttons';
 
 export default function Login() {
   const navigate = useNavigate();

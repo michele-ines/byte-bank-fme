@@ -1,9 +1,9 @@
 {
-  "name": "home",
+  "name": "dashboard-react",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env PORT=3002 webpack serve --config webpack.config.js --color",
+    "start": "cross-env PORT=3003 webpack serve --config webpack.config.js --color",
     "build": "webpack --config webpack.config.js",
     "test": "jest"
   },

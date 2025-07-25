@@ -1,5 +1,5 @@
 import React from 'react';
-import { AbrirContaButton, JaTenhoContaButton } from '../components/Buttons';
+import { AbrirContaButton, JaTenhoContaButton } from '../../../../components/Buttons';
 import { Link } from 'react-router-dom';
 
 export default function Cadastro() {
