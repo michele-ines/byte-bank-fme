@@ -38,8 +38,8 @@ module.exports = {
       name: 'header',
       filename: 'remoteEntry.js',
       exposes: {
-        "./HeaderPublic": "./src/HeaderPublic.tsx",
-        "./HeaderPrivate": "./src/HeaderPrivate.tsx"
+       "./HeaderPublic": "./src/shared/HeaderPublic.tsx",
+        "./HeaderPrivate": "./src/shared/HeaderPrivate.tsx"
       },
       remotes: {
 
