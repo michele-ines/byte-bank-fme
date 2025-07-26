@@ -52,11 +52,11 @@ module.exports = {
       name: 'dashboard',
       filename: 'remoteEntry.js',
       exposes: {
-        "./Dashboard": "./src/pages/Dashboard.tsx",
-        "./MeusCartoes": "./src/pages/MeusCartoes.tsx",
-        "./Investimentos": "./src/pages/Investimentos.tsx",
-        "./OutrosServicos": "./src/pages/OutrosServicos.tsx",
-        "./MinhaConta": "./src/pages/MinhaConta.tsx"
+        "./Dashboard": "./src/pages/dashboard/dashboardPage.tsx",
+        "./MeusCartoes": "./src/pages/meus-cartoes/personalCardsPage.tsx",
+        "./Investimentos": "./src/pages/investments/investmentPage.tsx",
+        "./OutrosServicos": "./src/pages/outros-servicos/other-servicesPage.tsx",
+        "./MinhaConta": "./src/pages/minha-conta/my-accountPage.tsx"
       },
       remotes: {},
       shared: {
