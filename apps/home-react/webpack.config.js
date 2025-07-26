@@ -54,7 +54,7 @@ module.exports = {
       exposes: {
         "./Home": "./src/pages/Home.tsx",
         "./Cadastro": "./src/pages/cadastro/Cadastro.tsx",
-        "./Login": "./src/pages/login/Login.tsx"
+        "./Login": "./src/pages/login/loginPage.tsx"
       },
       remotes: {},
       shared: {

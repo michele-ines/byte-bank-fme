@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AbrirContaButton, JaTenhoContaButton } from '../../../../components/Buttons';
 
-export default function Login() {
+export default function loginPage() {
   const navigate = useNavigate();
   return (
     <div className="p-6 flex flex-col items-center gap-4">
