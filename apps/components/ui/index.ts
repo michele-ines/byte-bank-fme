@@ -2,7 +2,7 @@
 export { default as React, useState } from "react";
 
 // ——— Next/Router (Hooks para React 17 + Next 12) ———
-export { useRouter } from "next/router";
+// export { useRouter } from "next/router";
 
 // Caso precise do `pathname` separadamente como no `usePathname`, você pode criar um custom hook à parte.
 // Por agora, removemos: redirect, usePathname (não disponíveis).
@@ -40,8 +40,8 @@ export { default as VisibilityOffIcon } from "@mui/icons-material/VisibilityOff"
 export { PieChart } from "@mui/x-charts";
 
 // ——— Next/Image & Link ———
-export { default as Image } from "next/image";
-export { default as Link } from "next/link";
+// export { default as Image } from "next/image";
+// export { default as Link } from "next/link";
 
 // // ——— Tipos do Next ———
 // export type { Metadata } from "next";
@@ -60,7 +60,7 @@ export { default as Link } from "next/link";
 // });
 
 // ——— SCSS Modules ———
-export { default as CadInvestmentsStyles } from "../../components/my-cards/cad-investments/cad-investments.module.scss";
+// export { default as CadInvestmentsStyles } from "../../components/my-cards/cad-investments/cad-investments.module.scss";
 // export { default as CardBalanceStyles } from "../../components/my-cards/card-balance/card-balance.module.scss";
 // export { default as CardListExtractStyles } from "../../components/my-cards/card-list-extract/card-list-extract.module.scss";
 // export { default as CardMyAccountStyles } from "../../components/my-cards/card-my-account/card-my-account.module.scss";

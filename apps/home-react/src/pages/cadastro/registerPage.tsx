@@ -1,21 +1,32 @@
-import React from 'react';
-import { AbrirContaButton, JaTenhoContaButton } from '../../../../components/Buttons';
-import { Link } from 'react-router-dom';
-
-export default function Cadastro() {
+"use client";
+import RegisterForm from "../../../../components/forms/register-form";
+import { Box, Typography } from "../../../../components/ui";
+import ilustracaoCadastro from '../../../../components/ui/imgs/cadastro/ilustracao-cadastro.svg';
+import { tw } from 'twind';
+import '../../index.css';
+export default function RegisterPage() {
   return (
-    <div className="p-6 flex flex-col items-center gap-4">
-      <h1 className="text-3xl font-bold">Abrir conta</h1>
+    <div className={tw`min-h-screen flex items-center justify-center bg-[var(--byte-bg-dashboard)] p-4`}>
+      <div className={tw`flex flex-col lg:flex-row w-full max-w-5xl bg-white rounded-2xl shadow-md overflow-hidden`}>
+        <div className={tw`hidden lg:flex w-full lg:w-1/2 items-center justify-center p-8`}>
+          <img
+            src={ilustracaoCadastro}
+            alt="Ilustração de cadastro"
+            className={tw`w-full h-auto max-h-[400px] object-contain`}
+          />
+        </div>
+        <div className={tw`w-full lg:w-1/2 p-8 lg:p-12`}>
+          <Typography
+            variant="h5"
+            className={tw`text-2xl font-bold text-gray-800 mb-8`}
+          >
+            Preencha os campos abaixo para criar sua conta corrente!
+          </Typography>
 
-      <form className="w-full max-w-sm flex flex-col gap-2">
-        <input className="border p-2 rounded" placeholder="Nome completo" />
-        <input className="border p-2 rounded" placeholder="Email" />
-        <input className="border p-2 rounded" placeholder="CPF" />
-        <AbrirContaButton type="submit" />
-        <Link to="/login">
-          <JaTenhoContaButton />
-        </Link>
-      </form>
+          <RegisterForm />
+        </div>
+      </div>
     </div>
   );
+
 }
