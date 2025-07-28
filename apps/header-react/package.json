@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-"start": "cross-env PORT=3001 SASS_QUIET_DEPS=true webpack serve --config webpack.config.js --color",
+    "start": "cross-env PORT=3001 SASS_QUIET_DEPS=true webpack serve --config webpack.config.js --color",
     "build": "webpack --config webpack.config.js",
     "test": "jest"
   },

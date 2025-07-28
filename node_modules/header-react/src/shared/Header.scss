@@ -2,6 +2,7 @@
   --byte-color-black: #000000;
   --byte-color-green-500: #47a138;
   --byte-color-dash: #121212; // se aplicável para o dashboard
+  --color-white: #ffffff;
 }
 
 .header {
@@ -16,7 +17,7 @@
 
 // Estilo do menu (Dashboard, Sobre, Serviços)
 .header .MuiButton-root {
-  color: var(--byte-color-green-500) !important;
+  color: var(--byte-color-green-500);
   font-weight: 600;
   text-transform: none;
 }
@@ -28,10 +29,10 @@
   padding-bottom: 4px;
 }
 
-// Botão: Abrir Conta
+// // Botão: Abrir Conta
 .openAccountButton {
+  color: var(--color-white) !important;
   background-color: var(--byte-color-green-500) !important;
-  color: #ffffff !important;
   font-weight: 600;
   padding: 6px 16px;
 }
@@ -46,4 +47,3 @@
   padding: 6px 16px;
   border-radius: 4px;
 }
-
