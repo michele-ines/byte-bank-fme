@@ -1,18 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation, NavLink } from "react-router-dom";
-import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const ROUTES = {
   ROOT: "/",
   DASHBOARD: "/dashboard",
-  REGISTER: "/cadastro",
-  LOGIN: "/login",
+  PERSONAL_CARDS: "/meus-cartoes",
+  INVESTMENTS: "/investments",
+  MY_ACCOUNT: "/minha-conta",
+  OTHER_SERVICES: "/outros-servicos",
 };
 
 export default function HeaderPrivate() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const openMenu = (e: React.MouseEvent<HTMLElement>) =>
+    setAnchorEl(e.currentTarget);
+  const closeMenu = () => setAnchorEl(null);
 
   const isActive = (route: string) =>
     pathname === route || pathname.startsWith(route + "/");
@@ -28,13 +43,20 @@ export default function HeaderPrivate() {
 
   return (
     <AppBar position="static" elevation={0} sx={{ backgroundColor: "#004D61" }}>
-      <Toolbar sx={{ justifyContent: "space-between", padding: 2 }}>
-        {/* Logo + Menu */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+      <Toolbar sx={{ justifyContent: "space-between" }}>
+        {/* Logo + Menu desktop*/}
+        <Box
+          sx={{
+            display: { xs: "none", md: "flex" },
+            alignItems: "center",
+            gap: 4,
+          }}
+        >
           {/* Logo texto ou imagem */}
           <NavLink
             to={ROUTES.ROOT}
             className={({ isActive }) => (isActive ? "activeLink" : "")}
+            style={{ border: "none" }}
           >
             <img
               src="/header/header-logo.svg"
@@ -74,33 +96,93 @@ export default function HeaderPrivate() {
           </Box>
         </Box>
 
+        {/* Mobile Menu */}
+        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={closeMenu}>
+          <MenuItem
+            onClick={() => {
+              closeMenu();
+              navigate(ROUTES.ROOT);
+            }}
+          >
+            Início
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              closeMenu();
+              navigate(ROUTES.PERSONAL_CARDS);
+            }}
+          >
+            Meus Cartões
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              closeMenu();
+              navigate(ROUTES.INVESTMENTS);
+            }}
+          >
+            Investimentos
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              closeMenu();
+              navigate(ROUTES.MY_ACCOUNT);
+            }}
+          >
+            Minha Conta
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              closeMenu();
+              navigate(ROUTES.OTHER_SERVICES);
+            }}
+          >
+            Outros Serviços
+          </MenuItem>
+        </Menu>
+        <IconButton
+          size="large"
+          aria-label="menu"
+          onClick={openMenu}
+          sx={{ display: { xs: "flex", md: "none" }, color: "#47a138" }}
+        >
+          <MenuIcon />
+        </IconButton>
+
         {/* Usuário */}
         <Box
           sx={{
-            display: { xs: "none", md: "flex" },
+            display: "flex",
             alignItems: "center",
             gap: 1,
           }}
         >
-          <Typography sx={{ color: "#ffffff", marginRight: 1 }}>
+          <Typography
+            sx={{
+              color: "#ffffff",
+              marginRight: 1,
+              display: { xs: "none", md: "flex" },
+            }}
+          >
             Joana da Silva Oliveira
           </Typography>
-          <Box
+          <IconButton
+            size="large"
+            aria-label="user account"
+            onClick={() => navigate(ROUTES.MY_ACCOUNT)}
             sx={{
               width: 32,
               height: 32,
-              borderRadius: "50%",
               backgroundColor: "#47a138",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               color: "#000000",
               fontWeight: "bold",
-              fontSize: "0.9rem",
+              fontSize: "0.8rem",
             }}
           >
             J
-          </Box>
+          </IconButton>
         </Box>
       </Toolbar>
     </AppBar>
