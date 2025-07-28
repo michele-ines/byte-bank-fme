@@ -13,7 +13,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 
 const ROUTES = {
-  ROOT: "/",
+  ROOT: "/home",
   DASHBOARD: "/dashboard",
   PERSONAL_CARDS: "/meus-cartoes",
   INVESTMENTS: "/investments",
@@ -179,6 +179,9 @@ export default function HeaderPrivate() {
               color: "#000000",
               fontWeight: "bold",
               fontSize: "0.8rem",
+              ":hover": {
+                backgroundColor: "#3f8d2a",
+              },
             }}
           >
             J

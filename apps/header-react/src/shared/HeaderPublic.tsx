@@ -14,7 +14,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 
 const ROUTES = {
-  ROOT: "/",
+  ROOT: "/home",
   DASHBOARD: "/dashboard",
   REGISTER: "/cadastro",
   LOGIN: "/login",
