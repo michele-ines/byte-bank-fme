@@ -41,6 +41,10 @@ module.exports = {
           }
         ]
       },
+       {
+      test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
+      type: 'asset/resource',
+    },
       {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader', 'postcss-loader']
@@ -53,8 +57,10 @@ module.exports = {
       filename: 'remoteEntry.js',
       exposes: {
         "./Home": "./src/pages/Home.tsx",
-        "./Cadastro": "./src/pages/cadastro/Cadastro.tsx",
-        "./Login": "./src/pages/login/Login.tsx"
+        "./Cadastro": "./src/pages/cadastro/registerPage.tsx",
+        "./Login": "./src/pages/login/loginPage.tsx",
+        "./EsqueciSenha": "./src/pages/esqueci-senha/forgotPasswordPage.tsx",
+        './not-found': './src/pages/not-found/notFound.tsx', 
       },
       remotes: {},
       shared: {
