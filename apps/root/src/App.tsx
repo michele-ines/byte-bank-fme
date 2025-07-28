@@ -1,21 +1,21 @@
 import React, { Suspense, lazy, useMemo, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 
-const HeaderPublic  = lazy(() => import('header/HeaderPublic'));
+const HeaderPublic = lazy(() => import('header/HeaderPublic'));
 const HeaderPrivate = lazy(() => import('header/HeaderPrivate'));
 
-const Home       = lazy(() => import('home/Home'));
-const Cadastro   = lazy(() => import('home/Cadastro'));
-const Login      = lazy(() => import('home/Login'));
-const EsqueciSenha = lazy(() => import('home/EsqueciSenha'));
+const Home = lazy(() => import('home/Home'));
+const Cadastro = lazy(() => import('home/Cadastro'));
+const Login = lazy(() => import('home/Login'));
 
-const Dashboard     = lazy(() => import('dashboard/Dashboard'));
-const MeusCartoes   = lazy(() => import('dashboard/MeusCartoes'));
+const Dashboard = lazy(() => import('dashboard/Dashboard'));
+const MeusCartoes = lazy(() => import('dashboard/MeusCartoes'));
 const Investimentos = lazy(() => import('dashboard/Investimentos'));
-const OutrosServicos= lazy(() => import('dashboard/OutrosServicos'));
-const MinhaConta    = lazy(() => import('dashboard/MinhaConta'));
+const OutrosServicos = lazy(() => import('dashboard/OutrosServicos'));
+const MinhaConta = lazy(() => import('dashboard/MinhaConta'));
 
 let FooterDefined = false;
+
 function useDefineFooter() {
   useEffect(() => {
     if (!FooterDefined) {
@@ -31,19 +31,19 @@ function Layout() {
   const location = useLocation();
   useDefineFooter();
 
-  const isPublic = useMemo(() => (
-    ['/home','/cadastro','/login','/esqueci-senha','/minha-conta','/'].some(p =>
-      location.pathname.startsWith(p)
-    )
-  ), [location.pathname]);
+  const isPublic = useMemo(() => {
+    return location.pathname.startsWith('/home') ||
+           location.pathname.startsWith('/cadastro') ||
+           location.pathname.startsWith('/login') ||
+           location.pathname === '/';
+  }, [location.pathname]);
+
+  const currentPath = location.pathname;
 
   return (
     <div className="min-h-screen flex flex-col">
       <Suspense fallback={<div className="p-4">Carregando header...</div>}>
-        {isPublic
-          ? <HeaderPublic currentPath={location.pathname} />
-          : <HeaderPrivate currentPath={location.pathname} />
-        }
+        {isPublic ? <HeaderPublic currentPath={currentPath} /> : <HeaderPrivate currentPath={currentPath} />}
       </Suspense>
 
       <main className="flex-1">
@@ -53,7 +53,6 @@ function Layout() {
             <Route path="/home" element={<Home />} />
             <Route path="/cadastro" element={<Cadastro />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/esqueci-senha" element={<EsqueciSenha />} />
 
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/meus-cartoes" element={<MeusCartoes />} />
