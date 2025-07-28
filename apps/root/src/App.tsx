@@ -4,9 +4,12 @@ import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-route
 const HeaderPublic = lazy(() => import('header/HeaderPublic'));
 const HeaderPrivate = lazy(() => import('header/HeaderPrivate'));
 
-const Home = lazy(() => import('home/Home'));
-const Cadastro = lazy(() => import('home/Cadastro'));
-const Login = lazy(() => import('home/Login'));
+
+const Home       = lazy(() => import('home/Home'));
+const NotFound       = lazy(() => import('home/not-found'));
+const Cadastro   = lazy(() => import('home/Cadastro'));
+const Login      = lazy(() => import('home/Login'));
+const EsqueciSenha = lazy(() => import('home/EsqueciSenha'));
 
 const Dashboard = lazy(() => import('dashboard/Dashboard'));
 const MeusCartoes = lazy(() => import('dashboard/MeusCartoes'));
@@ -60,7 +63,7 @@ function Layout() {
             <Route path="/outros-servicos" element={<OutrosServicos />} />
             <Route path="/minha-conta" element={<MinhaConta />} />
 
-            <Route path="*" element={<div className="p-4">404 - Página não encontrada</div>} />
+            <Route path="*"element={<NotFound />} />
           </Routes>
         </Suspense>
       </main>
