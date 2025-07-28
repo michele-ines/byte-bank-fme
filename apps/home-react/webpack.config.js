@@ -59,7 +59,8 @@ module.exports = {
         "./Home": "./src/pages/Home.tsx",
         "./Cadastro": "./src/pages/cadastro/registerPage.tsx",
         "./Login": "./src/pages/login/loginPage.tsx",
-        "./EsqueciSenha": "./src/pages/esqueci-senha/forgotPasswordPage.tsx"
+        "./EsqueciSenha": "./src/pages/esqueci-senha/forgotPasswordPage.tsx",
+        './not-found': './src/pages/not-found/notFound.tsx', 
       },
       remotes: {},
       shared: {
