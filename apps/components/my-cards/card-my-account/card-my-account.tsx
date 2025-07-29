@@ -1,16 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-
 import {
   Box,
   FormControl,
   Button,
   IconButton,
 } from "../../ui";
-import styles from "@my-cards/card-my-account/card-my-account.module.scss";
-
-
 
 import {
   OutlinedInput,
@@ -26,6 +22,8 @@ import {
 import { registerValidations } from "../../../utils/forms-validations/formValidations";
 import { RegisterData, UserInfo } from "../../../interfaces/dashboard";
 import { useForm } from "react-hook-form";
+
+import "./card-my-accout.css";  
 
 const initialUser: UserInfo = {
   name: "Joana da Silva Oliveira",
@@ -45,7 +43,6 @@ export function CardMyAccount() {
     register,
     watch,
     formState: { errors },
-    
   } = useForm<RegisterData>({
     mode: "onBlur",
     defaultValues: initialUser,
@@ -56,59 +53,57 @@ export function CardMyAccount() {
   const toggleEdit = (field: keyof typeof isEditable) =>
     setIsEditable((prev) => ({ ...prev, [field]: !prev[field] }));
 
-  /* 🔹 refs para foco quando o campo entra em modo de edição */
-  const nameRef     = useRef<HTMLInputElement>(null);
-  const emailRef    = useRef<HTMLInputElement>(null);
+  /* refs para foco */
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isEditable.name)     nameRef.current?.focus();
-    if (isEditable.email)    emailRef.current?.focus();
+    if (isEditable.name) nameRef.current?.focus();
+    if (isEditable.email) emailRef.current?.focus();
     if (isEditable.password) passwordRef.current?.focus();
   }, [isEditable]);
 
-  /* === Funções de estilo === */
+  /* === Funções de estilo MUI (sem alterações) === */
   const inputSx = (field: keyof typeof isEditable) => {
-    const editing  = isEditable[field];
+    const editing = isEditable[field];
     const hasError = !!errors[field];
     return {
-      backgroundColor: editing
-        ? "var(--byte-bg-default)"
-        : "var(--byte-gray-200)",
-      color: editing ? "var(--byte-color-black)" : "var(--byte-gray-800)",
+      backgroundColor: editing ? "#ffffff" : "#cbcbcb",
+      color: editing ? "#000000" : "#444444",
       "& .MuiOutlinedInput-notchedOutline": {
         borderColor: hasError
-          ? "var(--byte-color-error)"
+          ? "#bf1313"
           : editing
-          ? "var(--byte-color-green-500)"
+          ? "#47a138"
           : "rgba(0,0,0,0.23)",
         borderWidth: hasError || editing ? 1 : undefined,
       },
       "&:hover .MuiOutlinedInput-notchedOutline": {
         borderColor: hasError
-          ? "var(--byte-color-error)"
+          ? "#bf1313"
           : editing
-          ? "var(--byte-color-green-500)"
+          ? "#47a138"
           : undefined,
       },
     };
   };
 
   const iconSx = (field: keyof typeof isEditable) => {
-    const editing  = isEditable[field];
+    const editing = isEditable[field];
     const hasError = !!errors[field];
     if (!editing) {
-      return { color: "var(--byte-gray-800)", backgroundColor: "transparent" };
+      return { color: "#444444", backgroundColor: "transparent" };
     }
     if (hasError) {
       return {
-        color: "var(--byte-color-error)",
+        color: "#bf1313",
         backgroundColor: "rgba(191,19,19,0.1)",
         ml: 2,
       };
     }
     return {
-      color: "var(--byte-color-green-500)",
+      color: "#47a138",
       backgroundColor: "rgba(71,161,56,0.1)",
       ml: 2,
     };
@@ -118,34 +113,32 @@ export function CardMyAccount() {
     const hasError = !!errors.password;
     if (hasError) {
       return {
-        color: "var(--byte-color-error)",
+        color: "#bf1313",
         backgroundColor: "rgba(191,19,19,0.1)",
       };
     }
     if (showPassword) {
       return {
-        color: "var(--byte-color-green-500)",
+        color: "#47a138",
         backgroundColor: "rgba(71,161,56,0.1)",
       };
     }
-    return { color: "var(--byte-gray-800)", backgroundColor: "transparent" };
+    return { color: "#444444", backgroundColor: "transparent" };
   };
-  /* ========================= */
 
   return (
     <Box
-      className={`${styles.cardContainer} w-full h-full`}
+      className="cardContainer"
       role="region"
       aria-labelledby="my-account-heading"
     >
-      <section className="flex flex-col gap-6 w-full h-full">
-        <h3 id="my-account-heading" className={styles.myAccountTitle}>
+      <section className="cardSection">
+        <h3 id="my-account-heading" className="myAccountTitle">
           Minha conta
         </h3>
 
-        <Box className="flex flex-col lg:flex-row-reverse w-full h-full">
-          <Box className="flex flex-col gap-6 w-full h-full">
-
+        <Box className="cardFlexRowReverse">
+          <Box className="cardFormContainer">
             {/* Nome */}
             <FormControl
               variant="outlined"
@@ -153,7 +146,7 @@ export function CardMyAccount() {
               error={!!errors.name}
               aria-invalid={!!errors.name}
             >
-              <label htmlFor="name" className="text-md font-bold text-gray-700">
+              <label htmlFor="name" className="myAccountLabel">
                 Nome
               </label>
               <OutlinedInput
@@ -166,7 +159,11 @@ export function CardMyAccount() {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label={isEditable.name ? "Concluir edição de nome" : "Editar nome"}
+                      aria-label={
+                        isEditable.name
+                          ? "Concluir edição de nome"
+                          : "Editar nome"
+                      }
                       onClick={() => toggleEdit("name")}
                       edge="end"
                       sx={iconSx("name")}
@@ -188,7 +185,7 @@ export function CardMyAccount() {
               error={!!errors.email}
               aria-invalid={!!errors.email}
             >
-              <label htmlFor="email" className="text-md font-bold text-gray-700">
+              <label htmlFor="email" className="myAccountLabel">
                 E-mail
               </label>
               <OutlinedInput
@@ -201,7 +198,11 @@ export function CardMyAccount() {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label={isEditable.email ? "Concluir edição de e-mail" : "Editar e-mail"}
+                      aria-label={
+                        isEditable.email
+                          ? "Concluir edição de e-mail"
+                          : "Editar e-mail"
+                      }
                       onClick={() => toggleEdit("email")}
                       edge="end"
                       sx={iconSx("email")}
@@ -223,7 +224,7 @@ export function CardMyAccount() {
               error={!!errors.password}
               aria-invalid={!!errors.password}
             >
-              <label htmlFor="password" className="text-md font-bold text-gray-700">
+              <label htmlFor="password" className="myAccountLabel">
                 Senha
               </label>
               <OutlinedInput
@@ -235,10 +236,12 @@ export function CardMyAccount() {
                 {...register("password", registerValidations.password)}
                 aria-describedby="password-helper"
                 endAdornment={
-                  <InputAdornment position="end" className="flex items-center">
+                  <InputAdornment position="end">
                     {isEditable.password && passwordValue && (
                       <IconButton
-                        aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                        aria-label={
+                          showPassword ? "Ocultar senha" : "Mostrar senha"
+                        }
                         onClick={() => setShowPassword((p) => !p)}
                         edge="end"
                         sx={visibilityIconSx()}
@@ -248,7 +251,11 @@ export function CardMyAccount() {
                       </IconButton>
                     )}
                     <IconButton
-                      aria-label={isEditable.password ? "Concluir edição de senha" : "Editar senha"}
+                      aria-label={
+                        isEditable.password
+                          ? "Concluir edição de senha"
+                          : "Editar senha"
+                      }
                       onClick={() => toggleEdit("password")}
                       edge="end"
                       sx={iconSx("password")}
@@ -268,10 +275,10 @@ export function CardMyAccount() {
               <Button
                 type="submit"
                 variant="contained"
-                className="w-full py-3 font-medium text-base"
+                className="cardSaveButton"
                 style={{
-                  background: "var(--byte-color-orange-500)",
-                  color: "var(--byte-bg-default)",
+                  background: "#ff5031",
+                  color: "#ffffff",
                 }}
               >
                 Salvar alterações
