@@ -20,6 +20,7 @@ module.exports = {
     alias: {
       '@ui-imgs': path.resolve(__dirname, '../components/ui/imgs'),
       '@my-cards': path.resolve(__dirname, '../components/my-cards'),
+      '@store/store': path.resolve(__dirname, '../../store/store.ts'),     // <— aponta para a pasta /store do monorepo
     },
   },
   module: {
@@ -77,11 +78,13 @@ module.exports = {
         ],
       },
 
-      // 3) SVGs como assets
+     // 3) SVGs como assets (com hash para evitar conflito)
       {
         test: /\.svg$/i,
         type: 'asset/resource',
-        generator: { filename: 'static/media/[name][ext]' },
+        generator: {
+          filename: 'static/media/[name].[contenthash][ext]'
+        },
       },
 
       // 4) TypeScript
