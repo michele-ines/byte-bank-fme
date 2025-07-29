@@ -1,3 +1,5 @@
+// apps/components/my-cards/card-other-services/card-other-services.tsx
+
 import {
   Box,
   Card,
@@ -5,39 +7,22 @@ import {
   Typography,
 } from '../../ui';
 
-import styles from "@my-cards/card-other-services/card-other-services.module.scss";
+import styles from '@my-cards/card-other-services/card-other-services.module.scss';
+
+import emprestimoIcon     from '@ui-imgs/dash-card-outros-servicos/icone-emprestimo.svg';
+import meusCartoesIcon    from '@ui-imgs/dash-card-outros-servicos/icone-meus-cartoes.svg';
+import doacoesIcon        from '@ui-imgs/dash-card-outros-servicos/icone-doacoes.svg';
+import pixIcon            from '@ui-imgs/dash-card-outros-servicos/icone-pix.svg';
+import segurosIcon        from '@ui-imgs/dash-card-outros-servicos/icone-seguros.svg';
+import creditoCelularIcon from '@ui-imgs/dash-card-outros-servicos/icone-credito-celular.svg';
 
 const services = [
-  {
-    key: 'emprestimo',
-    title: 'Empréstimo',
-    icon: '/dash-card-outros-servicos/icone-emprestimo.svg',
-  },
-  {
-    key: 'cartoes',
-    title: 'Meus cartões',
-    icon: '/dash-card-outros-servicos/icone-meus-cartoes.svg',
-  },
-  {
-    key: 'doacoes',
-    title: 'Doações',
-    icon: '/dash-card-outros-servicos/icone-doacoes.svg',
-  },
-  {
-    key: 'pix',
-    title: 'Pix',
-    icon: '/dash-card-outros-servicos/icone-pix.svg',
-  },
-  {
-    key: 'seguros',
-    title: 'Seguros',
-    icon: '/dash-card-outros-servicos/icone-seguros.svg',
-  },
-  {
-    key: 'celular',
-    title: 'Crédito celular',
-    icon: '/dash-card-outros-servicos/icone-credito-celular.svg',
-  },
+  { key: 'emprestimo', title: 'Empréstimo',       icon: emprestimoIcon     },
+  { key: 'cartoes',   title: 'Meus cartões',      icon: meusCartoesIcon    },
+  { key: 'doacoes',   title: 'Doações',           icon: doacoesIcon        },
+  { key: 'pix',       title: 'Pix',               icon: pixIcon            },
+  { key: 'seguros',   title: 'Seguros',           icon: segurosIcon        },
+  { key: 'celular',   title: 'Crédito celular',   icon: creditoCelularIcon },
 ];
 
 export default function CardsOutrosServicos() {
@@ -46,35 +31,17 @@ export default function CardsOutrosServicos() {
       component="section"
       role="region"
       aria-labelledby="servicos-heading"
+      className={styles.cardTransacao}
       sx={{
+        // Esses estilos continuam, complementando o módulo SCSS:
         backgroundColor: 'var(--byte-gray-200)',
-        borderRadius: 1,
-        p: 3,
-        position: 'relative',
-        overflow: 'hidden',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          width: 120,
-          height: 120,
-          background: `url("@ui-imgs/dash-card-new-transacao/card-pixels-3.svg") no-repeat left bottom/contain`,
-          pointerEvents: 'none',
-        },
-        '&::after': {
-          content: '""',
-          position: 'absolute',
-          inset: 0,
-          pointerEvents: 'none',
-          background: `url("@ui-imgs/dash-card-new-transacao/card-pixels-4.svg") no-repeat right top/120px 120px`,
-        },
+        // ...
       }}
+      /* Note que o módulo SCSS já define background, border-radius e os ::before/::after.
+         Se quiser remover redundâncias, pode mover tudo para o SCSS. */
     >
-      {/* Título */}
       <Typography
         id="servicos-heading"
-        className={styles.investmentTitle}
         variant="h6"
         component="h3"
         sx={{
@@ -88,7 +55,6 @@ export default function CardsOutrosServicos() {
         Confira os serviços disponíveis
       </Typography>
 
-      {/* Grid via CSS */}
       <Box
         role="list"
         sx={{
@@ -134,7 +100,7 @@ export default function CardsOutrosServicos() {
                 p: 0,
               }}
             >
-              <Box sx={{ width: 48, height: 48, position: 'relative' }}>
+              <Box sx={{ width: 48, height: 48 }}>
                 <img
                   src={icon}
                   alt={title}
@@ -145,8 +111,7 @@ export default function CardsOutrosServicos() {
               </Box>
               <Typography
                 variant="body1"
-                sx={{ fontWeight: 500 }}
-                className="serviceLabel"
+                className={styles.serviceLabel}
               >
                 {title}
               </Typography>
