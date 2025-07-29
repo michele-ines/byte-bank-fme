@@ -3,24 +3,17 @@ import { useNavigate, useLocation, NavLink } from "react-router-dom";
 import {
   AppBar,
   Box,
-  Button,
+  Toolbar,
   IconButton,
+  Typography,
   Menu,
   MenuItem,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+  Button,
+  MenuIcon,
+  PermIdentityIcon,
+} from "../../../components/ui/index";
+import { ROUTES } from "../../../config-routes/routes";
 
-const ROUTES = {
-  ROOT: "/home",
-  DASHBOARD: "/dashboard",
-  PERSONAL_CARDS: "/meus-cartoes",
-  INVESTMENTS: "/investments",
-  MY_ACCOUNT: "/minha-conta",
-  OTHER_SERVICES: "/outros-servicos",
-};
 
 export default function HeaderPrivate() {
   const navigate = useNavigate();
@@ -150,46 +143,29 @@ export default function HeaderPrivate() {
         </IconButton>
 
         {/* Usuário */}
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-          }}
-        >
-          <Typography
-            sx={{
-              color: "#ffffff",
-              marginRight: 1,
-              display: { xs: "none", md: "flex" },
-            }}
-            onClick={() => navigate(ROUTES.MY_ACCOUNT)}
-
-          >
-            Joana da Silva Oliveira
-          </Typography>
-          <IconButton
-            size="large"
-            aria-label="user account"
-            onClick={() => navigate(ROUTES.MY_ACCOUNT)}
-            sx={{
-              width: 32,
-              height: 32,
-              backgroundColor: "#47a138",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#000000",
-              fontWeight: "bold",
-              fontSize: "0.8rem",
-              ":hover": {
-                backgroundColor: "#3f8d2a",
-              },
-            }}
-          >
-            <PermIdentityIcon fontSize="small" className="userIcon" />
-          </IconButton>
-        </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: { md: 4, xs: 2 },
+                    marginLeft: "auto",
+                  }}                >
+                  <Typography
+                    className="userName"
+                    onClick={() => navigate(ROUTES.MY_ACCOUNT)}
+                  >
+                    Joana da Silva Oliveira
+                  </Typography>
+                  <IconButton
+                    size="large"
+                    onClick={() => navigate(ROUTES.MY_ACCOUNT)}
+                    className="userButton"
+                    title="Minha conta"
+                    aria-label="Ícone de usuário"
+                  >
+                    <PermIdentityIcon fontSize="small" className="userIcon" />
+                  </IconButton>
+                </Box>
       </Toolbar>
     </AppBar>
   );
