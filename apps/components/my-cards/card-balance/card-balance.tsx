@@ -3,10 +3,11 @@
 import React, { useState, KeyboardEvent } from "react";
 import {
   Box,
-  CardBalanceStyles as styles,
   VisibilityIcon,
   VisibilityOffIcon,
 } from "../../ui";
+import "./card-balance.css"; // Importando o módulo SCSS
+
 // Se você ainda usa TS, pode manter essa importação e o caminho correto:
 // import { CardBalanceProps } from "interfaces/dashboard";
 // Ou então defina localmente:
@@ -40,19 +41,19 @@ const CardBalance: React.FC<CardBalanceProps> = ({ user, balance }) => {
   };
 
   return (
-    <Box className={`${styles.cardSaldo} min-h-[402px]`}>
+    <Box className="cardSaldo">
       {/* Saudação e data */}
       <Box>
-        <h1 className={styles.nameTitle}>
+        <h1 className="nameTitle">
           Olá, {user.name.split(" ")[0]} 😊
         </h1>
-        <p className={styles.dateText}>{getCurrentDate()}</p>
+        <p className="dateText">{getCurrentDate()}</p>
       </Box>
 
       {/* Seção de saldo */}
-      <Box className={styles.balanceSection}>
-        <div className={styles.saldoHeader}>
-          <p className={styles.saldoTitle}>
+      <Box className="balanceSection">
+        <div className="saldoHeader">
+          <p className="saldoTitle">
             Saldo&nbsp;
             <span
               tabIndex={0}
@@ -61,7 +62,7 @@ const CardBalance: React.FC<CardBalanceProps> = ({ user, balance }) => {
               aria-label={showBalance ? "Ocultar saldo" : "Mostrar saldo"}
               onClick={handleToggleBalance}
               onKeyDown={handleKeyToggle}
-              className={styles.eyeIcon}
+              className="eyeIcon"
             >
               {showBalance ? (
                 <VisibilityIcon fontSize="small" />
@@ -70,11 +71,11 @@ const CardBalance: React.FC<CardBalanceProps> = ({ user, balance }) => {
               )}
             </span>
           </p>
-          <hr className={styles.hrOrange} />
+          <hr className="hrOrange" />
         </div>
 
-        <p className={styles.contaCorrenteTitle}>{balance.account}</p>
-        <p className={styles.valorSaldoText}>
+        <p className="contaCorrenteTitle">{balance.account}</p>
+        <p className="valorSaldoText">
           {showBalance
             ? typeof balance.value === "number"
               ? formatBRL(balance.value)

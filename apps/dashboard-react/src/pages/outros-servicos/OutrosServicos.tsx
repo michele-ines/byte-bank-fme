@@ -74,10 +74,10 @@ function OutrosServicosContent() {
         <div className="flex flex-col lg:flex-row gap-y-6 lg:gap-x-6 lg:ml-8">
           {/* coluna esquerda */}
           <div className="flex flex-col gap-6 w-full lg:w-[calc(55.666%-12px)]">
-            {/* <CardBalance
+            <CardBalance
               user={data.user}
               balance={{ ...data.balance, value: balanceValue }}
-            /> */}
+            />
             <FinancialChart />
             {preferences.spendingAlert && (
               <SpendingAlertWidget limit={2000} transactions={transactions} />
