@@ -1,12 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react';
+"use client";
+
+import { useState, useRef, useEffect } from "react";
 
 import {
   Box,
   FormControl,
   Button,
-  CardMyAccountStyles as styles,
   IconButton,
 } from "../../ui";
+import styles from "@my-cards/card-my-account/card-my-account.module.scss";
+
+
 
 import {
   OutlinedInput,
@@ -20,17 +24,14 @@ import {
   VisibilityOff,
 } from "@mui/icons-material";
 import { registerValidations } from "../../../utils/forms-validations/formValidations";
-
-import { useForm } from "react-hook-form";
 import { RegisterData, UserInfo } from "../../../interfaces/dashboard";
+import { useForm } from "react-hook-form";
 
 const initialUser: UserInfo = {
   name: "Joana da Silva Oliveira",
   email: "joanadasilvaoliveira@email.com.br",
   password: "(@79Tp6840)",
 };
-
-const srOnly = "absolute -m-px w-px h-px overflow-hidden clip-[rect(0,0,0,0)]";
 
 export function CardMyAccount() {
   const [showPassword, setShowPassword] = useState(false);
@@ -44,6 +45,7 @@ export function CardMyAccount() {
     register,
     watch,
     formState: { errors },
+    
   } = useForm<RegisterData>({
     mode: "onBlur",
     defaultValues: initialUser,
@@ -54,18 +56,20 @@ export function CardMyAccount() {
   const toggleEdit = (field: keyof typeof isEditable) =>
     setIsEditable((prev) => ({ ...prev, [field]: !prev[field] }));
 
-  const nameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
+  /* 🔹 refs para foco quando o campo entra em modo de edição */
+  const nameRef     = useRef<HTMLInputElement>(null);
+  const emailRef    = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isEditable.name) nameRef.current?.focus();
-    if (isEditable.email) emailRef.current?.focus();
+    if (isEditable.name)     nameRef.current?.focus();
+    if (isEditable.email)    emailRef.current?.focus();
     if (isEditable.password) passwordRef.current?.focus();
   }, [isEditable]);
 
+  /* === Funções de estilo === */
   const inputSx = (field: keyof typeof isEditable) => {
-    const editing = isEditable[field];
+    const editing  = isEditable[field];
     const hasError = !!errors[field];
     return {
       backgroundColor: editing
@@ -91,7 +95,7 @@ export function CardMyAccount() {
   };
 
   const iconSx = (field: keyof typeof isEditable) => {
-    const editing = isEditable[field];
+    const editing  = isEditable[field];
     const hasError = !!errors[field];
     if (!editing) {
       return { color: "var(--byte-gray-800)", backgroundColor: "transparent" };
@@ -126,6 +130,7 @@ export function CardMyAccount() {
     }
     return { color: "var(--byte-gray-800)", backgroundColor: "transparent" };
   };
+  /* ========================= */
 
   return (
     <Box
@@ -161,9 +166,7 @@ export function CardMyAccount() {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label={
-                        isEditable.name ? "Concluir edição de nome" : "Editar nome"
-                      }
+                      aria-label={isEditable.name ? "Concluir edição de nome" : "Editar nome"}
                       onClick={() => toggleEdit("name")}
                       edge="end"
                       sx={iconSx("name")}
@@ -198,9 +201,7 @@ export function CardMyAccount() {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label={
-                        isEditable.email ? "Concluir edição de e-mail" : "Editar e-mail"
-                      }
+                      aria-label={isEditable.email ? "Concluir edição de e-mail" : "Editar e-mail"}
                       onClick={() => toggleEdit("email")}
                       edge="end"
                       sx={iconSx("email")}
@@ -237,9 +238,7 @@ export function CardMyAccount() {
                   <InputAdornment position="end" className="flex items-center">
                     {isEditable.password && passwordValue && (
                       <IconButton
-                        aria-label={
-                          showPassword ? "Ocultar senha" : "Mostrar senha"
-                        }
+                        aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
                         onClick={() => setShowPassword((p) => !p)}
                         edge="end"
                         sx={visibilityIconSx()}
@@ -249,11 +248,7 @@ export function CardMyAccount() {
                       </IconButton>
                     )}
                     <IconButton
-                      aria-label={
-                        isEditable.password
-                          ? "Concluir edição de senha"
-                          : "Editar senha"
-                      }
+                      aria-label={isEditable.password ? "Concluir edição de senha" : "Editar senha"}
                       onClick={() => toggleEdit("password")}
                       edge="end"
                       sx={iconSx("password")}

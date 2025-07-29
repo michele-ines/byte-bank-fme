@@ -60,6 +60,8 @@ export { PieChart } from "@mui/x-charts";
 // });
 
 // ——— SCSS Modules ———
+// barrel ou componente
+
 // export { default as CadInvestmentsStyles } from "../../components/my-cards/cad-investments/cad-investments.module.scss";
 // export { default as CardBalanceStyles } from "../../components/my-cards/card-balance/card-balance.module.scss";
 // export { default as CardListExtractStyles } from "../../components/my-cards/card-list-extract/card-list-extract.module.scss";

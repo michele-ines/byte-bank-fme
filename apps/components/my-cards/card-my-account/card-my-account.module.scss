@@ -1,6 +1,59 @@
-/* ------------------------------------------------------------------ */
-/* CARD CONTAINER (fundo cinza + pixels decorativos)                  */
-/* ------------------------------------------------------------------ */
+/* ==========================
+      Variáveis e reset padrão
+      ========================== */
+:root {
+  /* ===== Cores Base ===== */
+  --byte-bg-default: #ffffff;
+  --byte-bg-dashboard: #E4EDE3;
+  --byte-text-medium-gray: #767676;
+  --byte-color-black: #000000;
+  --byte-color-dash:#004D61;
+  --byte-color-neutral-600: #8b8b8b;
+  --byte-color-green-50: rgba(71,161,56,.5);
+
+  /* ===== Cores Utilitárias ===== */
+  --byte-color-error: #bf1313;
+  --byte-color-red-500: #bd3737;
+  --byte-color-orange-500: #ff5031;
+  --byte-color-orange-300: #f1823d;
+  --byte-color-green-500: #47a138;
+  --byte-color-green-100: #f8f8f8;
+  --byte-color-blue-500: #2567f9;
+  --byte-color-purple-500: #8f3cff;
+  --byte-color-magenta-500: #ff3c82;
+
+  --byte-gray-100: #dee9ea;
+  --byte-gray-200: #cbcbcb;
+  --byte-gray-800: #444444;
+
+  --byte-gradient-green: linear-gradient(90deg, #1ec88d 0%, #58fcb4 100%);
+  --byte-gradient-teal: linear-gradient(180deg, #004d61 0%, #ffffff 100%);
+
+  /* ===== Tipografia ===== */
+  --font-inter: "Inter", sans-serif;
+
+  --text-xs: 14px;
+  --text-sm: 16px;
+  --text-base: 18px;
+  --text-md: 20px;
+  --text-lg: 25px;
+  --text-xl: 28px;
+
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  --line-height-tight: 100%;
+  --line-height-normal: 120%; /* use essa como padrão */
+  --letter-spacing-none: 0%; /* tracking */
+  --vertical-align-middle: middle;
+
+  /* ===== Background/Texto padrão ===== */
+  --background: var(--byte-bg-default);
+  --foreground: var(--byte-color-black);
+}
+
 .cardContainer {
   background-color: var(--byte-gray-200);
   border-radius: 8px;
@@ -11,7 +64,7 @@
   position: relative;
   overflow: hidden;
 
-  /* pixels no canto inferior‑esquerdo */
+
   &::before {
     content: "";
     position: absolute;
@@ -19,23 +72,19 @@
     left: 0;
     width: 120px;
     height: 120px;
-    background: url("/dash-card-my-account/card-pixels-4.svg") no-repeat left
-      bottom / contain;
+    background: url("@ui-imgs/dash-card-my-account/card-pixels-4.svg") no-repeat left bottom / contain;
     pointer-events: none;
     z-index: 0 !important;
   }
 
-  /* pixels no canto superior‑direito */
   &::after {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: url("/dash-card-my-account/card-pixels-3.svg") no-repeat right
-      top / 120px 120px;
+    background: url("@ui-imgs/dash-card-my-account/card-pixels-3.svg") no-repeat right top / 120px 120px;
   }
 
-  /* garante que o conteúdo fique acima dos pixels */
   > * {
     position: relative;
     z-index: 1;

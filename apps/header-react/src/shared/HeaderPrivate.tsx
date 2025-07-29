@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 
 const ROUTES = {
   ROOT: "/home",
@@ -162,6 +163,8 @@ export default function HeaderPrivate() {
               marginRight: 1,
               display: { xs: "none", md: "flex" },
             }}
+            onClick={() => navigate(ROUTES.MY_ACCOUNT)}
+
           >
             Joana da Silva Oliveira
           </Typography>
@@ -184,7 +187,7 @@ export default function HeaderPrivate() {
               },
             }}
           >
-            J
+            <PermIdentityIcon fontSize="small" className="userIcon" />
           </IconButton>
         </Box>
       </Toolbar>

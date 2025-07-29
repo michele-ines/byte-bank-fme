@@ -1,3 +1,4 @@
+// apps/dashboard-react/tsconfig.json
 {
   "compilerOptions": {
     "target": "ES2017",
@@ -16,10 +17,18 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "jsx": "react-jsx",
-    "noEmit": false
+    "noEmit": false,
+
+    // ◀─── Adicionadas estas linhas:
+    "baseUrl": ".",  
+    "paths": {
+      "@my-cards/*": ["../components/my-cards/*"]
+    }
   },
-  "include": [
-    "src",
-    "src/**/*.d.ts"
-  ]
+"include": [
+  "src",
+  "src/**/*.d.ts",
+  "src/global.d.ts",
+  "../components/my-cards/**/*"
+]
 }
