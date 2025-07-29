@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { fetchBalance } from '../../../../store/slices/balanceSlice';
-import { Box } from '@mui/material';
 import CardBalance from '../../../../components/my-cards/card-balance/card-balance';
 import CardsOtherService from '../../../../components/my-cards/card-other-services/card-other-services';
 // import CardListExtract from '../../../../components/my-cards/card-list-extract/card-list-extract';
@@ -17,10 +16,6 @@ import WidgetPreferencesButton from '../../../../components/widgets/widget-prefe
 import { useWidgetPreferences } from '../../../../hooks/use-widget-preferences';
 import { AppDispatch, RootState, store } from '../../../../store/store';
 
-/** 
- * Conteúdo original, usando hooks do Redux. 
- * Vamos extrair para um componente interno. 
- */
 function OutrosServicosContent() {
   const data = dashboardData as DashboardData;
   const dispatch = useDispatch<AppDispatch>();
@@ -69,14 +64,16 @@ function OutrosServicosContent() {
   };
 
   return (
-    <Box className="w-full min-h-screen px-4 py-6 lg:px-12 bg-[var(--byte-bg-dashboard)]">
-      <Box className="font-sans max-w-screen-xl mx-auto">
-        <Box className="flex justify-end mb-4">
+    <div className="w-full min-h-screen px-4 py-6 lg:px-12 bg-[var(--byte-bg-dashboard)]">
+      <div className="font-sans max-w-screen-xl mx-auto">
+        {/* botão de preferências */}
+        <div className="flex justify-end mb-4">
           <WidgetPreferencesButton />
-        </Box>
+        </div>
 
-        <Box className="flex flex-col lg:flex-row gap-y-6 lg:gap-x-6 lg:ml-8">
-          <Box className="flex flex-col gap-6 w-full lg:w-[calc(55.666%-12px)]">
+        <div className="flex flex-col lg:flex-row gap-y-6 lg:gap-x-6 lg:ml-8">
+          {/* coluna esquerda */}
+          <div className="flex flex-col gap-6 w-full lg:w-[calc(55.666%-12px)]">
             {/* <CardBalance
               user={data.user}
               balance={{ ...data.balance, value: balanceValue }}
@@ -89,9 +86,10 @@ function OutrosServicosContent() {
               <SavingsGoalWidget goal={3000} transactions={transactions} />
             )}
             <CardsOtherService />
-          </Box>
+          </div>
 
-          <Box className="max-w-full flex flex-col">
+          {/* coluna direita – extrato */}
+          <div className="max-w-full flex flex-col">
             <div className="flex-1 overflow-y-auto max-h-[800px]">
               {/* <CardListExtract
                 transactions={transactions}
@@ -102,16 +100,13 @@ function OutrosServicosContent() {
                 atualizaSaldo={() => void handleAtualizaSaldo()}
               /> */}
             </div>
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
-/**
- * Export padrão: envolve o conteúdo no Provider local.
- */
 export default function OutrosServicos() {
   return (
     <Provider store={store}>

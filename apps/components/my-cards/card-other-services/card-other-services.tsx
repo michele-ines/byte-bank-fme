@@ -6,8 +6,8 @@ import {
   CardContent,
   Typography,
 } from '../../ui';
+import "./card-other-services.css";
 
-import styles from '@my-cards/card-other-services/card-other-services.module.scss';
 
 import emprestimoIcon     from '@ui-imgs/dash-card-outros-servicos/icone-emprestimo.svg';
 import meusCartoesIcon    from '@ui-imgs/dash-card-outros-servicos/icone-meus-cartoes.svg';
@@ -31,7 +31,7 @@ export default function CardsOutrosServicos() {
       component="section"
       role="region"
       aria-labelledby="servicos-heading"
-      className={styles.cardTransacao}
+      className="cardTransacao"
       sx={{
         // Esses estilos continuam, complementando o módulo SCSS:
         backgroundColor: 'var(--byte-gray-200)',
@@ -50,6 +50,7 @@ export default function CardsOutrosServicos() {
           mb: 4,
           position: 'relative',
           zIndex: 1,
+          color: 'common.black', 
         }}
       >
         Confira os serviços disponíveis
@@ -67,6 +68,7 @@ export default function CardsOutrosServicos() {
           },
           position: 'relative',
           zIndex: 1,
+          
         }}
       >
         {services.map(({ key, title, icon }) => (
@@ -111,7 +113,7 @@ export default function CardsOutrosServicos() {
               </Box>
               <Typography
                 variant="body1"
-                className={styles.serviceLabel}
+                className="serviceLabel"
               >
                 {title}
               </Typography>
