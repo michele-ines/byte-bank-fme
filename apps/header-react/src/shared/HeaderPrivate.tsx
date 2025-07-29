@@ -1,13 +1,19 @@
 import React from "react";
 import { useNavigate, useLocation, NavLink } from "react-router-dom";
-import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  MenuItem,
+  Button,
+  MenuIcon,
+  PermIdentityIcon,
+} from "../../../components/ui/index";
+import { ROUTES } from "../../../config-routes/routes";
 
-const ROUTES = {
-  ROOT: "/",
-  DASHBOARD: "/dashboard",
-  REGISTER: "/cadastro",
-  LOGIN: "/login",
-};
 
 export default function HeaderPrivate() {
   const navigate = useNavigate();
@@ -75,33 +81,29 @@ export default function HeaderPrivate() {
         </Box>
 
         {/* Usuário */}
-        <Box
-          sx={{
-            display: { xs: "none", md: "flex" },
-            alignItems: "center",
-            gap: 1,
-          }}
-        >
-          <Typography sx={{ color: "#ffffff", marginRight: 1 }}>
-            Joana da Silva Oliveira
-          </Typography>
-          <Box
-            sx={{
-              width: 32,
-              height: 32,
-              borderRadius: "50%",
-              backgroundColor: "#47a138",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#000000",
-              fontWeight: "bold",
-              fontSize: "0.9rem",
-            }}
-          >
-            J
-          </Box>
-        </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: { md: 4, xs: 2 },
+                    marginLeft: "auto",
+                  }}                >
+                  <Typography
+                    className="userName"
+                    onClick={() => navigate(ROUTES.MY_ACCOUNT)}
+                  >
+                    Joana da Silva Oliveira
+                  </Typography>
+                  <IconButton
+                    size="large"
+                    onClick={() => navigate(ROUTES.MY_ACCOUNT)}
+                    className="userButton"
+                    title="Minha conta"
+                    aria-label="Ícone de usuário"
+                  >
+                    <PermIdentityIcon fontSize="small" className="userIcon" />
+                  </IconButton>
+                </Box>
       </Toolbar>
     </AppBar>
   );

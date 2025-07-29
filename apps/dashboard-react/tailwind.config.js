@@ -1,6 +1,9 @@
 module.exports = {
-  content: ["./src/**/*.{js,ts,jsx,tsx}"],
-  theme: {
+  content: [
+    './src/**/*.{js,jsx,ts,tsx}',
+    '../components/**/*.{js,jsx,ts,tsx}',   // se seus components vivem fora de src
+  ],
+    theme: {
     extend: {
       colors: {
         brandGreen: "#47a138",
