@@ -27,92 +27,112 @@ const services = [
 
 export default function CardsOutrosServicos() {
   return (
-    <Box
+   <Box
       component="section"
-      role="region"
+      role="region" 
       aria-labelledby="servicos-heading"
-      className="cardTransacao"
       sx={{
-        // Esses estilos continuam, complementando o módulo SCSS:
-        backgroundColor: 'var(--byte-gray-200)',
-        // ...
+        backgroundColor: "#cbcbcb",
+        borderRadius: 1,
+        p: 3,
+        position: "relative",
+        overflow: "hidden",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          width: 120,
+          height: 120,
+          background: `url("/dash-card-new-transacao/card-pixels-3.svg") no-repeat left bottom/contain`,
+          pointerEvents: "none",
+        },
+        "&::after": {
+          content: '""',
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          background: `url("/dash-card-new-transacao/card-pixels-4.svg") no-repeat right top/120px 120px`,
+        },
       }}
-      /* Note que o módulo SCSS já define background, border-radius e os ::before/::after.
-         Se quiser remover redundâncias, pode mover tudo para o SCSS. */
     >
+      {/* Título */}
       <Typography
-        id="servicos-heading"
+        id="servicos-heading" 
+        className="investmentTitle"
         variant="h6"
         component="h3"
         sx={{
           fontWeight: 700,
           fontSize: 25,
           mb: 4,
-          position: 'relative',
+          position: "relative",
           zIndex: 1,
-          color: 'common.black', 
         }}
       >
         Confira os serviços disponíveis
       </Typography>
 
+      {/* Grid via CSS */}
       <Box
-        role="list"
+        role="list" 
         sx={{
-          display: 'grid',
+          display: "grid",
           gap: 2,
           gridTemplateColumns: {
-            xs: '1fr',
-            sm: '1fr 1fr',
-            md: '1fr 1fr 1fr',
+            xs: "1fr",
+            sm: "1fr 1fr",
+            md: "1fr 1fr 1fr",
           },
-          position: 'relative',
+          position: "relative",
           zIndex: 1,
-          
         }}
       >
         {services.map(({ key, title, icon }) => (
           <Card
             key={key}
-            role="listitem"
-            tabIndex={0}
-            aria-label={title}
+            role="listitem" 
+            tabIndex={0} 
+            aria-label={title} 
             variant="outlined"
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
               p: 2,
-              bgcolor: 'common.white',
-              '&:hover': { boxShadow: 4 },
+              bgcolor: "common.white",
+              "&:hover": { boxShadow: 4 },
             }}
+            /* Opção: se o card dispara navegação/clique,
+               propague a ação também no onKeyDown para Enter/Espaço */
             onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
+              if (e.key === "Enter" || e.key === " ") {
                 e.currentTarget.click();
               }
             }}
           >
             <CardContent
               sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
                 gap: 1,
                 p: 0,
               }}
             >
-              <Box sx={{ width: 48, height: 48 }}>
-                <img
-                  src={icon}
-                  alt={title}
-                  width={48}
-                  height={48}
-                  style={{ display: 'block' }}
-                />
+              <Box sx={{ width: 48, height: 48, position: "relative" }}>
+         <img
+      src={icon}
+      alt={title}
+      width={48}
+      height={48}
+      style={{ objectFit: "contain" }}
+    />
               </Box>
               <Typography
                 variant="body1"
+                sx={{ fontWeight: 500 }}
                 className="serviceLabel"
               >
                 {title}
