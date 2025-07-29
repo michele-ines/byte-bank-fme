@@ -22,13 +22,16 @@
     // ◀─── Adicionadas estas linhas:
     "baseUrl": ".",  
     "paths": {
-      "@my-cards/*": ["../components/my-cards/*"]
+      "@my-cards/*": ["../components/my-cards/*"],
+      "@ui-imgs/*": ["../components/ui/imgs/*"],
+     "@store/store": ["../../store/store.ts"]
     }
   },
 "include": [
   "src",
   "src/**/*.d.ts",
   "src/global.d.ts",
-  "../components/my-cards/**/*"
+  "../components/my-cards/**/*",
+  "../../store/**/*" 
 ]
 }

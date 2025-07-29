@@ -1,11 +1,11 @@
-import React from 'react';
 import {
   Box,
-  CadInvestmentsStyles as styles,
   Card,
   CardContent,
   Typography,
 } from '../../ui';
+
+import styles from "@my-cards/card-other-services/card-other-services.module.scss";
 
 const services = [
   {
@@ -59,7 +59,7 @@ export default function CardsOutrosServicos() {
           left: 0,
           width: 120,
           height: 120,
-          background: `url("/dash-card-new-transacao/card-pixels-3.svg") no-repeat left bottom/contain`,
+          background: `url("@ui-imgs/dash-card-new-transacao/card-pixels-3.svg") no-repeat left bottom/contain`,
           pointerEvents: 'none',
         },
         '&::after': {
@@ -67,7 +67,7 @@ export default function CardsOutrosServicos() {
           position: 'absolute',
           inset: 0,
           pointerEvents: 'none',
-          background: `url("/dash-card-new-transacao/card-pixels-4.svg") no-repeat right top/120px 120px`,
+          background: `url("@ui-imgs/dash-card-new-transacao/card-pixels-4.svg") no-repeat right top/120px 120px`,
         },
       }}
     >
