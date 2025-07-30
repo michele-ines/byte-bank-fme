@@ -48,10 +48,9 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
-              implementation: require('sass'),
-              // ↓ silencia apenas o aviso de legacy JS API
               sassOptions: {
-                silenceDeprecations: ['legacy-js-api']
+                silenceDeprecations: ['legacy-js-api'],
+                quietDeps: true
               }
             },
           },
@@ -69,9 +68,9 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
-              implementation: require('sass'),
               sassOptions: {
-                silenceDeprecations: ['legacy-js-api']
+                silenceDeprecations: ['legacy-js-api'],
+                quietDeps: true
               }
             },
           },
