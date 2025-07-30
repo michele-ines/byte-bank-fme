@@ -2,6 +2,8 @@
 
 import React from "react";
 import { Box, PieChart } from "../../ui";
+
+
 // Se estiver em TS, mantenha a interface. Caso contrário, ignore esta linha:
 // import { CadInvestmentsProps } from "interfaces/dashboard";
 

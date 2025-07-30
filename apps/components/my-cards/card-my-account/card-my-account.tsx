@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useRef, useEffect } from "react";
 import {
   Box,
@@ -127,18 +125,19 @@ export function CardMyAccount() {
   };
 
   return (
-    <Box
-      className="cardContainer"
+     <Box
+      className="cardContainer} w-full h-full"
       role="region"
       aria-labelledby="my-account-heading"
     >
-      <section className="cardSection">
+      <section className="flex flex-col gap-6 w-full h-full">
         <h3 id="my-account-heading" className="myAccountTitle">
           Minha conta
         </h3>
 
-        <Box className="cardFlexRowReverse">
-          <Box className="cardFormContainer">
+        <Box className="flex flex-col lg:flex-row-reverse w-full h-full">
+          <Box className="flex flex-col gap-6 w-full h-full">
+
             {/* Nome */}
             <FormControl
               variant="outlined"
@@ -146,7 +145,7 @@ export function CardMyAccount() {
               error={!!errors.name}
               aria-invalid={!!errors.name}
             >
-              <label htmlFor="name" className="myAccountLabel">
+              <label htmlFor="name" className="text-md font-bold text-gray-700">
                 Nome
               </label>
               <OutlinedInput
@@ -159,11 +158,7 @@ export function CardMyAccount() {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label={
-                        isEditable.name
-                          ? "Concluir edição de nome"
-                          : "Editar nome"
-                      }
+                      aria-label={isEditable.name ? "Concluir edição de nome" : "Editar nome"}
                       onClick={() => toggleEdit("name")}
                       edge="end"
                       sx={iconSx("name")}
@@ -185,7 +180,7 @@ export function CardMyAccount() {
               error={!!errors.email}
               aria-invalid={!!errors.email}
             >
-              <label htmlFor="email" className="myAccountLabel">
+              <label htmlFor="email" className="text-md font-bold text-gray-700">
                 E-mail
               </label>
               <OutlinedInput
@@ -198,11 +193,7 @@ export function CardMyAccount() {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label={
-                        isEditable.email
-                          ? "Concluir edição de e-mail"
-                          : "Editar e-mail"
-                      }
+                      aria-label={isEditable.email ? "Concluir edição de e-mail" : "Editar e-mail"}
                       onClick={() => toggleEdit("email")}
                       edge="end"
                       sx={iconSx("email")}
@@ -224,7 +215,7 @@ export function CardMyAccount() {
               error={!!errors.password}
               aria-invalid={!!errors.password}
             >
-              <label htmlFor="password" className="myAccountLabel">
+              <label htmlFor="password" className="text-md font-bold text-gray-700">
                 Senha
               </label>
               <OutlinedInput
@@ -236,12 +227,10 @@ export function CardMyAccount() {
                 {...register("password", registerValidations.password)}
                 aria-describedby="password-helper"
                 endAdornment={
-                  <InputAdornment position="end">
+                  <InputAdornment position="end" className="flex items-center">
                     {isEditable.password && passwordValue && (
                       <IconButton
-                        aria-label={
-                          showPassword ? "Ocultar senha" : "Mostrar senha"
-                        }
+                        aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
                         onClick={() => setShowPassword((p) => !p)}
                         edge="end"
                         sx={visibilityIconSx()}
@@ -251,11 +240,7 @@ export function CardMyAccount() {
                       </IconButton>
                     )}
                     <IconButton
-                      aria-label={
-                        isEditable.password
-                          ? "Concluir edição de senha"
-                          : "Editar senha"
-                      }
+                      aria-label={isEditable.password ? "Concluir edição de senha" : "Editar senha"}
                       onClick={() => toggleEdit("password")}
                       edge="end"
                       sx={iconSx("password")}
@@ -275,10 +260,10 @@ export function CardMyAccount() {
               <Button
                 type="submit"
                 variant="contained"
-                className="cardSaveButton"
+                className="w-full py-3 font-medium text-base"
                 style={{
-                  background: "#ff5031",
-                  color: "#ffffff",
+                  background: "var(--byte-color-orange-500)",
+                  color: "var(--byte-bg-default)",
                 }}
               >
                 Salvar alterações

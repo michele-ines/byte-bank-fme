@@ -1,35 +1,29 @@
 // apps/components/my-cards/card-other-services/card-other-services.tsx
 
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-} from '../../ui';
+import { Box, Card, CardContent, Typography } from "../../ui";
 import "./card-other-services.css";
 
-
-import emprestimoIcon     from '@ui-imgs/dash-card-outros-servicos/icone-emprestimo.svg';
-import meusCartoesIcon    from '@ui-imgs/dash-card-outros-servicos/icone-meus-cartoes.svg';
-import doacoesIcon        from '@ui-imgs/dash-card-outros-servicos/icone-doacoes.svg';
-import pixIcon            from '@ui-imgs/dash-card-outros-servicos/icone-pix.svg';
-import segurosIcon        from '@ui-imgs/dash-card-outros-servicos/icone-seguros.svg';
-import creditoCelularIcon from '@ui-imgs/dash-card-outros-servicos/icone-credito-celular.svg';
+import emprestimoIcon from "@ui-imgs/dash-card-outros-servicos/icone-emprestimo.svg";
+import meusCartoesIcon from "@ui-imgs/dash-card-outros-servicos/icone-meus-cartoes.svg";
+import doacoesIcon from "@ui-imgs/dash-card-outros-servicos/icone-doacoes.svg";
+import pixIcon from "@ui-imgs/dash-card-outros-servicos/icone-pix.svg";
+import segurosIcon from "@ui-imgs/dash-card-outros-servicos/icone-seguros.svg";
+import creditoCelularIcon from "@ui-imgs/dash-card-outros-servicos/icone-credito-celular.svg";
 
 const services = [
-  { key: 'emprestimo', title: 'Empréstimo',       icon: emprestimoIcon     },
-  { key: 'cartoes',   title: 'Meus cartões',      icon: meusCartoesIcon    },
-  { key: 'doacoes',   title: 'Doações',           icon: doacoesIcon        },
-  { key: 'pix',       title: 'Pix',               icon: pixIcon            },
-  { key: 'seguros',   title: 'Seguros',           icon: segurosIcon        },
-  { key: 'celular',   title: 'Crédito celular',   icon: creditoCelularIcon },
+  { key: "emprestimo", title: "Empréstimo", icon: emprestimoIcon },
+  { key: "cartoes", title: "Meus cartões", icon: meusCartoesIcon },
+  { key: "doacoes", title: "Doações", icon: doacoesIcon },
+  { key: "pix", title: "Pix", icon: pixIcon },
+  { key: "seguros", title: "Seguros", icon: segurosIcon },
+  { key: "celular", title: "Crédito celular", icon: creditoCelularIcon },
 ];
 
 export default function CardsOutrosServicos() {
   return (
-   <Box
+    <Box
       component="section"
-      role="region" 
+      role="region"
       aria-labelledby="servicos-heading"
       sx={{
         backgroundColor: "#cbcbcb",
@@ -58,7 +52,7 @@ export default function CardsOutrosServicos() {
     >
       {/* Título */}
       <Typography
-        id="servicos-heading" 
+        id="servicos-heading"
         className="investmentTitle"
         variant="h6"
         component="h3"
@@ -75,7 +69,7 @@ export default function CardsOutrosServicos() {
 
       {/* Grid via CSS */}
       <Box
-        role="list" 
+        role="list"
         sx={{
           display: "grid",
           gap: 2,
@@ -91,9 +85,9 @@ export default function CardsOutrosServicos() {
         {services.map(({ key, title, icon }) => (
           <Card
             key={key}
-            role="listitem" 
-            tabIndex={0} 
-            aria-label={title} 
+            role="listitem"
+            tabIndex={0}
+            aria-label={title}
             variant="outlined"
             sx={{
               display: "flex",
@@ -122,13 +116,13 @@ export default function CardsOutrosServicos() {
               }}
             >
               <Box sx={{ width: 48, height: 48, position: "relative" }}>
-         <img
-      src={icon}
-      alt={title}
-      width={48}
-      height={48}
-      style={{ objectFit: "contain" }}
-    />
+                <img
+                  src={icon}
+                  alt={title}
+                  width={48}
+                  height={48}
+                  style={{ objectFit: "contain" }}
+                />
               </Box>
               <Typography
                 variant="body1"
