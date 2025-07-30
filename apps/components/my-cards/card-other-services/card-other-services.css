@@ -2,7 +2,7 @@
 /* CARD CONTAINER (fundo cinza + pixels decorativos)                  */
 /* ------------------------------------------------------------------ */
 .cardTransacao {
-  background-color: var(--byte-gray-200);
+  background-color: #cbcbcb;
   border-radius: 8px;
   padding: 24px;
   display: flex;
@@ -38,11 +38,11 @@
 }
 
 .serviceLabel {
-  font-family: var(--font-inter);
-  font-weight: var(--font-bold);
-  font-size: var(--text-sm);
-  line-height: var(--line-height-tight);
-  letter-spacing: var(--letter-spacing-none);
+  font-family: "Inter";
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%; 
   text-align: center;
   vertical-align: middle;
 }
