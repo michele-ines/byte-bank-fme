@@ -1,171 +1,224 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useNavigate, useLocation, NavLink } from "react-router-dom";
+import "./Header.scss";
 import {
   AppBar,
   Box,
-  Toolbar,
+  Button,
   IconButton,
-  Typography,
   Menu,
   MenuItem,
-  Button,
-  MenuIcon,
-  PermIdentityIcon,
-} from "../../../components/ui/index";
-import { ROUTES } from "../../../config-routes/routes";
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
+const ROUTES = {
+  ROOT: "/home",
+  DASHBOARD: "/dashboard",
+  REGISTER: "/cadastro",
+  LOGIN: "/login",
+};
 
 export default function HeaderPrivate() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const showPublicLinks = useMemo(
+    () => [ROUTES.ROOT].includes(pathname),
+    [pathname]
+  );
+  const showDashboardBtn = useMemo(
+    () => pathname !== ROUTES.DASHBOARD,
+    [pathname]
+  );
+
+  const bgColor = useMemo(
+    () =>
+      pathname === ROUTES.DASHBOARD ? "var(--byte-color-dash)" : "#000000",
+    [pathname]
+  );
+
+  const isActive = (route: string) =>
+    pathname === route || pathname.startsWith(route + "/");
+
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const openMenu = (e: React.MouseEvent<HTMLElement>) =>
     setAnchorEl(e.currentTarget);
   const closeMenu = () => setAnchorEl(null);
 
-  const isActive = (route: string) =>
-    pathname === route || pathname.startsWith(route + "/");
-
-  const linkStyle = (path: string) => ({
-    color: "#47a138",
-    fontWeight: 500,
-    textTransform: "none",
-    marginLeft: "16px",
-    marginRight: "16px",
-    textDecoration: isActive(path) ? "underline" : "none",
-  });
+  const underlineStyle: React.CSSProperties = {
+    borderBottom: "2px solid #47a138",
+    paddingBottom: 4,
+  };
 
   return (
-    <AppBar position="static" elevation={0} sx={{ backgroundColor: "#004D61" }}>
-      <Toolbar sx={{ justifyContent: "space-between" }}>
-        {/* Logo + Menu desktop*/}
-        <Box
-          sx={{
-            display: { xs: "none", md: "flex" },
+    <AppBar
+      position="static"
+      className="header"
+      style={{ backgroundColor: bgColor, boxShadow: "none" }}
+    >
+      <Toolbar
+        className="toolbarOverride"
+        sx={{
+          flex: 1,
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        {/* Logo */}
+        <NavLink
+          to={ROUTES.ROOT}
+          className={({ isActive }) => (isActive ? "activeLink" : "")}
+          style={{
+            border: "none",
+            display: "flex",
             alignItems: "center",
-            gap: 4,
+            marginLeft: "16px",
           }}
         >
-          {/* Logo texto ou imagem */}
-          <NavLink
-            to={ROUTES.ROOT}
-            className={({ isActive }) => (isActive ? "activeLink" : "")}
-            style={{ border: "none" }}
-          >
+          <Box sx={{ display: { xs: "block", md: "none" } }}>
+            <img
+              src="/header/icon-group.svg"
+              alt="Ícone"
+              width={26}
+              height={26}
+            />
+          </Box>
+          <Box sx={{ display: { xs: "none", md: "block" } }}>
             <img
               src="/header/header-logo.svg"
-              alt="Logo Bytebank"
-              style={{ height: 32, cursor: "pointer", paddingLeft: 10 }}
+              alt="Logo"
+              width={120}
+              height={40}
             />
-          </NavLink>
-
-          {/* Navegação */}
-          <Box
-            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
-          >
-            <Button
-              sx={linkStyle("/dashboard")}
-              onClick={() => navigate("/dashboard")}
-            >
-              Início
-            </Button>
-            <Button
-              sx={linkStyle("/meus-cartoes")}
-              onClick={() => navigate("/meus-cartoes")}
-            >
-              Meus cartões
-            </Button>
-            <Button
-              sx={linkStyle("/investimentos")}
-              onClick={() => navigate("/investimentos")}
-            >
-              Investimentos
-            </Button>
-            <Button
-              sx={linkStyle("/outros-servicos")}
-              onClick={() => navigate("/outros-servicos")}
-            >
-              Outros serviços
-            </Button>
           </Box>
+        </NavLink>
+
+        {/* Desktop nav */}
+        <Box
+          sx={{
+            flexGrow: 1,
+            display: { xs: "none", md: "flex" },
+            gap: 2,
+            ml: 4,
+          }}
+        >
+          {showDashboardBtn && (
+            <Button
+              component={NavLink}
+              to={ROUTES.DASHBOARD}
+              sx={{ color: "#47a138" }}
+              style={isActive(ROUTES.DASHBOARD) ? underlineStyle : undefined}
+            >
+              Dashboard
+            </Button>
+          )}
+          {showPublicLinks && (
+            <>
+              <Button
+                component="a"
+                href="#sobre"
+                sx={{ color: "#47a138" }}
+                style={isActive("#sobre") ? underlineStyle : undefined}
+              >
+                Sobre
+              </Button>
+              <Button
+                component="a"
+                href="#servicos"
+                sx={{ color: "#47a138" }}
+                style={isActive("#servicos") ? underlineStyle : undefined}
+              >
+                Serviços
+              </Button>
+            </>
+          )}
+        </Box>
+
+        {/* Actions */}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, mr: 2 }}>
+          {showPublicLinks && (
+            <>
+              <Button
+                className="openAccountButton"
+                onClick={() => navigate(ROUTES.REGISTER)}
+                sx={{
+                  display: { xs: "none", md: "inline-flex" },
+                }}
+              >
+                Abrir Conta
+              </Button>
+              <Button
+                className="loginButton"
+                onClick={() => navigate(ROUTES.LOGIN)}
+                sx={{
+                  display: { xs: "none", md: "inline-flex" },
+                }}
+              >
+                Já tenho conta
+              </Button>
+            </>
+          )}
+          <IconButton
+            size="large"
+            aria-label="menu"
+            onClick={openMenu}
+            sx={{ display: { xs: "flex", md: "none" }, color: "#47a138" }}
+          >
+            <MenuIcon />
+          </IconButton>
         </Box>
 
         {/* Mobile Menu */}
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={closeMenu}>
-          <MenuItem
-            onClick={() => {
-              closeMenu();
-              navigate(ROUTES.ROOT);
-            }}
-          >
-            Início
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              closeMenu();
-              navigate(ROUTES.PERSONAL_CARDS);
-            }}
-          >
-            Meus Cartões
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              closeMenu();
-              navigate(ROUTES.INVESTMENTS);
-            }}
-          >
-            Investimentos
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              closeMenu();
-              navigate(ROUTES.MY_ACCOUNT);
-            }}
-          >
-            Minha Conta
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              closeMenu();
-              navigate(ROUTES.OTHER_SERVICES);
-            }}
-          >
-            Outros Serviços
-          </MenuItem>
+          {showDashboardBtn && (
+            <MenuItem
+              onClick={() => {
+                closeMenu();
+                navigate(ROUTES.DASHBOARD);
+              }}
+            >
+              Início
+            </MenuItem>
+          )}
+          {showPublicLinks && (
+            <>
+              <MenuItem
+                onClick={() => {
+                  closeMenu();
+                  window.location.hash = "sobre";
+                }}
+              >
+                Sobre
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  closeMenu();
+                  window.location.hash = "servicos";
+                }}
+              >
+                Serviços
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  closeMenu();
+                  navigate(ROUTES.REGISTER);
+                }}
+              >
+                Abrir Conta
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  closeMenu();
+                  navigate(ROUTES.LOGIN);
+                }}
+              >
+                Já tenho conta
+              </MenuItem>
+            </>
+          )}
         </Menu>
-        <IconButton
-          size="large"
-          aria-label="menu"
-          onClick={openMenu}
-          sx={{ display: { xs: "flex", md: "none" }, color: "#47a138" }}
-        >
-          <MenuIcon />
-        </IconButton>
-
-        {/* Usuário */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: { md: 4, xs: 2 },
-                    marginLeft: "auto",
-                  }}                >
-                  <Typography
-                    className="userName"
-                    onClick={() => navigate(ROUTES.MY_ACCOUNT)}
-                  >
-                    Joana da Silva Oliveira
-                  </Typography>
-                  <IconButton
-                    size="large"
-                    onClick={() => navigate(ROUTES.MY_ACCOUNT)}
-                    className="userButton"
-                    title="Minha conta"
-                    aria-label="Ícone de usuário"
-                  >
-                    <PermIdentityIcon fontSize="small" className="userIcon" />
-                  </IconButton>
-                </Box>
       </Toolbar>
     </AppBar>
   );
