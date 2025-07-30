@@ -6,6 +6,7 @@ import CardsOtherService from '../../../../components/my-cards/card-other-servic
 // import CardListExtract from '../../../../components/my-cards/card-list-extract/card-list-extract';
 import SavingsGoalWidget from '../../../../components/widgets/savings-goal-widget';
 import SpendingAlertWidget from '../../../../components/widgets/spending-alert-widget';
+import { Box } from "@mui/material";
 
 import type { DashboardData, Transaction } from '../../../../interfaces/dashboard';
 import dashboardData from '../../../../mocks/dashboard-data.json';
@@ -64,16 +65,17 @@ function OutrosServicosContent() {
   };
 
   return (
-    <div className="w-full min-h-screen px-4 py-6 lg:px-12" style={{ backgroundColor: '#E4EDE3' }}>
-      <div className="font-sans max-w-screen-xl mx-auto">
-        {/* botão de preferências */}
-        <div className="flex justify-end mb-4">
+    <Box className="w-full min-h-screen px-4 py-6 lg:px-12 bg-[var(--byte-bg-dashboard)]">
+      <Box className="font-sans max-w-screen-xl mx-auto">
+        {/* botão de personalização */}
+        <Box className="flex justify-end mb-4">
           <WidgetPreferencesButton />
-        </div>
+        </Box>
 
-        <div className="flex flex-col lg:flex-row gap-y-6 lg:gap-x-6 lg:ml-8">
+        <Box className="flex flex-col lg:flex-row gap-y-6 lg:gap-x-6 lg:ml-8">
           {/* coluna esquerda */}
-          <div className="flex flex-col gap-6 w-full lg:w-[calc(55.666%-12px)]">
+          <Box className="flex flex-col gap-6 w-full lg:w-[calc(55.666%-12px)]">
+            {/* Balance agora vem do Redux */}
             <CardBalance
               user={data.user}
               balance={{ ...data.balance, value: balanceValue }}
@@ -86,24 +88,31 @@ function OutrosServicosContent() {
               <SavingsGoalWidget goal={3000} transactions={transactions} />
             )}
             <CardsOtherService />
-          </div>
+          </Box>
 
-          {/* coluna direita – extrato */}
-          <div className="max-w-full flex flex-col">
+          {/* coluna direita – extrato com scroll infinito */}
+          <Box className="max-w-full flex flex-col">
             <div className="flex-1 overflow-y-auto max-h-[800px]">
               {/* <CardListExtract
                 transactions={transactions}
-                fetchPage={() => void fetchPage()}
+                fetchPage={() => {
+                  void fetchPage();
+                }}
                 hasMore={hasMore}
                 isPageLoading={isPageLoading}
+                onSave={(txs) => {
+                  void handleSaveTransactions(txs);
+                }}
                 onDelete={handleDeleteTransactions}
-                atualizaSaldo={() => void handleAtualizaSaldo()}
+                atualizaSaldo={() => {
+                  void handleAtualizaSaldo();
+                }}
               /> */}
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 }
 

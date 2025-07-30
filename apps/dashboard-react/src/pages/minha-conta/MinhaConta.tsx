@@ -4,13 +4,10 @@ import bannerIlustracao from "../../../../components/ui/imgs/dash-card-my-accoun
 
 export default function MyAccountPage() {
   return (
-    // Volta a centralizar vertical e horizontalmente
     <Box className="flex items-center justify-center min-h-screen bg-[var(--byte-bg-dashboard)] px-4">
-      {/* Card com padding interno moderado */}
-      <Box className="flex flex-col lg:flex-row bg-[var(--byte-gray-200)] rounded-2xl shadow-lg max-w-4xl w-full overflow-hidden">
-        
-        {/* Ilustração: padding reduzido */}
-        <Box className="lg:flex lg:items-center lg:justify-center lg:w-1/2 py-6 pl-8">
+      <Box className="flex flex-col lg:flex-row bg-[var(--byte-gray-200)] rounded-2xl shadow-lg max-w-4xl w-full overflow-hidden my-6">
+        {/* Ilustração centralizada */}
+        <Box className=" lg:flex lg:items-center lg:justify-center lg:w-1/2 py-12 pl-12">
           <img
             src={bannerIlustracao}
             alt="Ilustração de uma mulher com cabelo castanho claro, usando um vestido azul e segurando um celular"
@@ -20,11 +17,10 @@ export default function MyAccountPage() {
           />
         </Box>
 
-        {/* Formulário: padding reduzido */}
-        <Box className="w-full lg:w-1/2 p-6 lg:p-12 flex flex-col">
+        {/* Formulário */}
+        <Box className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col ">
           <CardMyAccount />
         </Box>
-
       </Box>
     </Box>
   );

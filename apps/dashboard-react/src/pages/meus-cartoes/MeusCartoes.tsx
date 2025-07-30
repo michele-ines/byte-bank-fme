@@ -80,12 +80,15 @@ function MeusCartoesPage() {
   return (
     <Box className="w-full min-h-screen px-4 py-6 lg:px-12 bg-[var(--byte-bg-dashboard)]">
       <Box className="font-sans max-w-screen-xl mx-auto">
+        {/* botão de personalização */}
         <Box className="flex justify-end mb-4">
           <WidgetPreferencesButton />
         </Box>
 
         <Box className="flex flex-col lg:flex-row gap-y-6 lg:gap-x-6 lg:ml-8">
+          {/* coluna esquerda */}
           <Box className="flex flex-col gap-6 w-full lg:w-[calc(55.666%-12px)]">
+            {/* 1) Balance agora usa o valor do Redux */}
             <CardBalance
               user={data.user}
               balance={{ ...data.balance, value: balanceValue }}
@@ -97,12 +100,29 @@ function MeusCartoesPage() {
             {preferences.savingsGoal && (
               <SavingsGoalWidget goal={3000} transactions={transactions} />
             )}
+
             <PersonalCards />
           </Box>
 
+          {/* coluna direita – extrato com scroll infinito */}
           <Box className="max-w-full flex flex-col">
             <div className="flex-1 overflow-y-auto max-h-[800px]">
-              {/* ... CardListExtract comentado ... */}
+              {/* <CardListExtract
+                transactions={transactions}
+                fetchPage={() => {
+                  void fetchPage();
+                }}
+                hasMore={hasMore}
+                isPageLoading={isPageLoading}
+                onSave={(txs) => {
+                  void handleSaveTransactions(txs);
+                }}
+                onDelete={handleDeleteTransactions}
+                // 2) permite que o CardListExtract dispare atualização de saldo se quiser
+                atualizaSaldo={() => {
+                  void handleAtualizaSaldo();
+                }}
+              /> */}
             </div>
           </Box>
         </Box>

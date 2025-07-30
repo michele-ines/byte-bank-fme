@@ -10,7 +10,10 @@ import CadInvestments from "../../../../components/my-cards/cad-investments/cad-
 import SavingsGoalWidget from "../../../../components/widgets/savings-goal-widget";
 import SpendingAlertWidget from "../../../../components/widgets/spending-alert-widget";
 
-import type { DashboardData, Transaction } from "../../../../interfaces/dashboard";
+import type {
+  DashboardData,
+  Transaction,
+} from "../../../../interfaces/dashboard";
 import dashboardData from "../../../../mocks/dashboard-data.json";
 import { handleRequest } from "../../../../utils/error-handlers/error-handle";
 import { usePaginatedTransactions } from "../../../../hooks/use-paginated-transactions";
@@ -77,6 +80,51 @@ function InvestimentosPage() {
   };
 
   return (
+    // <Box className="w-full min-h-screen px-4 py-6 lg:px-12 bg-[var(--byte-bg-dashboard)]">
+    //   <Box className="font-sans max-w-screen-xl mx-auto">
+    //     {/* botão de personalização */}
+    //     <Box className="flex justify-end mb-4">
+    //       <WidgetPreferencesButton />
+    //     </Box>
+
+    //     <Box className="flex flex-col lg:flex-row gap-y-6 lg:gap-x-6 lg:ml-8">
+    //       {/* coluna esquerda */}
+    //       <Box className="flex flex-col gap-6 w-full lg:w-[calc(55.666%-12px)]">
+    //         {/* Balance agora com valor do Redux */}
+    //         <CardBalance
+    //           user={data.user}
+    //           balance={{ ...data.balance, value: balanceValue }}
+    //         />
+
+    //         <FinancialChart />
+
+    //         {preferences.spendingAlert && (
+    //           <SpendingAlertWidget limit={2000} transactions={transactions} />
+    //         )}
+    //         {preferences.savingsGoal && (
+    //           <SavingsGoalWidget goal={3000} transactions={transactions} />
+    //         )}
+
+    //         {/* Mapeando id:number → id:string */}
+    //         <CadInvestments
+    //           balance={{ ...data.balance, value: balanceValue }}
+    //           investments={data.investments.map((inv) => ({
+    //             id: String(inv.id),
+    //             label: inv.label,
+    //             value: inv.value,
+    //           }))}
+    //         />
+    //       </Box>
+
+    //       {/* coluna direita – extrato */}
+    //       <Box className="max-w-full flex flex-col">
+    //         <div className="flex-1 overflow-y-auto max-h-[800px]">
+    //           {/* seu CardListExtract aqui */}
+    //         </div>
+    //       </Box>
+    //     </Box>
+    //   </Box>
+    // </Box>
     <Box className="w-full min-h-screen px-4 py-6 lg:px-12 bg-[var(--byte-bg-dashboard)]">
       <Box className="font-sans max-w-screen-xl mx-auto">
         {/* botão de personalização */}
@@ -92,17 +140,13 @@ function InvestimentosPage() {
               user={data.user}
               balance={{ ...data.balance, value: balanceValue }}
             />
-
             <FinancialChart />
-
             {preferences.spendingAlert && (
               <SpendingAlertWidget limit={2000} transactions={transactions} />
             )}
             {preferences.savingsGoal && (
               <SavingsGoalWidget goal={3000} transactions={transactions} />
             )}
-
-            {/* Mapeando id:number → id:string */}
             <CadInvestments
               balance={{ ...data.balance, value: balanceValue }}
               investments={data.investments.map((inv) => ({
@@ -113,10 +157,24 @@ function InvestimentosPage() {
             />
           </Box>
 
-          {/* coluna direita – extrato */}
+          {/* coluna direita – extrato com scroll */}
           <Box className="max-w-full flex flex-col">
             <div className="flex-1 overflow-y-auto max-h-[800px]">
-              {/* seu CardListExtract aqui */}
+              {/* <CardListExtract
+                transactions={transactions}
+                fetchPage={() => {
+                  void fetchPage();
+                }}
+                hasMore={hasMore}
+                isPageLoading={isPageLoading}
+                onSave={(txs) => {
+                  void handleSaveTransactions(txs);
+                }}
+                onDelete={handleDeleteTransactions}
+                atualizaSaldo={() => {
+                  void handleAtualizaSaldo();
+                }}
+              /> */}
             </div>
           </Box>
         </Box>

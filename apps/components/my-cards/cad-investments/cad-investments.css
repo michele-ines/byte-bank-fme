@@ -19,7 +19,8 @@
   left: 0;
   width: 120px;
   height: 120px;
-  background: url("@ui-imgs/dash-card-new-transacao/card-pixels-3.svg") no-repeat left bottom / contain;
+  background: url("@ui-imgs/dash-card-new-transacao/card-pixels-3.svg")
+    no-repeat left bottom / contain;
   pointer-events: none;
   z-index: 0 !important;
 }
@@ -29,7 +30,8 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: url("@ui-imgs/dash-card-new-transacao/card-pixels-4.svg") no-repeat right top / 120px 120px;
+  background: url("@ui-imgs/dash-card-new-transacao/card-pixels-4.svg")
+    no-repeat right top / 120px 120px;
 }
 
 .cardTransacao > * {
@@ -75,12 +77,11 @@
   display: flex;
 }
 
-/* Estatísticas (contém o PieChart) */
+/* Variações */
 .investmentBoxStats {
-  height: 184px; /* altura fixa conforme maquetes */
+  height: 184px;
 }
 
-/* Tipo de renda (Renda Fixa / Variável) */
 .investmentBoxType {
   width: 100%;
   height: auto;
@@ -96,7 +97,6 @@
   }
 }
 
-/* Textos dentro dos boxes */
 .investmentBoxTitle {
   color: var(--byte-gray-50);
   font-size: 16px;
@@ -122,6 +122,8 @@
   color: var(--color-white) !important;
 }
 
+/* Se você estiver usando CSS puro (sem CSS Modules), o :global não existe.
+   Aqui está a adaptação correta para CSS normal: */
 .investmentBoxStats .MuiChartsLegend-label {
   color: var(--byte-bg-default) !important;
   font-family: var(--font-inter) !important;
