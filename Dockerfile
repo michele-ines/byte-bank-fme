@@ -90,13 +90,18 @@ COPY --from=deps /app/node_modules ./node_modules
 
 # Copiar arquivos de configuração
 COPY --chown=appuser:nodejs package*.json ./
+COPY --chown=appuser:nodejs server.js ./
 COPY --chown=appuser:nodejs apps/ ./apps/
 
 # Instalar devDependencies do root (necessário para concurrently)
 RUN npm install --include=dev
 
-# Instalar serve para servir arquivos estáticos (antes de mudar usuário)
-RUN npm install -g serve
+# Copiar builds dos outros microfrontends para o diretório do root
+RUN mkdir -p apps/root/dist/header apps/root/dist/home apps/root/dist/dashboard apps/root/dist/footer
+RUN cp -r apps/header-react/dist/* apps/root/dist/header/ || true
+RUN cp -r apps/home-react/dist/* apps/root/dist/home/ || true  
+RUN cp -r apps/dashboard-react/dist/* apps/root/dist/dashboard/ || true
+RUN cp -r apps/footer-angular/dist/* apps/root/dist/footer/ || true
 
 # Mudar para usuário não-root
 USER appuser
@@ -108,16 +113,9 @@ ENV PORT=3000
 # Expor porta (Railway usa a variável PORT)
 EXPOSE $PORT
 
-# Health check
+# Health check usando o endpoint /health do server.js
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD curl -f http://localhost:$PORT/ || exit 1
+  CMD curl -f http://localhost:$PORT/health || exit 1
 
-# Copiar builds dos outros microfrontends para o diretório do root
-RUN mkdir -p apps/root/dist/header apps/root/dist/home apps/root/dist/dashboard apps/root/dist/footer
-RUN cp -r apps/header-react/dist/* apps/root/dist/header/ || true
-RUN cp -r apps/home-react/dist/* apps/root/dist/home/ || true  
-RUN cp -r apps/dashboard-react/dist/* apps/root/dist/dashboard/ || true
-RUN cp -r apps/footer-angular/dist/* apps/root/dist/footer/ || true
-
-# Comando para produção - serve o root com todos os microfrontends
-CMD ["serve", "-s", "apps/root/dist", "-l", "3000"]
+# Comando para produção - usa o server.js
+CMD ["node", "server.js"]
