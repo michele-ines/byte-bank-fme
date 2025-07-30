@@ -10,6 +10,7 @@ module.exports = {
   // Configurações do servidor de desenvolvimento
   devServer: {
     port: 4200,
+    host: '0.0.0.0',
     historyApiFallback: true,
     headers: {
       'Access-Control-Allow-Origin': '*'

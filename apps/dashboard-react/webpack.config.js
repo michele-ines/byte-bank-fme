@@ -8,6 +8,7 @@ module.exports = {
   mode: 'development',
   devServer: {
     port: 3003,
+    host: '0.0.0.0',
     historyApiFallback: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
     static: { directory: path.resolve(__dirname, 'public') },
