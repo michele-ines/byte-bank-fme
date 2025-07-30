@@ -1,4 +1,5 @@
 {
+   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "ES2017",
     "lib": [
@@ -18,8 +19,11 @@
     "jsx": "react-jsx",
     "noEmit": false
   },
-  "include": [
+    "include": [
     "src",
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
+    "../types/global-assets.d.ts",
+    "../components/my-cards/**/*",
+    "../components/my-cards/**/*"
   ]
 }

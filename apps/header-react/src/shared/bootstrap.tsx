@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
 import HeaderPublic from './HeaderPublic';
+import { BrowserRouter } from 'react-router-dom';
+
 import './index.css';
+import '@global-styles'; 
+import { store } from '@store/store';
 
 const container = document.getElementById('root');
 if (container) {

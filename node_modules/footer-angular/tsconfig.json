@@ -1,4 +1,5 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022", "dom"],
@@ -12,8 +13,11 @@
     "baseUrl": ".",
     "paths": {}
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
+    "include": [
+    "src",
+    "src/**/*.d.ts",
+    "../types/global-assets.d.ts",
+    "../components/my-cards/**/*",
+    "../components/my-cards/**/*"
   ]
 }
