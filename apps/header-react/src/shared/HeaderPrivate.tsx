@@ -1,6 +1,5 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation, NavLink } from "react-router-dom";
-import "./Header.scss";
 import {
   AppBar,
   Box,
@@ -12,213 +11,185 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 
 const ROUTES = {
   ROOT: "/home",
   DASHBOARD: "/dashboard",
-  REGISTER: "/cadastro",
-  LOGIN: "/login",
+  PERSONAL_CARDS: "/meus-cartoes",
+  INVESTMENTS: "/investments",
+  MY_ACCOUNT: "/minha-conta",
+  OTHER_SERVICES: "/outros-servicos",
 };
 
 export default function HeaderPrivate() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-
-  const showPublicLinks = useMemo(
-    () => [ROUTES.ROOT].includes(pathname),
-    [pathname]
-  );
-  const showDashboardBtn = useMemo(
-    () => pathname !== ROUTES.DASHBOARD,
-    [pathname]
-  );
-
-  const bgColor = useMemo(
-    () =>
-      pathname === ROUTES.DASHBOARD ? "var(--byte-color-dash)" : "#000000",
-    [pathname]
-  );
-
-  const isActive = (route: string) =>
-    pathname === route || pathname.startsWith(route + "/");
-
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const openMenu = (e: React.MouseEvent<HTMLElement>) =>
     setAnchorEl(e.currentTarget);
   const closeMenu = () => setAnchorEl(null);
 
-  const underlineStyle: React.CSSProperties = {
-    borderBottom: "2px solid #47a138",
-    paddingBottom: 4,
-  };
+  const isActive = (route: string) =>
+    pathname === route || pathname.startsWith(route + "/");
+
+  const linkStyle = (path: string) => ({
+    color: "#47a138",
+    fontWeight: 500,
+    textTransform: "none",
+    marginLeft: "16px",
+    marginRight: "16px",
+    textDecoration: isActive(path) ? "underline" : "none",
+  });
 
   return (
-    <AppBar
-      position="static"
-      className="header"
-      style={{ backgroundColor: bgColor, boxShadow: "none" }}
-    >
-      <Toolbar
-        className="toolbarOverride"
-        sx={{
-          flex: 1,
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        {/* Logo */}
-        <NavLink
-          to={ROUTES.ROOT}
-          className={({ isActive }) => (isActive ? "activeLink" : "")}
-          style={{
-            border: "none",
-            display: "flex",
-            alignItems: "center",
-            marginLeft: "16px",
-          }}
-        >
-          <Box sx={{ display: { xs: "block", md: "none" } }}>
-            <img
-              src="/header/icon-group.svg"
-              alt="Ícone"
-              width={26}
-              height={26}
-            />
-          </Box>
-          <Box sx={{ display: { xs: "none", md: "block" } }}>
-            <img
-              src="/header/header-logo.svg"
-              alt="Logo"
-              width={120}
-              height={40}
-            />
-          </Box>
-        </NavLink>
-
-        {/* Desktop nav */}
+    <AppBar position="static" elevation={0} sx={{ backgroundColor: "#004D61" }}>
+      <Toolbar sx={{ justifyContent: "space-between" }}>
+        {/* Logo + Menu desktop*/}
         <Box
           sx={{
-            flexGrow: 1,
             display: { xs: "none", md: "flex" },
-            gap: 2,
-            ml: 4,
+            alignItems: "center",
+            gap: 4,
           }}
         >
-          {showDashboardBtn && (
-            <Button
-              component={NavLink}
-              to={ROUTES.DASHBOARD}
-              sx={{ color: "#47a138" }}
-              style={isActive(ROUTES.DASHBOARD) ? underlineStyle : undefined}
-            >
-              Dashboard
-            </Button>
-          )}
-          {showPublicLinks && (
-            <>
-              <Button
-                component="a"
-                href="#sobre"
-                sx={{ color: "#47a138" }}
-                style={isActive("#sobre") ? underlineStyle : undefined}
-              >
-                Sobre
-              </Button>
-              <Button
-                component="a"
-                href="#servicos"
-                sx={{ color: "#47a138" }}
-                style={isActive("#servicos") ? underlineStyle : undefined}
-              >
-                Serviços
-              </Button>
-            </>
-          )}
-        </Box>
-
-        {/* Actions */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2, mr: 2 }}>
-          {showPublicLinks && (
-            <>
-              <Button
-                className="openAccountButton"
-                onClick={() => navigate(ROUTES.REGISTER)}
-                sx={{
-                  display: { xs: "none", md: "inline-flex" },
-                }}
-              >
-                Abrir Conta
-              </Button>
-              <Button
-                className="loginButton"
-                onClick={() => navigate(ROUTES.LOGIN)}
-                sx={{
-                  display: { xs: "none", md: "inline-flex" },
-                }}
-              >
-                Já tenho conta
-              </Button>
-            </>
-          )}
-          <IconButton
-            size="large"
-            aria-label="menu"
-            onClick={openMenu}
-            sx={{ display: { xs: "flex", md: "none" }, color: "#47a138" }}
+          {/* Logo texto ou imagem */}
+          <NavLink
+            to={ROUTES.ROOT}
+            className={({ isActive }) => (isActive ? "activeLink" : "")}
+            style={{ border: "none" }}
           >
-            <MenuIcon />
-          </IconButton>
+            <img
+              src="/header/header-logo.svg"
+              alt="Logo Bytebank"
+              style={{ height: 32, cursor: "pointer", paddingLeft: 10 }}
+            />
+          </NavLink>
+
+          {/* Navegação */}
+          <Box
+            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
+          >
+            <Button
+              sx={linkStyle("/dashboard")}
+              onClick={() => navigate("/dashboard")}
+            >
+              Início
+            </Button>
+            <Button
+              sx={linkStyle("/meus-cartoes")}
+              onClick={() => navigate("/meus-cartoes")}
+            >
+              Meus cartões
+            </Button>
+            <Button
+              sx={linkStyle("/investimentos")}
+              onClick={() => navigate("/investimentos")}
+            >
+              Investimentos
+            </Button>
+            <Button
+              sx={linkStyle("/outros-servicos")}
+              onClick={() => navigate("/outros-servicos")}
+            >
+              Outros serviços
+            </Button>
+          </Box>
         </Box>
 
         {/* Mobile Menu */}
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={closeMenu}>
-          {showDashboardBtn && (
-            <MenuItem
-              onClick={() => {
-                closeMenu();
-                navigate(ROUTES.DASHBOARD);
-              }}
-            >
-              Início
-            </MenuItem>
-          )}
-          {showPublicLinks && (
-            <>
-              <MenuItem
-                onClick={() => {
-                  closeMenu();
-                  window.location.hash = "sobre";
-                }}
-              >
-                Sobre
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  closeMenu();
-                  window.location.hash = "servicos";
-                }}
-              >
-                Serviços
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  closeMenu();
-                  navigate(ROUTES.REGISTER);
-                }}
-              >
-                Abrir Conta
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  closeMenu();
-                  navigate(ROUTES.LOGIN);
-                }}
-              >
-                Já tenho conta
-              </MenuItem>
-            </>
-          )}
+          <MenuItem
+            onClick={() => {
+              closeMenu();
+              navigate(ROUTES.ROOT);
+            }}
+          >
+            Início
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              closeMenu();
+              navigate(ROUTES.PERSONAL_CARDS);
+            }}
+          >
+            Meus Cartões
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              closeMenu();
+              navigate(ROUTES.INVESTMENTS);
+            }}
+          >
+            Investimentos
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              closeMenu();
+              navigate(ROUTES.MY_ACCOUNT);
+            }}
+          >
+            Minha Conta
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              closeMenu();
+              navigate(ROUTES.OTHER_SERVICES);
+            }}
+          >
+            Outros Serviços
+          </MenuItem>
         </Menu>
+        <IconButton
+          size="large"
+          aria-label="menu"
+          onClick={openMenu}
+          sx={{ display: { xs: "flex", md: "none" }, color: "#47a138" }}
+        >
+          <MenuIcon />
+        </IconButton>
+
+        {/* Usuário */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <Typography
+            sx={{
+              color: "#ffffff",
+              marginRight: 1,
+              display: { xs: "none", md: "flex" },
+            }}
+            onClick={() => navigate(ROUTES.MY_ACCOUNT)}
+
+          >
+            Joana da Silva Oliveira
+          </Typography>
+          <IconButton
+            size="large"
+            aria-label="user account"
+            onClick={() => navigate(ROUTES.MY_ACCOUNT)}
+            sx={{
+              width: 32,
+              height: 32,
+              backgroundColor: "#47a138",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#000000",
+              fontWeight: "bold",
+              fontSize: "0.8rem",
+              ":hover": {
+                backgroundColor: "#3f8d2a",
+              },
+            }}
+          >
+            <PermIdentityIcon fontSize="small" className="userIcon" />
+          </IconButton>
+        </Box>
       </Toolbar>
     </AppBar>
   );
