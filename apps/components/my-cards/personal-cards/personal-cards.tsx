@@ -1,15 +1,17 @@
-import { Box, Button, PersonalCardsStyles as styles } from '../../ui';
+import { Box, Button } from '../../ui';
+
+import "./personal-cards.css";
 
 export default function PersonalCards() {
   return (
     <Box
       role="region"
       aria-labelledby="meus-cartoes-heading"
-      className={`${styles.cardPersonalCards} cardTransacao w-full min-h-[478px]`}
+      className="cardPersonalCards cardTransacao w-full min-h-[478px]`}"
     >
       <h3
         id="meus-cartoes-heading"
-        className={`${styles.cardTitle} w-full text-center md:text-start`}
+        className="cardTitle w-full text-center md:text-start"
       >
         Meus cartões
       </h3>
@@ -18,7 +20,7 @@ export default function PersonalCards() {
         {/* ---------- Cartão físico ---------- */}
         <h4
           id="cartao-fisico-heading"
-          className={`${styles.descriptionCard} text-center md:text-start`}
+          className="descriptionCard text-center md:text-start"
         >
           Cartão físico
         </h4>
@@ -43,8 +45,8 @@ export default function PersonalCards() {
               aria-label="Configurar cartão físico"
               className="w-full py-3 font-medium text-base"
               style={{
-                background: 'var(--byte-color-orange-500)',
-                color: 'var(--byte-bg-default)',
+                background: '#ff5031',
+                color: '#ffffff',
               }}
             >
               Configurar
@@ -54,12 +56,12 @@ export default function PersonalCards() {
               type="button"
               variant="contained"
               aria-label="Bloquear cartão físico"
-              className={`w-full py-3 font-medium text-base ${styles.buttonBlock}`}
+              className="w-full py-3 font-medium text-base buttonBlock"
             >
               Bloquear
             </Button>
 
-            <span className={styles.descriptionFunctionCard}>
+            <span className="descriptionFunctionCard">
               Função: Débito/Crédito
             </span>
           </Box>
@@ -68,7 +70,7 @@ export default function PersonalCards() {
         {/* ---------- Cartão digital ---------- */}
         <h4
           id="cartao-digital-heading"
-          className={`${styles.descriptionCard} text-center md:text-start`}
+          className="descriptionCard text-center md:text-start"
         >
           Cartão digital
         </h4>
@@ -93,8 +95,8 @@ export default function PersonalCards() {
               aria-label="Configurar cartão digital"
               className="w-full py-3 font-medium text-base"
               style={{
-                background: 'var(--byte-color-orange-500)',
-                color: 'var(--byte-bg-default)',
+                background: '#ff5031',
+                color: '#ffffff',
               }}
             >
               Configurar
@@ -104,12 +106,12 @@ export default function PersonalCards() {
               type="button"
               variant="contained"
               aria-label="Bloquear cartão digital"
-              className={`w-full py-3 font-medium text-base ${styles.buttonBlock}`}
+              className="w-full py-3 font-medium text-base buttonBlock"
             >
               Bloquear
             </Button>
 
-            <span className={styles.descriptionFunctionCard}>
+            <span className="descriptionFunctionCard">
               Função: Débito
             </span>
           </Box>

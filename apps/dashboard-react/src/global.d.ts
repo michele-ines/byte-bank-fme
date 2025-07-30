@@ -12,3 +12,9 @@ declare module '*.svg' {
   const content: string;
   export default content;
 }
+
+declare module '@store/store' {
+  // Reexporte exatamente o que o seu monorepo exporta
+  import { store, AppDispatch, RootState } from '../../store/store';
+  export { store, AppDispatch, RootState };
+}
