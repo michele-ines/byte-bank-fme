@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  root:
+    build:
+      context: ./apps/root
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    depends_on:
+      - header
+      - home
+      - dashboard
+      - footer
+    networks:
+      - microfrontend-byte-bank-fme-fiap-network
+
+  header:
+    build:
+      context: ./apps/header-react
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    networks:
+      - microfrontend-byte-bank-fme-fiap-network
+
+  home:
+    build:
+      context: ./apps/home-react
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+    networks:
+      - microfrontend-byte-bank-fme-fiap-network
+
+  dashboard:
+    build:
+      context: ./apps/dashboard-react
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - PORT=3003
+    networks:
+      - microfrontend-byte-bank-fme-fiap-network
+
+  footer:
+    build:
+      context: ./apps/footer-angular
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    environment:
+      - NODE_ENV=production
+      - PORT=4200
+    networks:
+      - microfrontend-byte-bank-fme-fiap-network
+
+networks:
+  microfrontend-byte-bank-fme-fiap-network:
+    driver: bridge

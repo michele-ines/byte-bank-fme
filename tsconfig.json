@@ -38,8 +38,10 @@
   },
   "include": [
     "src/**/*",
+    "apps/**/*",
     "**/*.test.ts",
     "**/*.test.tsx",
+    "**/*.d.ts",
     "jest.setup.ts",
     ".next/types/**/*.ts"
   ],
