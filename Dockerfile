@@ -18,6 +18,7 @@ FROM base AS deps
 # Copiar arquivos de dependências do root
 COPY package*.json ./
 
+
 # Instalar dependências do workspace root
 RUN npm ci && npm cache clean --force
 
@@ -92,7 +93,7 @@ COPY --chown=appuser:nodejs package*.json ./
 COPY --chown=appuser:nodejs apps/ ./apps/
 
 # Instalar devDependencies do root (necessário para concurrently)
-RUN npm install
+RUN npm install --include=dev
 
 # Mudar para usuário não-root
 USER appuser
