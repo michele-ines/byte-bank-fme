@@ -70,5 +70,8 @@ EXPOSE $PORT
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD curl -f http://localhost:$PORT/ || exit 1
 
-# Comando para produção
-CMD ["webpack", "serve", "--config", "webpack.prod.js", "--host", "0.0.0.0", "--port", "3000"]
+# Instalar serve para servir arquivos estáticos
+RUN npm install -g serve
+
+# Comando para produção - serve os arquivos buildados
+CMD ["serve", "-s", "dist", "-l", "3000"]
