@@ -64,7 +64,7 @@ function OutrosServicosContent() {
   };
 
   return (
-    <div className="w-full min-h-screen px-4 py-6 lg:px-12 bg-[var(--byte-bg-dashboard)]">
+    <div className="w-full min-h-screen px-4 py-6 lg:px-12" style={{ backgroundColor: '#E4EDE3' }}>
       <div className="font-sans max-w-screen-xl mx-auto">
         {/* botão de preferências */}
         <div className="flex justify-end mb-4">

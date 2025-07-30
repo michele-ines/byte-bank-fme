@@ -2,11 +2,7 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -20,18 +16,19 @@
     "noEmit": false,
 
     // ◀─── Adicionadas estas linhas:
-    "baseUrl": ".",  
+    "baseUrl": ".",
     "paths": {
       "@my-cards/*": ["../components/my-cards/*"],
       "@ui-imgs/*": ["../components/ui/imgs/*"],
-     "@store/store": ["../../store/store.ts"]
+      "@store/store": ["../../store/store.ts"],
+      "@global-styles": ["../../styles/globals.css"]
     }
   },
-"include": [
-  "src",
-  "src/**/*.d.ts",
-  "src/global.d.ts",
-  "../components/my-cards/**/*",
-  "../../store/**/*" 
-]
+  "include": [
+    "src",
+    "src/**/*.d.ts",
+    "src/global.d.ts",
+    "../components/my-cards/**/*",
+    "../../store/**/*"
+  ]
 }

@@ -21,6 +21,8 @@ module.exports = {
       '@ui-imgs': path.resolve(__dirname, '../components/ui/imgs'),
       '@my-cards': path.resolve(__dirname, '../components/my-cards'),
       '@store/store': path.resolve(__dirname, '../../store/store.ts'),     // <— aponta para a pasta /store do monorepo
+      '@global-styles': path.resolve(__dirname, '../..', 'styles')
+
     },
   },
   module: {

@@ -1,7 +1,10 @@
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
-  content: ['./src/**/*.{ts,tsx}'],
+    content: [
+    './styles/globals.css',           // seu CSS global do Tailwind
+    './apps/**/*.{js,jsx,ts,tsx,html}'// varre todos os apps + HTML, se houver
+  ],
   theme: {
     extend: {
       screens: {
