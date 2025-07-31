@@ -1,16 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import {
-  Box,
-  FormControl,
-  Button,
-  IconButton,
-} from "../../ui";
+import { Box, FormControl, Button, IconButton } from "../../ui";
 
-import {
-  OutlinedInput,
-  FormHelperText,
-  InputAdornment,
-} from "@mui/material";
+import { OutlinedInput, FormHelperText, InputAdornment } from "@mui/material";
 
 import {
   Edit as EditIcon,
@@ -20,8 +11,9 @@ import {
 import { registerValidations } from "../../../utils/forms-validations/formValidations";
 import { RegisterData, UserInfo } from "../../../interfaces/dashboard";
 import { useForm } from "react-hook-form";
+import { tw } from "twind";
 
-import "./card-my-accout.css";  
+import "./card-my-accout.css";
 
 const initialUser: UserInfo = {
   name: "Joana da Silva Oliveira",
@@ -78,11 +70,7 @@ export function CardMyAccount() {
         borderWidth: hasError || editing ? 1 : undefined,
       },
       "&:hover .MuiOutlinedInput-notchedOutline": {
-        borderColor: hasError
-          ? "#bf1313"
-          : editing
-          ? "#47a138"
-          : undefined,
+        borderColor: hasError ? "#bf1313" : editing ? "#47a138" : undefined,
       },
     };
   };
@@ -125,19 +113,18 @@ export function CardMyAccount() {
   };
 
   return (
-     <Box
-      className="cardContainer} w-full h-full"
+    <Box
+      className={tw`cardContainer w-full h-full`}
       role="region"
       aria-labelledby="my-account-heading"
     >
-      <section className="flex flex-col gap-6 w-full h-full">
-        <h3 id="my-account-heading" className="myAccountTitle">
+      <section className={tw`flex flex-col gap-6 w-full h-full p-6`}>
+        <h3 id="my-account-heading" className={tw`myAccountTitle`}>
           Minha conta
         </h3>
 
-        <Box className="flex flex-col lg:flex-row-reverse w-full h-full">
-          <Box className="flex flex-col gap-6 w-full h-full">
-
+        <Box className={tw`flex flex-col lg:flex-row-reverse w-full h-full`}>
+          <Box className={tw`flex flex-col gap-6 w-full h-full`}>
             {/* Nome */}
             <FormControl
               variant="outlined"
@@ -145,7 +132,10 @@ export function CardMyAccount() {
               error={!!errors.name}
               aria-invalid={!!errors.name}
             >
-              <label htmlFor="name" className="text-md font-bold text-gray-700">
+              <label
+                htmlFor="name"
+                className={tw`text-md font-bold text-gray-700`}
+              >
                 Nome
               </label>
               <OutlinedInput
@@ -158,7 +148,11 @@ export function CardMyAccount() {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label={isEditable.name ? "Concluir edição de nome" : "Editar nome"}
+                      aria-label={
+                        isEditable.name
+                          ? "Concluir edição de nome"
+                          : "Editar nome"
+                      }
                       onClick={() => toggleEdit("name")}
                       edge="end"
                       sx={iconSx("name")}
@@ -180,7 +174,10 @@ export function CardMyAccount() {
               error={!!errors.email}
               aria-invalid={!!errors.email}
             >
-              <label htmlFor="email" className="text-md font-bold text-gray-700">
+              <label
+                htmlFor="email"
+                className={tw`text-md font-bold text-gray-700`}
+              >
                 E-mail
               </label>
               <OutlinedInput
@@ -193,7 +190,11 @@ export function CardMyAccount() {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label={isEditable.email ? "Concluir edição de e-mail" : "Editar e-mail"}
+                      aria-label={
+                        isEditable.email
+                          ? "Concluir edição de e-mail"
+                          : "Editar e-mail"
+                      }
                       onClick={() => toggleEdit("email")}
                       edge="end"
                       sx={iconSx("email")}
@@ -215,7 +216,10 @@ export function CardMyAccount() {
               error={!!errors.password}
               aria-invalid={!!errors.password}
             >
-              <label htmlFor="password" className="text-md font-bold text-gray-700">
+              <label
+                htmlFor="password"
+                className={tw`text-md font-bold text-gray-700`}
+              >
                 Senha
               </label>
               <OutlinedInput
@@ -230,7 +234,9 @@ export function CardMyAccount() {
                   <InputAdornment position="end" className="flex items-center">
                     {isEditable.password && passwordValue && (
                       <IconButton
-                        aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                        aria-label={
+                          showPassword ? "Ocultar senha" : "Mostrar senha"
+                        }
                         onClick={() => setShowPassword((p) => !p)}
                         edge="end"
                         sx={visibilityIconSx()}
@@ -240,7 +246,11 @@ export function CardMyAccount() {
                       </IconButton>
                     )}
                     <IconButton
-                      aria-label={isEditable.password ? "Concluir edição de senha" : "Editar senha"}
+                      aria-label={
+                        isEditable.password
+                          ? "Concluir edição de senha"
+                          : "Editar senha"
+                      }
                       onClick={() => toggleEdit("password")}
                       edge="end"
                       sx={iconSx("password")}
@@ -260,7 +270,7 @@ export function CardMyAccount() {
               <Button
                 type="submit"
                 variant="contained"
-                className="w-full py-3 font-medium text-base"
+                className={tw`w-full py-3 font-medium text-base`}
                 style={{
                   background: "var(--byte-color-orange-500)",
                   color: "var(--byte-bg-default)",
