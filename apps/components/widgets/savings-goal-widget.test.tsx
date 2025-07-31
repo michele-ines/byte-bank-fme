@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import SavingsGoalWidget from './savings-goal-widget';
-import { SavingsGoalProps, Transaction } from 'interfaces/dashboard';
+import { SavingsGoalProps, Transaction } from '../../interfaces/dashboard';
 
 /* Factory de transação para facilitar os cenários */
 const createTransaction = (overrides: Partial<Transaction>): Transaction => ({

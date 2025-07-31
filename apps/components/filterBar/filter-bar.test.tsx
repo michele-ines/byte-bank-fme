@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { TypeFilter } from 'interfaces/dashboard';
+import { TypeFilter } from '../../interfaces/dashboard';
 import FilterBar from './filter-bar'; // Ajuste o caminho se necessário
 
 describe('FilterBar', () => {

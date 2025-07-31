@@ -3,7 +3,7 @@ import SpendingAlertWidget from "./spending-alert-widget";
 import {
   SpendingAlertProps,
   Transaction,
-} from "interfaces/dashboard";
+} from "../../interfaces/dashboard";
 
 /* utilitário para criar transações */
 const createTransaction = (overrides: Partial<Transaction>): Transaction => ({

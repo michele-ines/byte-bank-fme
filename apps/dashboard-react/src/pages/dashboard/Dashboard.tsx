@@ -53,13 +53,16 @@ type TransactionLike = Omit<Transaction, "valor"> & {
   anexos?: Attachment[];
 };
 
-const normalizeToTransaction = (txs: TransactionLike[]): Transaction[] =>
+// Tipo com 'valor' já garantido como number (o que os componentes esperam)
+type TransactionNum = Omit<Transaction, "valor"> & { valor: number };
+
+const normalizeToTransaction = (txs: TransactionLike[]): TransactionNum[] =>
   txs.map((tx) => ({
     ...tx,
     valor: toNumber(tx.valor),
   }));
 
-const normalizeToTxWithFiles = (txs: Transaction[]): TxWithFiles[] =>
+const normalizeToTxWithFiles = (txs: TransactionNum[]): TxWithFiles[] =>
   txs.map((tx) => ({
     ...tx,
     // se seu TxWithFiles exige 'novosAnexos', garanta default:
@@ -87,15 +90,18 @@ const DashboardContent = () => {
 
   const { preferences } = useWidgetPreferences();
 
-  // Normaliza para o tipo "oficial" de @interfaces/dashboard
-  const transactions: Transaction[] = useMemo(
-    () => normalizeToTransaction(transactionsRaw as unknown as TransactionLike[]),
+  // Normaliza para o tipo com 'valor: number' que os componentes esperam
+  const transactions: TransactionNum[] = useMemo(
+    () =>
+      normalizeToTransaction(
+        transactionsRaw as unknown as TransactionLike[]
+      ),
     [transactionsRaw]
   );
 
   const fetchNextPage = useCallback(() => {
     if (transactionsStatus !== "loading") {
-      void dispatch(fetchTransactions());
+      void dispatch(fetchTransactions()); // sua thunk não recebe args
     }
   }, [dispatch, transactionsStatus]);
 
@@ -132,7 +138,7 @@ const DashboardContent = () => {
         </Box>
 
         <Box className={tw`flex flex-col md:grid md:grid-cols-3 gap-6`}>
-          <Box className={tw`flex flex-col gap-6 w-ful col-span-2`}>
+          <Box className={tw`flex flex-col gap-6 w-full col-span-2`}>
             <CardBalance
               user={data.user}
               balance={{ ...data.balance, value: balanceValue }}
@@ -157,9 +163,9 @@ const DashboardContent = () => {
               transactions={transactions}
               fetchPage={fetchNextPage}
               isPageLoading={transactionsStatus === "loading"}
-              onSave={(txs /* Transaction[] já normalizado */) => {
+              onSave={(txs) => {
                 // Converter para TxWithFiles[] antes de salvar
-                const normalized = normalizeToTxWithFiles(txs);
+                const normalized = normalizeToTxWithFiles(txs as TransactionNum[]);
                 void handleSaveTransactions(normalized);
               }}
               onDelete={handleDeleteTransactions}
