@@ -1,11 +1,12 @@
 import { Box } from "@mui/material";
 import { SpendingAlertProps } from "../../interfaces/dashboard";
+import { tw } from "twind";
 
 function calculateTotalExpenses(
   transactions: SpendingAlertProps["transactions"]
 ): number {
   return transactions
-    .filter(tx => tx.tipo === "saida")
+    .filter((tx) => tx.tipo === "saida")
     .reduce((total, tx) => total + tx.valor, 0);
 }
 
@@ -18,12 +19,12 @@ export default function SpendingAlertWidget({
 
   return (
     <Box
-      component="section"                 /* região identificável */
+      component="section" /* região identificável */
       aria-labelledby="spending-alert-heading"
-      className="p-4 rounded-2xl shadow-md bg-white text-gray-900"
+      className={tw`p-4 rounded-2xl shadow-md bg-white text-gray-900`}
       style={{ border: "2px solid var(--byte-color-dash)" }}
     >
-      <h3 id="spending-alert-heading" className="text-lg font-semibold">
+      <h3 id="spending-alert-heading" className={tw`text-lg font-semibold`}>
         Alerta de Gastos
       </h3>
 
@@ -40,15 +41,17 @@ export default function SpendingAlertWidget({
 
       {alert ? (
         <p
-          className="text-red-600 font-bold mt-2"
-          role="alert"                  /* avisado imediatamente */
+          className={tw`text-red-600 font-bold mt-2`}
+          role="alert" /* avisado imediatamente */
           aria-live="assertive"
         >
-          <span role="img" aria-label="Alerta">⚠</span>{" "}
+          <span role="img" aria-label="Alerta">
+            ⚠
+          </span>{" "}
           Você ultrapassou o limite!
         </p>
       ) : (
-        <p className="text-green-600 font-semibold mt-2" aria-live="polite">
+        <p className={tw`text-green-600 font-semibold mt-2`} aria-live="polite">
           Gastos dentro do limite
         </p>
       )}
