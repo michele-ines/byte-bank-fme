@@ -9,6 +9,7 @@ import doacoesIcon from "@ui-imgs/dash-card-outros-servicos/icone-doacoes.svg";
 import pixIcon from "@ui-imgs/dash-card-outros-servicos/icone-pix.svg";
 import segurosIcon from "@ui-imgs/dash-card-outros-servicos/icone-seguros.svg";
 import creditoCelularIcon from "@ui-imgs/dash-card-outros-servicos/icone-credito-celular.svg";
+import { tw } from "twind";
 
 const services = [
   { key: "emprestimo", title: "Empréstimo", icon: emprestimoIcon },
@@ -25,35 +26,12 @@ export default function CardsOutrosServicos() {
       component="section"
       role="region"
       aria-labelledby="servicos-heading"
-      sx={{
-        backgroundColor: "#cbcbcb",
-        borderRadius: 1,
-        p: 3,
-        position: "relative",
-        overflow: "hidden",
-        "&::before": {
-          content: '""',
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          width: 120,
-          height: 120,
-          background: `url("/dash-card-new-transacao/card-pixels-3.svg") no-repeat left bottom/contain`,
-          pointerEvents: "none",
-        },
-        "&::after": {
-          content: '""',
-          position: "absolute",
-          inset: 0,
-          pointerEvents: "none",
-          background: `url("/dash-card-new-transacao/card-pixels-4.svg") no-repeat right top/120px 120px`,
-        },
-      }}
+      className={tw`cardTransacao`}
     >
       {/* Título */}
       <Typography
         id="servicos-heading"
-        className="investmentTitle"
+        className={tw`investmentTitle`}
         variant="h6"
         component="h3"
         sx={{
@@ -62,6 +40,7 @@ export default function CardsOutrosServicos() {
           mb: 4,
           position: "relative",
           zIndex: 1,
+          color: "#000",
         }}
       >
         Confira os serviços disponíveis
@@ -80,6 +59,8 @@ export default function CardsOutrosServicos() {
           },
           position: "relative",
           zIndex: 1,
+          width: "100%",
+          alignSelf: "center",
         }}
       >
         {services.map(({ key, title, icon }) => (
