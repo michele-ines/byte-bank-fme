@@ -1,28 +1,34 @@
-import React, { useEffect, useCallback } from 'react';
-import { Provider, useDispatch, useSelector } from 'react-redux';
-import { fetchBalance } from '../../../../store/slices/balanceSlice';
-import CardBalance from '../../../../components/my-cards/card-balance/card-balance';
-import CardsOtherService from '../../../../components/my-cards/card-other-services/card-other-services';
+import React, { useEffect, useCallback } from "react";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import { fetchBalance } from "../../../../store/slices/balanceSlice";
+import CardBalance from "../../../../components/my-cards/card-balance/card-balance";
+import CardsOtherService from "../../../../components/my-cards/card-other-services/card-other-services";
 // import CardListExtract from '../../../../components/my-cards/card-list-extract/card-list-extract';
-import SavingsGoalWidget from '../../../../components/widgets/savings-goal-widget';
-import SpendingAlertWidget from '../../../../components/widgets/spending-alert-widget';
+import SavingsGoalWidget from "../../../../components/widgets/savings-goal-widget";
+import SpendingAlertWidget from "../../../../components/widgets/spending-alert-widget";
 import { Box } from "@mui/material";
 
-import type { DashboardData, Transaction } from '../../../../interfaces/dashboard';
-import dashboardData from '../../../../mocks/dashboard-data.json';
-import { handleRequest } from '../../../../utils/error-handlers/error-handle';
-import { usePaginatedTransactions } from '../../../../hooks/use-paginated-transactions';
-import FinancialChart from '../../../../components/charts/financialChart';
-import WidgetPreferencesButton from '../../../../components/widgets/widget-preferences-button';
-import { useWidgetPreferences } from '../../../../hooks/use-widget-preferences';
-import { AppDispatch, RootState, store } from '../../../../store/store';
+import type {
+  DashboardData,
+  Transaction,
+} from "../../../../interfaces/dashboard";
+import dashboardData from "../../../../mocks/dashboard-data.json";
+import { handleRequest } from "../../../../utils/error-handlers/error-handle";
+import { usePaginatedTransactions } from "../../../../hooks/use-paginated-transactions";
+import FinancialChart from "../../../../components/charts/financialChart";
+import WidgetPreferencesButton from "../../../../components/widgets/widget-preferences-button";
+import { useWidgetPreferences } from "../../../../hooks/use-widget-preferences";
+import { AppDispatch, RootState, store } from "../../../../store/store";
+import { tw } from "twind";
 
 function OutrosServicosContent() {
   const data = dashboardData as DashboardData;
   const dispatch = useDispatch<AppDispatch>();
 
   // === saldo via Redux ===
-  const { value: balanceValue } = useSelector((state: RootState) => state.balance);
+  const { value: balanceValue } = useSelector(
+    (state: RootState) => state.balance
+  );
 
   const handleAtualizaSaldo = useCallback(async () => {
     await dispatch(fetchBalance());
@@ -33,8 +39,13 @@ function OutrosServicosContent() {
   }, [handleAtualizaSaldo]);
 
   /* paginação */
-  const { transactions, fetchPage, refresh, hasMore, isLoading: isPageLoading } =
-    usePaginatedTransactions();
+  const {
+    transactions,
+    fetchPage,
+    refresh,
+    hasMore,
+    isLoading: isPageLoading,
+  } = usePaginatedTransactions();
 
   /* prefs dos widgets */
   const { preferences } = useWidgetPreferences();
@@ -45,8 +56,8 @@ function OutrosServicosContent() {
       await Promise.all(
         txs.map(async (tx) =>
           fetch(`/api/transacao/${tx._id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ tipo: tx.tipo, valor: tx.valor }),
           })
         )
@@ -58,23 +69,34 @@ function OutrosServicosContent() {
 
   const handleDeleteTransactions = async (ids: number[]) => {
     await handleRequest(async () => {
-      await Promise.all(ids.map((id) => fetch(`/api/transacao/${id}`, { method: 'DELETE' })));
+      await Promise.all(
+        ids.map((id) => fetch(`/api/transacao/${id}`, { method: "DELETE" }))
+      );
       await refresh();
       await handleAtualizaSaldo();
     });
   };
 
   return (
-    <Box className="w-full min-h-screen px-4 py-6 lg:px-12 bg-[var(--byte-bg-dashboard)]">
-      <Box className="font-sans max-w-screen-xl mx-auto">
+    <Box
+      className={tw`w-full min-h-screen flex flex-col justify-center px-4 py-6 lg:px-12 bg-[#E4EDE3]`}
+    >
+      <Box
+        className={tw`w-full md:max-w-screen-lg flex flex-col gap-6 mx-auto`}
+      >
         {/* botão de personalização */}
-        <Box className="flex justify-end mb-4">
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
           <WidgetPreferencesButton />
         </Box>
 
-        <Box className="flex flex-col lg:flex-row gap-y-6 lg:gap-x-6 lg:ml-8">
+        <Box className={tw`flex flex-col md:grid md:grid-cols-3 gap-6`}>
           {/* coluna esquerda */}
-          <Box className="flex flex-col gap-6 w-full lg:w-[calc(55.666%-12px)]">
+          <Box className={tw`flex flex-col gap-6 w-ful col-span-2`}>
             {/* Balance agora vem do Redux */}
             <CardBalance
               user={data.user}
@@ -91,8 +113,8 @@ function OutrosServicosContent() {
           </Box>
 
           {/* coluna direita – extrato com scroll infinito */}
-          <Box className="max-w-full flex flex-col">
-            <div className="flex-1 overflow-y-auto max-h-[800px]">
+          <Box className={tw`flex flex-col`}>
+            <div className={tw`flex-1 overflow-y-auto max-h-[800px]`}>
               {/* <CardListExtract
                 transactions={transactions}
                 fetchPage={() => {
