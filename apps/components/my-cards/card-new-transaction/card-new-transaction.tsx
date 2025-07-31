@@ -13,7 +13,6 @@ import {
   NewTransactionData,
 } from "../../../interfaces/dashboard";
 import { useForm } from "react-hook-form";
-import clsx from "clsx";
 import { maskCurrency } from "../../../utils/currency-formatte/currency-formatte";
 import "./card-new-transaction.css";
 import { tw } from "twind";
@@ -161,11 +160,13 @@ export default function CardNewTransaction({
             /* 🆕 atributos de estado para leitores de tela */
             aria-busy={isLoading ? "true" : undefined}
             aria-disabled={isLoading ? "true" : undefined}
-            className={clsx("transacaoButton", {
-              "opacity-50 cursor-not-allowed bg-gray-400 hover:bg-gray-400":
-                isLoading,
-            })}
+            className={tw`transacaoButton ${
+              isLoading
+                ? "opacity-50 cursor-not-allowed bg-gray-400 hover:bg-gray-400"
+                : ""
+            }`}
             disabled={isLoading}
+            sx={{ backgroundColor: "#004d61" }}
           >
             {isLoading ? "Concluindo…" : "Concluir Transação"}
           </Button>

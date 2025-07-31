@@ -3,7 +3,6 @@
 import React from "react";
 import { Box, PieChart } from "../../ui";
 
-
 // Se estiver em TS, mantenha a interface. Caso contrário, ignore esta linha:
 // import { CadInvestmentsProps } from "interfaces/dashboard";
 
@@ -47,7 +46,7 @@ const CadInvestments: React.FC<CadInvestmentsProps> = ({
           })}
         </p>
 
-        <div className={tw`flex flex-col md:flex-row gap-6`}>
+        <div className={tw`flex flex-col lg:flex-row gap-6`}>
           {investments.map(({ id, label, value }) => {
             const formatted = value.toLocaleString("pt-BR", {
               style: "currency",

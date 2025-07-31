@@ -4,12 +4,12 @@
 :root {
   /* ===== Cores Base ===== */
   --byte-bg-default: #ffffff;
-  --byte-bg-dashboard: #E4EDE3;
+  --byte-bg-dashboard: #e4ede3;
   --byte-text-medium-gray: #767676;
   --byte-color-black: #000000;
-  --byte-color-dash:#004D61;
+  --byte-color-dash: #004d61;
   --byte-color-neutral-600: #8b8b8b;
-  --byte-color-green-50: rgba(71,161,56,.5);
+  --byte-color-green-50: rgba(71, 161, 56, 0.5);
 
   /* ===== Cores Utilitárias ===== */
   --byte-color-error: #bf1313;
@@ -58,20 +58,11 @@
   background: var(--byte-gradient-teal);
 }
 
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #151414;
     --foreground: #ededed;
   }
-}
-
-body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-inter);
-  margin: 0;
-  padding: 0;
 }
 
 /* 
@@ -128,34 +119,4 @@ body {
   line-height: var(--line-height-normal);
   letter-spacing: var(--letter-spacing-none);
   vertical-align: var(--vertical-align-middle);
-}
-
-
-/* Adicione no seu CSS global */
-@media (min-width: 1024px) { /* Desktop */
-  .card-saldo,
-  .cardTransacao {
-    width: 690px !important;
-  }
-  .cardExtrato {
-    width: 282px !important;
-  }
-
-}
-
-@media (min-width: 768px) and (max-width: 1024px) { /* Tablet */
-  .card-saldo,
-  .cardTransacao,
-  .cardExtrato {
-    width: 100% !important; /* pode manter 100% ou o valor desejado */
-  }
-
-}
-
-@media (max-width: 767px) { /* Celular - responsivo completo */
-  .card-saldo,
-  .cardTransacao,
-  .cardExtrato {
-    width: 100% !important; /* pode manter 100% ou o valor desejado */
-  }
 }

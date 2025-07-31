@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* =======================
   Import Tailwind e fontes
    ======================= */
@@ -14,12 +13,12 @@
 :root {
   /* ===== Cores Base ===== */
   --byte-bg-default: #ffffff;
-  --byte-bg-dashboard: #E4EDE3;
+  --byte-bg-dashboard: #e4ede3;
   --byte-text-medium-gray: #767676;
   --byte-color-black: #000000;
-  --byte-color-dash:#004D61;
+  --byte-color-dash: #004d61;
   --byte-color-neutral-600: #8b8b8b;
-  --byte-color-green-50: rgba(71,161,56,.5);
+  --byte-color-green-50: rgba(71, 161, 56, 0.5);
 
   /* ===== Cores Utilitárias ===== */
   --byte-color-error: #bf1313;
@@ -78,90 +77,3 @@ body {
   margin: 0;
   padding: 0;
 }
-
-/* 
-      ============================
-      Banner Title (h1 do banner)
-      ============================
-   */
-.banner-title {
-  font-family: var(--font-inter);
-  font-weight: var(--font-semibold);
-  font-size: var(--text-xl);
-  line-height: var(--line-height-tight);
-  letter-spacing: var(--letter-spacing-none);
-  vertical-align: var(--vertical-align-middle);
-  color: var(--byte-color-black);
-}
-
-/* 
-      ===========================
-      Título "Vantagens do nosso banco"
-      =========================== 
-*/
-.banner-title-mobile {
-  font-family: var(--font-inter);
-  font-weight: var(--font-bold);
-  font-size: var(--text-lg);
-  line-height: var(--line-height-normal);
-  letter-spacing: var(--letter-spacing-none);
-  vertical-align: var(--vertical-align-middle);
-  color: var(--byte-color-black);
-}
-
-/* 
-      ===========================
-      Título "Vantagens do nosso banco"
-      =========================== */
-.vantagem-title {
-  font-family: var(--font-inter);
-  font-weight: var(--font-bold);
-  line-height: var(--line-height-normal);
-  letter-spacing: var(--letter-spacing-none);
-  text-align: center;
-  vertical-align: var(--vertical-align-middle);
-}
-
-/* 
-      ===========================
-      Descrição das vantagens
-      (ex.: "Isso mesmo, nossa conta é digital...", etc.)
-      =========================== */
-.vantagem-description {
-  font-family: var(--font-inter);
-  font-size: 16px;
-  line-height: var(--line-height-normal);
-  letter-spacing: var(--letter-spacing-none);
-  vertical-align: var(--vertical-align-middle);
-}
-
-
-/* Adicione no seu CSS global */
-@media (min-width: 1024px) { /* Desktop */
-  .card-saldo,
-  .cardTransacao {
-    width: 690px !important;
-  }
-  .cardExtrato {
-    width: 282px !important;
-  }
-
-}
-
-@media (min-width: 768px) and (max-width: 1024px) { /* Tablet */
-  .card-saldo,
-  .cardTransacao,
-  .cardExtrato {
-    width: 100% !important; /* pode manter 100% ou o valor desejado */
-  }
-
-}
-
-@media (max-width: 767px) { /* Celular - responsivo completo */
-  .card-saldo,
-  .cardTransacao,
-  .cardExtrato {
-    width: 100% !important; /* pode manter 100% ou o valor desejado */
-  }
-}
-
