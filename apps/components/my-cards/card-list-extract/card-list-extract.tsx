@@ -132,7 +132,7 @@ import {
 import { formatDateBR, parseDateBR } from "../../../utils/date-formatte/date-formatte";
 import InfiniteScrollSentinel from "../../infinite-scroll-sentinel/infinite-scroll-sentinel";
 import { Chip } from "@mui/material";
-import SkeletonListExtract from "apps/components/skeleton-list-extract/skeleton-list-extract";
+import SkeletonListExtract from "../../skeleton-list-extract/skeleton-list-extract";
 import "./card-list-extract.css"; 
 export interface TxWithFiles extends Transaction {
   novosAnexos?: File[];

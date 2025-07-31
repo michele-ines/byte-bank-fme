@@ -51,7 +51,7 @@ module.exports = {
     ],
     alias: {
       // @store/... → C:/.../byte-bank-fme/apps/store/...
-      "@store": path.resolve(__dirname, "../store"),
+      // "@store": path.resolve(__dirname, "../store"),
     },
   },
 

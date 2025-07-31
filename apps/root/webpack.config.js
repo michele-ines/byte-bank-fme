@@ -42,11 +42,11 @@ module.exports = {
         ],
       }),
     ],
-    alias: {
-      // ajuste se você tiver o pacote/dir de store compartilhado
-      "@store": path.resolve(__dirname, "../store"),
-      "@global-styles": path.resolve(__dirname, "../../styles/globals.css"),
-    },
+    // alias: {
+    //   // ajuste se você tiver o pacote/dir de store compartilhado
+    //   // "@store": path.resolve(__dirname, "../store"),
+    //   // "@global-styles": path.resolve(__dirname, "../../styles/globals.css"),
+    // },
   },
   module: {
     rules: [

@@ -20,6 +20,9 @@
     "src/**/*.d.ts",
     "../types/global-assets.d.ts",
     "../components/my-cards/**/*",
-    "../components/my-cards/**/*"
+    "../../hooks/**/*",
+    "../../interfaces/**/*",
+    "../../mocks/**/*",
+    "../../store/**/*"
   ]
 }

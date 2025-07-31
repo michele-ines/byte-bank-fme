@@ -15,19 +15,53 @@
     "jsx": "react-jsx",
     "noEmit": false,
 
-    "baseUrl": "src",
+    "baseUrl": "./src",
     "paths": {
+      "@store/*": ["../../store/*"],
+      "@store": ["../../store/index.ts"],
+
+      "@hooks/*": ["../../hooks/*"],
+      "@interfaces/*": ["../../interfaces/*"],
+      "@mocks/*": ["../../mocks/*"],
+      "@global-styles": ["../../styles/globals.css"],
+
+      
       "header/*": ["components/header/*"],
       "footer/*": ["components/footer/*"],
       "home/*": ["pages/home/*"],
       "dashboard/*": ["pages/dashboard/*"]
-    }
+    },
+
+    "typeRoots": ["./src/shared", "../../node_modules/@types"]
   },
   "include": [
     "src",
     "src/**/*.d.ts",
+    "src/shared/**/*.d.ts",
+
+    // estes são fontes que o root consome por path alias:
     "../types/global-assets.d.ts",
     "../components/my-cards/**/*",
-    "../components/my-cards/**/*"
+    "../hooks/**/*",
+    "../interfaces/**/*",
+    "../mocks/**/*",
+    "../store/**/*"
+  ],
+  "exclude": [
+    // —— EXCLUIR TESTES DO PACOTE my-cards (ts/tsx/js) ——
+    "../components/my-cards/**/*.test.ts",
+    "../components/my-cards/**/*.test.tsx",
+    "../components/my-cards/**/*.spec.ts",
+    "../components/my-cards/**/*.spec.tsx",
+    "../components/my-cards/**/*.test.js",
+    "../components/my-cards/**/*.spec.js",
+
+    // (opcionais) excluir testes do próprio root, se quiser:
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx",
+    "src/**/*.test.js",
+    "src/**/*.spec.js"
   ]
 }

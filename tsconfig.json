@@ -12,10 +12,15 @@
 
     "baseUrl": ".",
     "paths": {
+      "@hooks/*": ["apps/hooks/*"],
+      "@interfaces/*": ["apps/interfaces/*"],
+      "@mocks/*": ["apps/mocks/*"],
+      "@store/*": ["apps/store/*"],
+      "@utils/*": ["apps/utils/*"],
+
+      "@store": ["apps/store/index.ts"],
       "@my-cards/*": ["apps/components/my-cards/*"],
       "@ui-imgs/*": ["apps/components/ui/imgs/*"],
-   "@store/*": ["apps/store/*"],
-   "@store": ["apps/store/index.ts"],
       "@global-styles": ["styles/globals.css"]
     },
 
@@ -25,7 +30,7 @@
     "apps/**/*.ts",
     "apps/**/*.tsx",
     "apps/**/*.d.ts",
-    "store/**/*",
-    "styles/**/*"
+    // "store/**/*",
+    // "styles/**/*"
   ]
 }

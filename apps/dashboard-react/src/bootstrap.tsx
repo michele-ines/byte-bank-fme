@@ -1,17 +1,18 @@
-import ReactDOM from 'react-dom';
-import Dashboard from './pages/dashboard/Dashboard';
-import { BrowserRouter } from 'react-router-dom';
+import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
+import Dashboard from "./pages/dashboard/Dashboard";
 
-import './index.css';
-import '@global-styles'; 
-import { store } from '@store/store';
+import "@global-styles";
+import { StoreProvider } from "@store"; // <- usa StoreProvider do apps/store
 
 
 const container = document.getElementById('root');
 if (container) {
   ReactDOM.render(
     <BrowserRouter>
-      <Dashboard />
+      <StoreProvider>
+        <Dashboard />
+      </StoreProvider>
     </BrowserRouter>,
     container
   );

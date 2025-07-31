@@ -1,12 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import { BrowserRouter } from 'react-router-dom';
+// apps/root/src/index.tsx
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+import "@global-styles"; // ou o caminho relativo "../../styles/globals.css"
 
-import './index.css';
-import '@global-styles'; 
-
-const container = document.getElementById('root')!;
-ReactDOM.render(<App />, container);
-
-export {};
+const root = document.getElementById("root")!;
+ReactDOM.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  root
+);
