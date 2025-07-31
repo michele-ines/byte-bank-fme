@@ -1,25 +1,28 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useCallback } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { fetchBalance } from "../../../../store/slices/balanceSlice";
 import CardBalance from "../../../../components/my-cards/card-balance/card-balance";
 import CardsOtherService from "../../../../components/my-cards/card-other-services/card-other-services";
-// import CardListExtract from '../../../../components/my-cards/card-list-extract/card-list-extract';
 import SavingsGoalWidget from "../../../../components/widgets/savings-goal-widget";
 import SpendingAlertWidget from "../../../../components/widgets/spending-alert-widget";
 import { Box } from "@mui/material";
 
-import type {
-  DashboardData,
-  Transaction,
-} from "../../../../interfaces/dashboard";
+import {
+  fetchTransactions,
+  saveTransactions,
+  deleteTransactions,
+  SavePayload,
+} from "../../../../store/slices/transactionsSlice";
+import type { DashboardData } from "../../../../interfaces/dashboard";
 import dashboardData from "../../../../mocks/dashboard-data.json";
-import { handleRequest } from "../../../../utils/error-handlers/error-handle";
-import { usePaginatedTransactions } from "../../../../hooks/use-paginated-transactions";
 import FinancialChart from "../../../../components/charts/financialChart";
 import WidgetPreferencesButton from "../../../../components/widgets/widget-preferences-button";
 import { useWidgetPreferences } from "../../../../hooks/use-widget-preferences";
 import { AppDispatch, RootState, store } from "../../../../store/store";
 import { tw } from "twind";
+import CardListExtract, {
+  TxWithFiles,
+} from "@my-cards/card-list-extract/card-list-extract";
 
 function OutrosServicosContent() {
   const data = dashboardData as DashboardData;
@@ -30,52 +33,44 @@ function OutrosServicosContent() {
     (state: RootState) => state.balance
   );
 
-  const handleAtualizaSaldo = useCallback(async () => {
-    await dispatch(fetchBalance());
-  }, [dispatch]);
-
-  useEffect(() => {
-    void handleAtualizaSaldo();
-  }, [handleAtualizaSaldo]);
-
   /* paginação */
   const {
-    transactions,
-    fetchPage,
-    refresh,
+    items: transactions,
+    status: transactionsStatus,
     hasMore,
-    isLoading: isPageLoading,
-  } = usePaginatedTransactions();
+    currentPage,
+  } = useSelector((state: RootState) => state.transactions);
 
   /* prefs dos widgets */
   const { preferences } = useWidgetPreferences();
 
   /* callbacks do extrato */
-  const handleSaveTransactions = async (txs: Transaction[]) => {
-    await handleRequest(async () => {
-      await Promise.all(
-        txs.map(async (tx) =>
-          fetch(`/api/transacao/${tx._id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ tipo: tx.tipo, valor: tx.valor }),
-          })
-        )
-      );
-      await refresh();
-      await handleAtualizaSaldo();
-    });
+  const fetchNextPage = useCallback(() => {
+    if (transactionsStatus !== "loading" && hasMore) {
+      void dispatch(fetchTransactions(currentPage + 1));
+    }
+  }, [dispatch, transactionsStatus, hasMore, currentPage]);
+
+  const handleSaveTransactions = async (txsToSave: TxWithFiles[]) => {
+    const payload: SavePayload = { transactions: txsToSave };
+    try {
+      await dispatch(saveTransactions(payload)).unwrap();
+    } catch (error) {
+      console.error("Falha ao salvar as transações:", error);
+    }
   };
 
   const handleDeleteTransactions = async (ids: number[]) => {
-    await handleRequest(async () => {
-      await Promise.all(
-        ids.map((id) => fetch(`/api/transacao/${id}`, { method: "DELETE" }))
-      );
-      await refresh();
-      await handleAtualizaSaldo();
-    });
+    try {
+      await dispatch(deleteTransactions(ids)).unwrap();
+    } catch (error) {
+      console.error("Falha ao deletar as transações:", error);
+    }
   };
+
+  const handleAtualizaSaldo = useCallback(() => {
+    void dispatch(fetchBalance());
+  }, [dispatch]);
 
   return (
     <Box
@@ -113,24 +108,18 @@ function OutrosServicosContent() {
           </Box>
 
           {/* coluna direita – extrato com scroll infinito */}
-          <Box className={tw`flex flex-col`}>
-            <div className={tw`flex-1 overflow-y-auto max-h-[800px]`}>
-              {/* <CardListExtract
-                transactions={transactions}
-                fetchPage={() => {
-                  void fetchPage();
-                }}
-                hasMore={hasMore}
-                isPageLoading={isPageLoading}
-                onSave={(txs) => {
-                  void handleSaveTransactions(txs);
-                }}
-                onDelete={handleDeleteTransactions}
-                atualizaSaldo={() => {
-                  void handleAtualizaSaldo();
-                }}
-              /> */}
-            </div>
+          <Box className={tw`w-full overflow-y-auto max-h-[800px]`}>
+            <CardListExtract
+              transactions={transactions}
+              fetchPage={fetchNextPage}
+              hasMore={hasMore}
+              isPageLoading={transactionsStatus === "loading"}
+              onSave={(txs) => {
+                void handleSaveTransactions(txs);
+              }}
+              onDelete={handleDeleteTransactions}
+              atualizaSaldo={handleAtualizaSaldo}
+            />
           </Box>
         </Box>
       </Box>

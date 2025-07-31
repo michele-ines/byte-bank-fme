@@ -15,8 +15,8 @@ import {
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
 import { maskCurrency } from "../../../utils/currency-formatte/currency-formatte";
-import "./card-new-transaction.css";  
-
+import "./card-new-transaction.css";
+import { tw } from "twind";
 
 const srOnly = "absolute -m-px w-px h-px overflow-hidden clip-[rect(0,0,0,0)]";
 
@@ -38,9 +38,12 @@ export default function CardNewTransaction({
     <Box
       role="form"
       aria-labelledby="nova-transacao-titulo"
-      className="cardTransacao w-full min-h-[520px]"
+      className={tw`cardTransacao w-full min-h-[520px]`}
     >
-      <h3 id="nova-transacao-titulo" className="transacaoTitle">
+      <h3
+        id="nova-transacao-titulo"
+        className={tw`transacaoTitle text-gray-700 mb-4 text-xl`}
+      >
         Nova transação
       </h3>
 
@@ -50,9 +53,9 @@ export default function CardNewTransaction({
         }}
       >
         {/* ---------- SELECT Tipo ---------- */}
-        <FormControl fullWidth className="transacaoFormControl">
+        <FormControl fullWidth className={tw`transacaoFormControl`}>
           {/* 🆕 label somente-leitor para Select */}
-          <label htmlFor="tipo-select" className={srOnly}>
+          <label htmlFor="tipo-select" className={tw`${srOnly}`}>
             Tipo de transação
           </label>
 
@@ -92,17 +95,21 @@ export default function CardNewTransaction({
           </Select>
           {errors.tipo && (
             /* 🆕 role=alert faz o leitor de tela anunciar a mensagem imediatamente */
-            <span id="erro-tipo" role="alert" className="text-red-500 text-sm">
+            <span
+              id="erro-tipo"
+              role="alert"
+              className={tw`text-red-500 text-sm`}
+            >
               {errors.tipo.message}
             </span>
           )}
         </FormControl>
 
         {/* ---------- INPUT Valor ---------- */}
-        <p className="transacaoLabel">Valor</p>
-        <FormControl fullWidth className="transacaoFormControl">
+        <p className={tw`transacaoLabel text-gray-700 text-base`}>Valor</p>
+        <FormControl fullWidth className={tw`transacaoFormControl`}>
           {/* 🆕 label visualmente escondida */}
-          <label htmlFor="valor-input" className={srOnly}>
+          <label htmlFor="valor-input" className={tw`${srOnly}`}>
             Valor em Reais
           </label>
 
@@ -137,14 +144,18 @@ export default function CardNewTransaction({
             }}
           />
           {errors.valor && (
-            <span id="erro-valor" role="alert" className="text-red-500 text-sm">
+            <span
+              id="erro-valor"
+              role="alert"
+              className={tw`text-red-500 text-sm`}
+            >
               {errors.valor.message}
             </span>
           )}
         </FormControl>
 
         {/* ---------- BOTÃO ---------- */}
-        <Box className="mt-4">
+        <Box className={tw`mt-4`}>
           <Button
             type="submit"
             /* 🆕 atributos de estado para leitores de tela */

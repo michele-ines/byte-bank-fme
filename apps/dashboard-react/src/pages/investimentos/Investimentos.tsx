@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useSelector, useDispatch, Provider } from "react-redux";
 import { fetchBalance } from "../../../../store/slices/balanceSlice";
 import { AppDispatch, RootState, store } from "../../../../store/store";
@@ -10,17 +10,21 @@ import CadInvestments from "../../../../components/my-cards/cad-investments/cad-
 import SavingsGoalWidget from "../../../../components/widgets/savings-goal-widget";
 import SpendingAlertWidget from "../../../../components/widgets/spending-alert-widget";
 
-import type {
-  DashboardData,
-  Transaction,
-} from "../../../../interfaces/dashboard";
+import type { DashboardData } from "../../../../interfaces/dashboard";
 import dashboardData from "../../../../mocks/dashboard-data.json";
-import { handleRequest } from "../../../../utils/error-handlers/error-handle";
-import { usePaginatedTransactions } from "../../../../hooks/use-paginated-transactions";
 import FinancialChart from "../../../../components/charts/financialChart";
 import WidgetPreferencesButton from "../../../../components/widgets/widget-preferences-button";
 import { useWidgetPreferences } from "../../../../hooks/use-widget-preferences";
+import {
+  fetchTransactions,
+  saveTransactions,
+  deleteTransactions,
+  SavePayload,
+} from "../../../../store/slices/transactionsSlice";
 import { tw } from "twind";
+import CardListExtract, {
+  TxWithFiles,
+} from "@my-cards/card-list-extract/card-list-extract";
 
 //
 // 1) Componente “puro” sem Provider:
@@ -34,98 +38,43 @@ function InvestimentosPage() {
     (state: RootState) => state.balance
   );
 
-  const handleAtualizaSaldo = useCallback(async () => {
-    await dispatch(fetchBalance());
-  }, [dispatch]);
-
-  useEffect(() => {
-    void handleAtualizaSaldo();
-  }, [handleAtualizaSaldo]);
-
   const {
-    transactions,
-    fetchPage,
-    refresh,
+    items: transactions,
+    status: transactionsStatus,
     hasMore,
-    isLoading: isPageLoading,
-  } = usePaginatedTransactions();
+    currentPage,
+  } = useSelector((state: RootState) => state.transactions);
 
   const { preferences } = useWidgetPreferences();
 
-  const handleSaveTransactions = async (txs: Transaction[]) => {
-    await handleRequest(async () => {
-      await Promise.all(
-        txs.map(async (tx) =>
-          fetch(`/api/transacao/${tx._id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ tipo: tx.tipo, valor: tx.valor }),
-          })
-        )
-      );
-      await refresh();
-      await handleAtualizaSaldo();
-    });
+  const fetchNextPage = useCallback(() => {
+    if (transactionsStatus !== "loading" && hasMore) {
+      void dispatch(fetchTransactions(currentPage + 1));
+    }
+  }, [dispatch, transactionsStatus, hasMore, currentPage]);
+
+  const handleSaveTransactions = async (txsToSave: TxWithFiles[]) => {
+    const payload: SavePayload = { transactions: txsToSave };
+    try {
+      await dispatch(saveTransactions(payload)).unwrap();
+    } catch (error) {
+      console.error("Falha ao salvar as transações:", error);
+    }
   };
 
   const handleDeleteTransactions = async (ids: number[]) => {
-    await handleRequest(async () => {
-      await Promise.all(
-        ids.map(async (id) =>
-          fetch(`/api/transacao/${id}`, { method: "DELETE" })
-        )
-      );
-      await refresh();
-      await handleAtualizaSaldo();
-    });
+    try {
+      await dispatch(deleteTransactions(ids)).unwrap();
+    } catch (error) {
+      console.error("Falha ao deletar as transações:", error);
+    }
   };
 
+  const handleAtualizaSaldo = useCallback(() => {
+    void dispatch(fetchBalance());
+  }, [dispatch]);
+
   return (
-    // <Box className="w-full min-h-screen px-4 py-6 lg:px-12 bg-[var(--byte-bg-dashboard)]">
-    //   <Box className="font-sans max-w-screen-xl mx-auto">
-    //     {/* botão de personalização */}
-    //     <Box className="flex justify-end mb-4">
-    //       <WidgetPreferencesButton />
-    //     </Box>
-
-    //     <Box className="flex flex-col lg:flex-row gap-y-6 lg:gap-x-6 lg:ml-8">
-    //       {/* coluna esquerda */}
-    //       <Box className="flex flex-col gap-6 w-full lg:w-[calc(55.666%-12px)]">
-    //         {/* Balance agora com valor do Redux */}
-    //         <CardBalance
-    //           user={data.user}
-    //           balance={{ ...data.balance, value: balanceValue }}
-    //         />
-
-    //         <FinancialChart />
-
-    //         {preferences.spendingAlert && (
-    //           <SpendingAlertWidget limit={2000} transactions={transactions} />
-    //         )}
-    //         {preferences.savingsGoal && (
-    //           <SavingsGoalWidget goal={3000} transactions={transactions} />
-    //         )}
-
-    //         {/* Mapeando id:number → id:string */}
-    //         <CadInvestments
-    //           balance={{ ...data.balance, value: balanceValue }}
-    //           investments={data.investments.map((inv) => ({
-    //             id: String(inv.id),
-    //             label: inv.label,
-    //             value: inv.value,
-    //           }))}
-    //         />
-    //       </Box>
-
-    //       {/* coluna direita – extrato */}
-    //       <Box className="max-w-full flex flex-col">
-    //         <div className="flex-1 overflow-y-auto max-h-[800px]">
-    //           {/* seu CardListExtract aqui */}
-    //         </div>
-    //       </Box>
-    //     </Box>
-    //   </Box>
-    // </Box>
     <Box
       className={tw`w-full min-h-screen flex flex-col justify-center px-4 py-6 lg:px-12 bg-[#E4EDE3]`}
     >
@@ -168,24 +117,18 @@ function InvestimentosPage() {
           </Box>
 
           {/* coluna direita – extrato com scroll */}
-          <Box className={tw`flex flex-col`}>
-            <div className={tw`flex-1 overflow-y-auto max-h-[800px]`}>
-              {/* <CardListExtract
-                transactions={transactions}
-                fetchPage={() => {
-                  void fetchPage();
-                }}
-                hasMore={hasMore}
-                isPageLoading={isPageLoading}
-                onSave={(txs) => {
-                  void handleSaveTransactions(txs);
-                }}
-                onDelete={handleDeleteTransactions}
-                atualizaSaldo={() => {
-                  void handleAtualizaSaldo();
-                }}
-              /> */}
-            </div>
+          <Box className={tw`w-full overflow-y-auto max-h-[800px]`}>
+            <CardListExtract
+              transactions={transactions}
+              fetchPage={fetchNextPage}
+              hasMore={hasMore}
+              isPageLoading={transactionsStatus === "loading"}
+              onSave={(txs) => {
+                void handleSaveTransactions(txs);
+              }}
+              onDelete={handleDeleteTransactions}
+              atualizaSaldo={handleAtualizaSaldo}
+            />
           </Box>
         </Box>
       </Box>

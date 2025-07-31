@@ -15,7 +15,8 @@
   left: 0;
   width: 120px;
   height: 120px;
-  background: url("~@ui-imgs/dash-card-new-transacao/card-pixels-3.svg") no-repeat left bottom / contain;
+  background: url("~@ui-imgs/dash-card-new-transacao/card-pixels-3.svg")
+    no-repeat left bottom / contain;
   pointer-events: none;
   z-index: 0 !important;
 }
@@ -30,17 +31,19 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background:
-    url("~@ui-imgs/dash-card-new-transacao/Ilustracao-2.svg") no-repeat right bottom / 260px 240px,
-    url("~@ui-imgs/dash-card-new-transacao/card-pixels-4.svg") no-repeat right top / 120px 120px;
+  background: url("~@ui-imgs/dash-card-new-transacao/Ilustracao-2.svg")
+      no-repeat right bottom / 260px 240px,
+    url("~@ui-imgs/dash-card-new-transacao/card-pixels-4.svg") no-repeat right
+      top / 120px 120px;
 }
 
 @media (max-width: 1023px) {
   .cardTransacao::after {
-    background:
-      url("~@ui-imgs/dash-card-new-transacao/Ilustracao-2.svg") no-repeat right bottom / 239px 131px,
+    background: url("~@ui-imgs/dash-card-new-transacao/Ilustracao-2.svg")
+        no-repeat right bottom / 239px 131px,
       /* url("/_next/static/media/card-pixels-4.svg") no-repeat right top / 120px 95px; */
-      url("~@ui-imgs/dash-card-new-transacao/card-pixels-4.svg") no-repeat right top / 120px 95px;
+        url("~@ui-imgs/dash-card-new-transacao/card-pixels-4.svg") no-repeat
+        right top / 120px 95px;
   }
 }
 
