@@ -8,6 +8,8 @@ export { default as React, useState } from "react";
 // Por agora, removemos: redirect, usePathname (não disponíveis).
 
 // ——————— MUI Core ———————
+export { default as Link } from "@mui/material/Link";
+
 export { default as AppBar } from "@mui/material/AppBar";
 export { default as Autocomplete } from "@mui/material/Autocomplete"; 
 export { default as Box } from "@mui/material/Box";

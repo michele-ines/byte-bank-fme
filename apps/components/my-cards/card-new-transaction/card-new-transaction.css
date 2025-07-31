@@ -39,7 +39,8 @@
   .cardTransacao::after {
     background:
       url("~@ui-imgs/dash-card-new-transacao/Ilustracao-2.svg") no-repeat right bottom / 239px 131px,
-      url("/_next/static/media/card-pixels-4.svg") no-repeat right top / 120px 95px;
+      /* url("/_next/static/media/card-pixels-4.svg") no-repeat right top / 120px 95px; */
+      url("~@ui-imgs/dash-card-new-transacao/card-pixels-4.svg") no-repeat right top / 120px 95px;
   }
 }
 
