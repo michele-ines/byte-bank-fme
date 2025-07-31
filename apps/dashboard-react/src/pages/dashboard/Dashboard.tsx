@@ -1,71 +1,107 @@
-import React, { useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch, RootState } from "../../../../store/store";
+import React, { useCallback, useMemo } from "react";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import { Box } from "@mui/material";
+import { tw } from "twind";
+
+import { store, type AppDispatch, type RootState } from "@store/store";
 import {
   createNewTransaction,
   fetchTransactions,
   saveTransactions,
   deleteTransactions,
-  SavePayload,
-} from "../../../../store/slices/transactionsSlice";
-import StoreProvider from "../../../../store/StoreProvider"; // <-- MUDANÇA AQUI: Importe o Provider
+  type SavePayload,
+} from "@store/slices/transactionsSlice";
 
-// ... (todos os seus outros imports continuam aqui, sem alteração) ...
-import CardBalance from "../../../../components/my-cards/card-balance/card-balance";
-import CardNewTransaction from "../../../../components/my-cards/card-new-transaction/card-new-transaction";
+import { useWidgetPreferences } from "@hooks/use-widget-preferences";
+import { useDashboardData } from "@hooks/use-dashboard-data";
+import {
+  type DashboardData,
+  type NewTransactionData,
+  type TxWithFiles,
+  type Transaction,
+  type Attachment,
+} from "@interfaces/dashboard";
+
+import dashboardData from "@mocks/dashboard-data.json";
+
+import CardBalance from "@my-cards/card-balance/card-balance";
+import CardListExtract from "@my-cards/card-list-extract/card-list-extract";
+import CardNewTransaction from "@my-cards/card-new-transaction/card-new-transaction";
 import SavingsGoalWidget from "../../../../components/widgets/savings-goal-widget";
 import SpendingAlertWidget from "../../../../components/widgets/spending-alert-widget";
 import FinancialChart from "../../../../components/charts/financialChart";
 import WidgetPreferencesButton from "../../../../components/widgets/widget-preferences-button";
-import { useWidgetPreferences } from "../../../../hooks/use-widget-preferences";
-import { useDashboardData } from "../../../../hooks/use-dashboard-data";
-import {
-  DashboardData,
-  NewTransactionData,
-  TxWithFiles,
-} from "../../../../interfaces/dashboard";
-import dashboardData from "../../../../mocks/dashboard-data.json";
-import { Box } from "@mui/material";
-import { fetchBalance } from "@store/slices/balanceSlice";
-import CardListExtract from "@my-cards/card-list-extract/card-list-extract";
-import { tw } from "twind";
+
+/* -----------------------------------------------------------
+ * Helpers para garantir que 'valor' seja sempre number
+ * ----------------------------------------------------------*/
+const toNumber = (v: number | string): number => {
+  if (typeof v === "number") return v;
+  const normalized = v
+    .toString()
+    .trim()
+    .replace(/\s+/g, "")
+    .replace(/\./g, "")
+    .replace(/,/, ".");
+  const n = Number(normalized);
+  return Number.isFinite(n) ? n : 0;
+};
+
+// Tipo auxiliar: o que pode estar vindo do estado/API
+type TransactionLike = Omit<Transaction, "valor"> & {
+  valor: number | string;
+  anexos?: Attachment[];
+};
+
+const normalizeToTransaction = (txs: TransactionLike[]): Transaction[] =>
+  txs.map((tx) => ({
+    ...tx,
+    valor: toNumber(tx.valor),
+  }));
+
+const normalizeToTxWithFiles = (txs: Transaction[]): TxWithFiles[] =>
+  txs.map((tx) => ({
+    ...tx,
+    // se seu TxWithFiles exige 'novosAnexos', garanta default:
+    novosAnexos: (tx as unknown as { novosAnexos?: File[] }).novosAnexos ?? [],
+  }));
 
 // =================================================================================
-// PASSO 1: Renomeie seu componente de "Dashboard" para "DashboardPage".
-// O conteúdo dele fica IGUAL.
+// Conteúdo real da página
 // =================================================================================
-
-function DashboardPage() {
-  const data: DashboardData = dashboardData;
+const DashboardContent = () => {
+  const data: DashboardData = dashboardData as DashboardData;
   const dispatch = useDispatch<AppDispatch>();
 
   useDashboardData();
 
   const {
-    items: transactions,
+    items: transactionsRaw, // <- pode ter valor string | number
     status: transactionsStatus,
     creationStatus,
-    hasMore,
-    currentPage,
   } = useSelector((state: RootState) => state.transactions);
 
   const { value: balanceValue } = useSelector(
     (state: RootState) => state.balance
   );
 
-  /* ---------------- prefs de widgets ----------------- */
   const { preferences } = useWidgetPreferences();
-  /* --------------------------------------------------- */
+
+  // Normaliza para o tipo "oficial" de @interfaces/dashboard
+  const transactions: Transaction[] = useMemo(
+    () => normalizeToTransaction(transactionsRaw as unknown as TransactionLike[]),
+    [transactionsRaw]
+  );
 
   const fetchNextPage = useCallback(() => {
-    if (transactionsStatus !== "loading" && hasMore) {
-      void dispatch(fetchTransactions(currentPage + 1));
+    if (transactionsStatus !== "loading") {
+      void dispatch(fetchTransactions());
     }
-  }, [dispatch, transactionsStatus, hasMore, currentPage]);
+  }, [dispatch, transactionsStatus]);
 
-  const onSubmit = async (data: NewTransactionData) => {
+  const onSubmit = async (form: NewTransactionData) => {
     try {
-      await dispatch(createNewTransaction(data)).unwrap();
+      await dispatch(createNewTransaction(form)).unwrap();
     } catch (error) {
       console.error("Falha ao criar a transação:", error);
     }
@@ -88,35 +124,22 @@ function DashboardPage() {
     }
   };
 
-  const handleAtualizaSaldo = useCallback(() => {
-    void dispatch(fetchBalance());
-  }, [dispatch]);
-
   return (
-    <Box
-      className={tw`w-full min-h-screen flex flex-col justify-center px-4 py-6 lg:px-12 bg-[#E4EDE3]`}
-    >
-      <Box
-        className={tw`w-full md:max-w-screen-lg flex flex-col gap-6 mx-auto`}
-      >
-        {/* botão de personalização */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
+    <Box className={tw`w-full min-h-screen flex flex-col justify-center px-4 py-6 lg:px-12 bg-[#E4EDE3]`}>
+      <Box className={tw`w-full md:max-w-screen-lg flex flex-col gap-6 mx-auto`}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <WidgetPreferencesButton />
         </Box>
 
         <Box className={tw`flex flex-col md:grid md:grid-cols-3 gap-6`}>
-          {/* coluna esquerda */}
           <Box className={tw`flex flex-col gap-6 w-ful col-span-2`}>
             <CardBalance
               user={data.user}
               balance={{ ...data.balance, value: balanceValue }}
             />
-            <FinancialChart />
+            <Box className="relative h-64 md:h-80">
+              <FinancialChart />
+            </Box>
             {preferences.spendingAlert && (
               <SpendingAlertWidget limit={2000} transactions={transactions} />
             )}
@@ -129,34 +152,34 @@ function DashboardPage() {
             />
           </Box>
 
-          {/* coluna direita – extrato com scroll */}
           <Box className={tw`w-full overflow-y-auto max-h-[800px]`}>
             <CardListExtract
               transactions={transactions}
               fetchPage={fetchNextPage}
-              hasMore={hasMore}
               isPageLoading={transactionsStatus === "loading"}
-              onSave={(txs) => {
-                void handleSaveTransactions(txs);
+              onSave={(txs /* Transaction[] já normalizado */) => {
+                // Converter para TxWithFiles[] antes de salvar
+                const normalized = normalizeToTxWithFiles(txs);
+                void handleSaveTransactions(normalized);
               }}
               onDelete={handleDeleteTransactions}
-              atualizaSaldo={handleAtualizaSaldo}
             />
           </Box>
         </Box>
       </Box>
     </Box>
   );
-}
+};
+
 // =================================================================================
-// PASSO 2: Crie um novo componente "wrapper" com o nome original (Dashboard).
-// Ele é o único que será exportado.
+// Wrapper: exporta a página já com o Provider da store COMPARTILHADA
 // =================================================================================
-export default function Dashboard() {
-  // <-- MUDANÇA AQUI: Componente wrapper
+const DashboardPage = () => {
   return (
-    <StoreProvider>
-      <DashboardPage />
-    </StoreProvider>
+    <Provider store={store}>
+      <DashboardContent />
+    </Provider>
   );
-}
+};
+
+export default DashboardPage;

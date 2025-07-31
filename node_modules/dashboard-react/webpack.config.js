@@ -51,7 +51,13 @@ module.exports = {
     ],
     alias: {
       // @store/... → C:/.../byte-bank-fme/apps/store/...
+      "@hooks": path.resolve(__dirname, "../hooks"),
+      "@interfaces": path.resolve(__dirname, "../interfaces"),
+      "@mocks": path.resolve(__dirname, "../mocks"),
       "@store": path.resolve(__dirname, "../store"),
+
+
+
     },
   },
 

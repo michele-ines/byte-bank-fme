@@ -18,7 +18,6 @@ export const fetchBalance = createAsyncThunk<
       return rejectWithValue("Falha ao buscar o saldo");
     }
 
-    // Evita atribuição insegura usando unknown + verificação de tipo
     const raw: unknown = await res.json();
 
     if (
@@ -37,14 +36,12 @@ export const fetchBalance = createAsyncThunk<
   }
 });
 
-// --- 2. Definindo o estado inicial ---
 const initialState: BalanceState = {
   value: 0,
   status: "idle",
   error: null,
 };
 
-// --- 3. Criando o Slice ---
 const balanceSlice = createSlice({
   name: "balance",
   initialState,
