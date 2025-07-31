@@ -1,5 +1,5 @@
 .cardPersonalCards {
-  background-color:#cbcbcb;
+  background-color: #cbcbcb;
   border-radius: 8px;
   padding: 24px;
   display: flex;
@@ -16,7 +16,8 @@
   left: 0;
   width: 120px;
   height: 120px;
-  background: url("@ui-imgs/dash-card-new-transacao/card-pixels-3.svg") no-repeat left bottom / contain;
+  background: url("../../ui/imgs/dash-card-new-transacao/card-pixels-3.svg")
+    no-repeat left bottom / contain;
   pointer-events: none;
   z-index: 0 !important;
 }
@@ -31,12 +32,14 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: url("@ui-imgs/dash-card-new-transacao/card-pixels-4.svg") no-repeat right top / 120px 120px;
+  background: url("../../ui/imgs/dash-card-new-transacao/card-pixels-4.svg")
+    no-repeat right top / 120px 120px;
 }
 
 @media (max-width: 1023px) {
   .cardPersonalCards::after {
-    background: url("@ui-imgs/dash-card-new-transacao/card-pixels-4.svg") no-repeat right top / 120px 95px;
+    background: url("../../ui/imgs/dash-card-new-transacao/card-pixels-4.svg")
+      no-repeat right top / 120px 95px;
   }
 }
 
