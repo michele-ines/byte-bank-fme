@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useWidgetPreferences } from "../../hooks/use-widget-preferences";
+import { tw } from "twind";
 
 import { useEffect } from "react";
 
@@ -39,17 +40,7 @@ export default function WidgetSettingsModal({
     >
       <Box
         aria-modal="true"
-        className="bg-white p-6 rounded-2xl shadow-md text-gray-800 focus:outline-none overflow-y-auto"
-        sx={{
-          width: "100%",
-          maxWidth: 480,
-          mx: "auto",
-          mt: "2%",
-          maxHeight: "90vh",
-          overflowY: "auto",
-          outline: "none",
-          transition: "all 0.2s ease",
-        }}
+        className={tw`bg-white p-6 rounded-2xl shadow-md text-gray-800 focus:outline-none max-w-md max-h-[90vh] mx-auto my-10 overflow-y-auto`}
       >
         <Typography
           id="widget-modal-title"
@@ -60,12 +51,12 @@ export default function WidgetSettingsModal({
         >
           Personalizar Widgets
         </Typography>
-        <p className="text-xs text-gray-700 mb-4">
+        <p className={tw`text-xs text-gray-700 mb-4`}>
           Escolha quais widgets deseja exibir no painel
         </p>
         {/* CARD: Alerta de Gastos */}
         <Box
-          className={`border rounded-lg p-4 mb-3 transition-all cursor-pointer ${
+          className={tw`border rounded-lg p-4 mb-3 transition-all cursor-pointer ${
             preferences.spendingAlert
               ? "border-blue-600 bg-[#f8faff]"
               : "border-gray-300 bg-white"
@@ -77,7 +68,7 @@ export default function WidgetSettingsModal({
             togglePreference("spendingAlert")
           }
         >
-          <Box className="flex justify-between items-center">
+          <Box className={tw`flex justify-between items-center`}>
             <Typography fontWeight="bold">Alerta de gastos</Typography>
 
             <FormControlLabel
@@ -100,43 +91,43 @@ export default function WidgetSettingsModal({
             />
           </Box>
 
-          <Typography variant="body2" className="text-gray-600">
+          <Typography variant="body2" className={tw`text-gray-600`}>
             Monitore seus gastos mensais e receba alertas quando se aproximar do
             limite definido. Ideal para controle de orçamento pessoal.{" "}
           </Typography>
 
           <Box
-            className={`border rounded-lg p-4 my-3 border-gray-300 bg-white flex flex-col gap-4`}
+            className={tw`border rounded-lg p-4 my-3 border-gray-300 bg-white flex flex-col gap-4`}
           >
             <Typography
               fontWeight="bold"
               fontSize={14}
-              className="flex gap-2 items-end"
+              className={tw`flex gap-2 items-end`}
             >
               <BarChart />
               Prévia do widget
             </Typography>
 
-            <Typography fontSize={12} className="text-gray-600">
+            <Typography fontSize={12} className={tw`text-gray-600`}>
               Visualize seus gastos em tempo real com barras de progresso e
               notificações quando atingir 80% do limite.
             </Typography>
 
-            <Box className="flex justify-between">
+            <Box className={tw`flex justify-between`}>
               <Typography
                 variant="body2"
                 fontSize={10}
-                className="text-gray-500"
+                className={tw`text-gray-500`}
               >
                 Limite atual:{" "}
-                <span className="font-bold text-gray-900">R$ 2.000</span>
+                <span className={tw`font-bold text-gray-900`}>R$ 2.000</span>
               </Typography>
               <Typography
                 variant="body2"
                 fontSize={10}
-                className="text-gray-500"
+                className={tw`text-gray-500`}
               >
-                Gasto: <span className="font-bold text-red-600">R$ 0</span>
+                Gasto: <span className={tw`font-bold text-red-600`}>R$ 0</span>
               </Typography>
             </Box>
           </Box>
@@ -144,7 +135,7 @@ export default function WidgetSettingsModal({
         {/* -------------------------------------------- */}
         {/* CARD: Meta de Economia */}
         <Box
-          className={`border rounded-lg p-4 transition-all cursor-pointer ${
+          className={tw`border rounded-lg p-4 transition-all cursor-pointer ${
             preferences.savingsGoal
               ? "border-blue-600 bg-[#f8faff]"
               : "border-gray-300 bg-white"
@@ -156,7 +147,7 @@ export default function WidgetSettingsModal({
             togglePreference("savingsGoal")
           }
         >
-          <Box className="flex justify-between items-center">
+          <Box className={tw`flex justify-between items-center`}>
             <Typography fontWeight="bold">Meta de economia</Typography>
             <FormControlLabel
               control={
@@ -177,53 +168,53 @@ export default function WidgetSettingsModal({
               label={""}
             />
           </Box>
-          <Typography variant="body2" className="text-gray-600">
+          <Typography variant="body2" className={tw`text-gray-600`}>
             Defina metas de economia e acompanhe seu progresso com visualizações
             motivacionais. Perfeito para alcançar objetivos financeiros.
           </Typography>
 
           <Box
-            className={`border rounded-lg p-4 my-3 border-gray-300 bg-white flex flex-col gap-4`}
+            className={tw`border rounded-lg p-4 my-3 border-gray-300 bg-white flex flex-col gap-4`}
           >
             <Typography
               fontWeight="bold"
               fontSize={14}
-              className="flex gap-2 items-end"
+              className={tw`flex gap-2 items-end`}
             >
               <ModeStandby fontSize="small" />
               Prévia do widget
             </Typography>
 
-            <Typography fontSize={12} className="text-gray-600">
+            <Typography fontSize={12} className={tw`text-gray-600`}>
               Acompanhe o progresso das suas metas com barra de progresso
               animadas e celebre cada conquista alcançada.
             </Typography>
 
-            <Box className="flex justify-between">
+            <Box className={tw`flex justify-between`}>
               <Typography
                 variant="body2"
                 fontSize={10}
-                className="text-gray-500"
+                className={tw`text-gray-500`}
               >
                 Meta atual:{" "}
-                <span className="font-bold text-gray-900">R$ 3.000</span>
+                <span className={tw`font-bold text-gray-900`}>R$ 3.000</span>
               </Typography>
               <Typography
                 variant="body2"
                 fontSize={10}
-                className="text-gray-500"
+                className={tw`text-gray-500`}
               >
                 Economizado:{" "}
-                <span className="font-bold text-green-600">R$ 0</span>
+                <span className={tw`font-bold text-green-600`}>R$ 0</span>
               </Typography>
             </Box>
           </Box>
         </Box>
         {/* -------------------------------------------- */}
-        <Box className="mt-4 flex justify-end">
+        <Box className={tw`mt-4 flex justify-end`}>
           <button
             onClick={onClose}
-            className="px-4 py-2 text-white rounded cursor-pointer"
+            className={tw`px-4 py-2 text-white rounded cursor-pointer`}
             style={{ backgroundColor: "var(--byte-color-dash)" }}
           >
             Fechar
