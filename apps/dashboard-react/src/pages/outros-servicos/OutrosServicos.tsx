@@ -79,7 +79,6 @@ function OutrosServicosContent() {
   const {
     items: transactionsRaw, // <- pode ter valor string | number
     status: transactionsStatus,
-    creationStatus,
   } = useSelector((state: RootState) => state.transactions);
 
   const { value: balanceValue } = useSelector(
@@ -100,14 +99,6 @@ function OutrosServicosContent() {
       void dispatch(fetchTransactions()); // sua thunk não recebe args
     }
   }, [dispatch, transactionsStatus]);
-
-  const onSubmit = async (form: NewTransactionData) => {
-    try {
-      await dispatch(createNewTransaction(form)).unwrap();
-    } catch (error) {
-      console.error("Falha ao criar a transação:", error);
-    }
-  };
 
   const handleSaveTransactions = async (txsToSave: TxWithFiles[]) => {
     const payload: SavePayload = { transactions: txsToSave };
