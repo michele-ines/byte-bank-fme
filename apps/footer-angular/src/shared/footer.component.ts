@@ -1,4 +1,3 @@
-import './styles.scss';
 import { Component, Input } from '@angular/core';
 
 @Component({
@@ -38,7 +37,7 @@ import { Component, Input } from '@angular/core';
       </div>
     </footer>
   `,
-  styles: []
+  styleUrls: ['./styles.scss'] // ✅ não use `import './styles.scss'` dentro do .ts
 })
 export class FooterComponent {
   @Input('data-theme') theme: 'public' | 'private' = 'public';
