@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { tw } from "twind";
 
 const data = [
   { name: "Jan", valor: 1200 },
@@ -21,17 +22,21 @@ const data = [
 export default function FinancialChart() {
   return (
     <div
-      className="w-full h-64"
+      className={tw`w-full h-64`}
       role="region"
       aria-labelledby="financial-chart-heading"
     >
       {/* Visível apenas para leitores de tela */}
-      <h3 id="financial-chart-heading" className="sr-only">
+      <h3 id="financial-chart-heading" className={tw`sr-only`}>
         Gráfico financeiro: valores mensais de Janeiro a Junho
       </h3>
 
       {/* role="img" e aria-label movidos para a div ao redor do gráfico */}
-      <div role="img" aria-label="Gráfico de linha mostrando a variação de valores de Janeiro a Junho" className="w-full h-full">
+      <div
+        role="img"
+        aria-label="Gráfico de linha mostrando a variação de valores de Janeiro a Junho"
+        className={tw`w-full h-full`}
+      >
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
