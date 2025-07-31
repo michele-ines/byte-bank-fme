@@ -8,6 +8,7 @@ import { Box, PieChart } from "../../ui";
 // import { CadInvestmentsProps } from "interfaces/dashboard";
 
 import "./cad-investments.css";
+import { tw } from "twind";
 
 type CadInvestmentsProps = {
   balance: { value: number };
@@ -31,14 +32,14 @@ const CadInvestments: React.FC<CadInvestmentsProps> = ({
     <Box
       role="group"
       aria-labelledby="investimentos-title"
-      className="cardTransacao cardTransacao w-full gap-10"
+      className={tw`cardTransacao gap-10`}
     >
       {/* BLOCO: Título / Total / Caixas */}
-      <section className="flex flex-col gap-6 w-full">
-        <h3 id="investimentos-title" className="investmentTitle">
+      <section className={tw`flex flex-col gap-6 w-full`}>
+        <h3 id="investimentos-title" className={tw`investmentTitle`}>
           Investimentos
         </h3>
-        <p className="totalLabel">
+        <p className={tw`totalLabel`}>
           Total:&nbsp;
           {balance.value.toLocaleString("pt-BR", {
             style: "currency",
@@ -46,7 +47,7 @@ const CadInvestments: React.FC<CadInvestmentsProps> = ({
           })}
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className={tw`flex flex-col md:flex-row gap-6`}>
           {investments.map(({ id, label, value }) => {
             const formatted = value.toLocaleString("pt-BR", {
               style: "currency",
@@ -63,10 +64,10 @@ const CadInvestments: React.FC<CadInvestmentsProps> = ({
                     (e.currentTarget as HTMLElement).click();
                   }
                 }}
-                className="investmentBox investmentBoxType"
+                className={tw`investmentBox investmentBoxType`}
               >
-                <span className="investmentBoxTitle">{label}</span>
-                <span className="investmentBoxValue">{formatted}</span>
+                <span className={tw`investmentBoxTitle`}>{label}</span>
+                <span className={tw`investmentBoxValue`}>{formatted}</span>
               </Box>
             );
           })}
@@ -77,15 +78,15 @@ const CadInvestments: React.FC<CadInvestmentsProps> = ({
       <section
         role="group"
         aria-labelledby="estatisticas-title"
-        className="flex flex-col gap-6 w-full"
+        className={tw`flex flex-col gap-6 w-full`}
       >
-        <h4 id="estatisticas-title" className="statsTitle">
+        <h4 id="estatisticas-title" className={tw`statsTitle text-gray-800`}>
           Estatísticas
         </h4>
         <Box
           role="img"
           aria-label="Gráfico de pizza de investimentos"
-          className="investmentBox styles.investmentBoxStats w-full md:max-w-[610px]"
+          className={tw`investmentBox styles.investmentBoxStats w-full md:max-w-[610px]`}
         >
           <PieChart
             series={[{ data: chartData, innerRadius: 40, cornerRadius: 50 }]}

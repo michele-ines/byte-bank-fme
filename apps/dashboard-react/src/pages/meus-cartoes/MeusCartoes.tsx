@@ -11,7 +11,10 @@ import PersonalCards from "../../../../components/my-cards/personal-cards/person
 import SavingsGoalWidget from "../../../../components/widgets/savings-goal-widget";
 import SpendingAlertWidget from "../../../../components/widgets/spending-alert-widget";
 
-import type { DashboardData, Transaction } from "../../../../interfaces/dashboard";
+import type {
+  DashboardData,
+  Transaction,
+} from "../../../../interfaces/dashboard";
 import dashboardData from "../../../../mocks/dashboard-data.json";
 import { handleRequest } from "../../../../utils/error-handlers/error-handle";
 import { usePaginatedTransactions } from "../../../../hooks/use-paginated-transactions";
@@ -19,6 +22,8 @@ import FinancialChart from "../../../../components/charts/financialChart";
 // import { useWidgetPreferences } from "app/hooks/use-widget-preferences";
 import WidgetPreferencesButton from "../../../../components/widgets/widget-preferences-button";
 import { useWidgetPreferences } from "../../../../hooks/use-widget-preferences";
+import { tw } from "twind";
+
 //
 // 1) Componente de página puro (renomeado):
 //
@@ -78,16 +83,25 @@ function MeusCartoesPage() {
   };
 
   return (
-    <Box className="w-full min-h-screen px-4 py-6 lg:px-12 bg-[var(--byte-bg-dashboard)]">
-      <Box className="font-sans max-w-screen-xl mx-auto">
+    <Box
+      className={tw`w-full min-h-screen flex flex-col justify-center px-4 py-6 lg:px-12 bg-[#E4EDE3]`}
+    >
+      <Box
+        className={tw`w-full md:max-w-screen-lg flex flex-col gap-6 mx-auto`}
+      >
         {/* botão de personalização */}
-        <Box className="flex justify-end mb-4">
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
           <WidgetPreferencesButton />
         </Box>
 
-        <Box className="flex flex-col lg:flex-row gap-y-6 lg:gap-x-6 lg:ml-8">
+        <Box className={tw`flex flex-col md:grid md:grid-cols-3 gap-6`}>
           {/* coluna esquerda */}
-          <Box className="flex flex-col gap-6 w-full lg:w-[calc(55.666%-12px)]">
+          <Box className={tw`flex flex-col gap-6 w-ful col-span-2`}>
             {/* 1) Balance agora usa o valor do Redux */}
             <CardBalance
               user={data.user}
@@ -105,8 +119,8 @@ function MeusCartoesPage() {
           </Box>
 
           {/* coluna direita – extrato com scroll infinito */}
-          <Box className="max-w-full flex flex-col">
-            <div className="flex-1 overflow-y-auto max-h-[800px]">
+          <Box className={tw`flex flex-col`}>
+            <div className={tw`flex-1 overflow-y-auto max-h-[800px]`}>
               {/* <CardListExtract
                 transactions={transactions}
                 fetchPage={() => {

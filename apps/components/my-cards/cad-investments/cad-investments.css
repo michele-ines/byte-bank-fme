@@ -2,7 +2,7 @@
 /* CARD CONTAINER (fundo cinza + pixels decorativos)                  */
 /* ------------------------------------------------------------------ */
 .cardTransacao {
-  background-color: var(--byte-gray-200);
+  background-color: #cbcbcb;
   border-radius: 8px;
   padding: 24px;
   display: flex;
@@ -17,7 +17,6 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 120px;
   height: 120px;
   background: url("@ui-imgs/dash-card-new-transacao/card-pixels-3.svg")
     no-repeat left bottom / contain;
@@ -54,7 +53,7 @@
 .totalLabel {
   font-family: var(--font-inter);
   font-weight: 400;
-  font-size: 25px;
+  font-size: 20px;
   line-height: 120%;
   color: var(--byte-color-dash);
 }
@@ -71,7 +70,7 @@
 /* BOXES AZUIS                                                        */
 /* ------------------------------------------------------------------ */
 .investmentBox {
-  background-color: var(--byte-color-dash);
+  background-color: #004d61;
   padding: 16px 32px;
   border-radius: 8px;
   display: flex;
