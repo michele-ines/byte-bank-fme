@@ -25,7 +25,7 @@ export const useDashboardData = (): void => {
 
   useEffect(() => {
     if (transactionsStatus === 'idle') {
-      void dispatch(fetchTransactions(1)); // primeira página
+      void dispatch(fetchTransactions()); // <-- sem argumentos
     }
 
     if (balanceStatus === 'idle') {

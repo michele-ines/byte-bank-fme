@@ -7,7 +7,10 @@ import {
   act,
 } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import type { Transaction } from '../../../interfaces/dashboard';
+
+// use o alias para manter identidade do tipo com o app
+import type { Transaction } from '@interfaces/dashboard';
+
 import CardListExtract from './card-list-extract';
 
 /* ------------------------------------------------------------------ */
@@ -15,8 +18,6 @@ import CardListExtract from './card-list-extract';
 beforeAll(() => {
   global.fetch = jest.fn().mockResolvedValue({
     ok: true,
-
-    // ✅ agora há await de uma Promise real
     json: async () => await Promise.resolve({}),
   }) as unknown as typeof fetch;
 });
@@ -40,14 +41,14 @@ jest.mock(
 const mockTransactions: Transaction[] = [
   {
     _id: 1,
-    tipo: 'entrada',
+    tipo: 'deposito', // antes: 'entrada'
     valor: 1000,
     createdAt: '2024-05-20T00:00:00.000Z',
     updatedAt: '2024-05-20T00:00:00.000Z',
   },
   {
     _id: 2,
-    tipo: 'saída',
+    tipo: 'saque', // antes: 'saída'
     valor: -500,
     createdAt: '2024-05-21T00:00:00.000Z',
     updatedAt: '2024-05-21T00:00:00.000Z',
@@ -63,7 +64,7 @@ jest.mock(
         const [state, setState] = useState({
           transactions: [] as Transaction[],
           fetchPage,
-          hasMore: false,
+          hasMore: false,   // permanece dentro do hook mockado
           isLoading: true,
         });
 
@@ -91,30 +92,26 @@ const loadAndStop = () => act(() => jest.runAllTimers());
 
 /* ------------------------------------------------------------------ */
 /* 2)  Mocks de callbacks externos ---------------------------------- */
-const onSave        = jest.fn();
-// const onDelete      = jest.fn().mockResolvedValue(undefined);
-const atualizaSaldo = jest.fn().mockResolvedValue(undefined);
+const onSave   = jest.fn();
 
 /* ------------------------------------------------------------------ */
 /* 3) TESTES --------------------------------------------------------- */
 describe('CardListExtract – cobertura total ajustada', () => {
   beforeEach(() => jest.clearAllMocks());
 
-
- it('9) handleDeleteClick remove seleção e volta ao estado normal', async () => {
+  it('9) handleDeleteClick remove seleção e volta ao estado normal', async () => {
     const successfulDelete = jest.fn().mockResolvedValue(undefined);
 
     render(
       <CardListExtract
         transactions={mockTransactions}
         fetchPage={jest.fn()}
-        hasMore={false}
         isPageLoading={false}
         onSave={onSave}
         onDelete={successfulDelete}
-        atualizaSaldo={atualizaSaldo}
       />,
     );
+
     loadAndStop();
 
     fireEvent.click(screen.getByLabelText('excluir'));
@@ -125,7 +122,6 @@ describe('CardListExtract – cobertura total ajustada', () => {
       fireEvent.click(screen.getByText('Excluir'));
     });
 
-    /* espera o efeito “finally” do componente terminar */
     await waitFor(() => expect(successfulDelete).toHaveBeenCalledWith([1]));
     await waitFor(() =>
       expect(screen.queryAllByRole('checkbox')).toHaveLength(0),
