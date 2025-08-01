@@ -1,5 +1,5 @@
 "use client";
-import { tw } from 'twind';
+import { tw } from "twind";
 import React, { useState, useRef } from "react";
 import clsx from "clsx";
 import { useForm } from "react-hook-form";
@@ -14,7 +14,7 @@ import {
 } from "../ui";
 import { RegisterData } from "../../interfaces/dashboard";
 import { registerValidations } from "../../utils/forms-validations/formValidations";
-import '../styles/globals.css'
+import "../../../styles/globals.css";
 // Função auxiliar para gerar IDs únicos
 let globalId = 0;
 const generateId = () => `form-id-${++globalId}`;
@@ -122,10 +122,13 @@ export default function RegisterForm() {
           Senha
         </label>
         <div
-          className={clsx(tw`flex items-center rounded-lg focus-within:ring-2`, {
-            [inputNormalStyles]: !errors.password,
-            [inputErrorStyles]: !!errors.password,
-          })}
+          className={clsx(
+            tw`flex items-center rounded-lg focus-within:ring-2`,
+            {
+              [inputNormalStyles]: !errors.password,
+              [inputErrorStyles]: !!errors.password,
+            }
+          )}
         >
           <Input
             id="password"
@@ -165,10 +168,13 @@ export default function RegisterForm() {
           Confirmar senha
         </label>
         <div
-          className={clsx(tw`flex items-center rounded-lg focus-within:ring-2`, {
-            [inputNormalStyles]: !errors.confirmPassword,
-            [inputErrorStyles]: !!errors.confirmPassword,
-          })}
+          className={clsx(
+            tw`flex items-center rounded-lg focus-within:ring-2`,
+            {
+              [inputNormalStyles]: !errors.confirmPassword,
+              [inputErrorStyles]: !!errors.confirmPassword,
+            }
+          )}
         >
           <Input
             id="confirmPassword"
@@ -181,14 +187,18 @@ export default function RegisterForm() {
               registerValidations.confirmPassword(passwordValue)
             )}
             aria-invalid={!!errors.confirmPassword}
-            aria-describedby={errors.confirmPassword ? confirmPasswordId : undefined}
+            aria-describedby={
+              errors.confirmPassword ? confirmPasswordId : undefined
+            }
           />
           {confirmValue.length > 0 && (
             <button
               type="button"
               onClick={() => setShowConfirmPassword((v) => !v)}
               className={passwordToggleStyles}
-              aria-label={showConfirmPassword ? "Ocultar senha" : "Mostrar senha"}
+              aria-label={
+                showConfirmPassword ? "Ocultar senha" : "Mostrar senha"
+              }
             >
               {showConfirmPassword ? (
                 <VisibilityOffIcon className={tw`text-green-700`} />
@@ -199,11 +209,7 @@ export default function RegisterForm() {
           )}
         </div>
         {errors.confirmPassword && (
-          <span
-            id={confirmPasswordId}
-            role="alert"
-            className={errorTextStyles}
-          >
+          <span id={confirmPasswordId} role="alert" className={errorTextStyles}>
             {errors.confirmPassword.message}
           </span>
         )}
@@ -224,7 +230,11 @@ export default function RegisterForm() {
           </label>
         </div>
         {errors.terms && (
-          <span id={termsId} role="alert" className={tw`text-red-500 text-sm mt-1`}>
+          <span
+            id={termsId}
+            role="alert"
+            className={tw`text-red-500 text-sm mt-1`}
+          >
             {errors.terms.message}
           </span>
         )}

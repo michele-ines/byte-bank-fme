@@ -85,11 +85,16 @@ const CadInvestments: React.FC<CadInvestmentsProps> = ({
         <Box
           role="img"
           aria-label="Gráfico de pizza de investimentos"
-          className={tw`investmentBox styles.investmentBoxStats w-full md:max-w-[610px]`}
+          className={tw`investmentBox w-full md:max-w-full`}
         >
           <PieChart
             series={[{ data: chartData, innerRadius: 40, cornerRadius: 50 }]}
             {...chartSize}
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 4,
+            }}
           />
         </Box>
       </section>

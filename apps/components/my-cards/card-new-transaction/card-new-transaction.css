@@ -83,7 +83,6 @@
 }
 
 .transacaoButton {
-  width: 355px;
   height: 48px;
   border-radius: 8px !important;
   border: 2px solid var(--byte-color-dash);
@@ -96,8 +95,7 @@
     width: auto !important;
   }
 
-  .transacaoInput,
-  .transacaoButton {
+  .transacaoInput {
     width: 104px !important;
   }
 }

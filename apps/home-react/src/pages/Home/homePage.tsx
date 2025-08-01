@@ -12,23 +12,21 @@ export default function HomePage() {
     <div className={tw`w-full min-h-screen home-background`}>
       <div className={tw`max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 py-8`}>
         <section
-          className={tw`flex flex-col items-center gap-10 lg:flex-row lg:justify-between lg:gap-4`}
+          className={tw`grid grid-col-1 md:grid-cols-2 items-center gap-10 md:gap-4`}
         >
-          <div className={tw`w-full lg:w-1/2`}>
+          <div className={tw`w-full`}>
             {/* Mobile: telas menores que md */}
             <h1
-              className={tw`banner-title-mobile block md:hidden  text-center mb-4 whitespace-pre-line`}
+              className={tw`banner-title font-bold text-lg leading-tight tracking-tight block md:hidden text-center text-black mb-4 whitespace-pre-line`}
             >
               Experimente mais <br />
-              liberdade no controle da
-              <br />
-              vida financeira. Crie <br />
-              sua conta com a gente!
+              liberdade no controle <br /> da vida financeira. <br />
+              Crie sua conta com a gente!
             </h1>
 
             {/* Tablet: de md até lg */}
             <h1
-              className={tw`banner-title hidden md:block lg:hidden text-center mb-4 whitespace-pre-line`}
+              className={tw`banner-title font-bold text-xl leading-tight tracking-tight align-middle text-black hidden md:block lg:hidden text-center mb-4 whitespace-pre-line`}
             >
               Experimente mais liberdade no
               <br />
@@ -39,7 +37,7 @@ export default function HomePage() {
 
             {/* Desktop: a partir de lg */}
             <h1
-              className={tw`banner-title text-center hidden lg:block mb-4 whitespace-pre-line`}
+              className={tw`banner-title font-bold text-2xl leading-tight tracking-tight align-middle text-black text-center hidden lg:block mb-4`}
             >
               Experimente mais liberdade no
               <br />
@@ -49,9 +47,7 @@ export default function HomePage() {
             </h1>
           </div>
 
-          <div
-            className={tw`w-full lg:w-1/2 flex justify-center lg:justify-end`}
-          >
+          <div className={tw`w-full`}>
             <img
               src={bannerIlustracao}
               alt="Banner ilustrativo"
