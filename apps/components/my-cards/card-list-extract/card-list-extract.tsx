@@ -17,6 +17,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import clsx from "clsx";
 
+// --- MODIFICAÇÃO 1: Importa o nosso novo serviço de upload ---
+// (Certifique-se de que o caminho para o arquivo está correto)
+import { deleteFile, uploadFile } from "../../../dashboard-react/src/services/uploadService"; 
+
 import {
   formatBRL,
   formatTipo,
@@ -29,6 +33,7 @@ import SkeletonListExtract from "apps/components/skeleton-list-extract/skeleton-
 import { ReceiptLongOutlinedIcon } from "apps/components/ui";
 import InfiniteScrollSentinel from "apps/components/infinite-scroll-sentinel/infinite-scroll-sentinel";
 
+// --- Interfaces (sem alterações) ---
 interface Attachment {
   url: string;
   name: string;
@@ -53,7 +58,7 @@ interface CardListExtractProps {
   isPageLoading: boolean;
   onSave?: (transactions: Transaction[]) => Promise<void> | void;
   onDelete: (transactionIds: number[]) => Promise<void>;
-  hasMore?: boolean; // ← adicionado
+  hasMore?: boolean;
 }
 
 const formatDateBR = (dateString: string): string => {
@@ -69,10 +74,9 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
   onDelete,
   hasMore = false,
 }) => {
+  // --- Estado e Hooks (sem alterações) ---
   const [isEditing, setIsEditing] = useState(false);
-  const [editableTransactions, setEditableTransactions] = useState<TxWithFiles[]>(
-    []
-  );
+  const [editableTransactions, setEditableTransactions] = useState<TxWithFiles[]>([]);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedTransactions, setSelectedTransactions] = useState<number[]>([]);
   const [isDeletingInProgress, setIsDeletingInProgress] = useState(false);
@@ -83,6 +87,7 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
   const [endDate, setEndDate] = useState("");
   const [dateError, setDateError] = useState(false);
 
+  // --- Funções e Lógica (com a modificação no handleAttachFiles) ---
   useEffect(() => {
     if (transactions) {
       setEditableTransactions(
@@ -152,45 +157,64 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
     );
   };
 
-  const handleAttachFiles = (transactionId: number, files: File[]) => {
-    setEditableTransactions((currentTxs) =>
-      currentTxs.map((tx) =>
-        tx._id === transactionId ? { ...tx, novosAnexos: files } : tx
-      )
-    );
+  // --- MODIFICAÇÃO 2: A função de anexar agora se comunica com o backend ---
+  const handleAttachFiles = async (transactionId: number, files: File[]) => {
+    if (files.length === 0) return;
+
+    // Itera sobre cada arquivo que o usuário selecionou
+    for (const file of files) {
+      // Usa nosso serviço para enviar o arquivo para o backend
+      const nomeDoArquivoSalvo = await uploadFile(file);
+
+      // Se o upload deu certo, o backend retorna o nome do arquivo
+      if (nomeDoArquivoSalvo) {
+        // Atualiza o estado local `editableTransactions` para mostrar o novo anexo
+        setEditableTransactions((currentTxs) =>
+          currentTxs.map((tx) => {
+            // Encontra a transação correta
+            if (tx._id === transactionId) {
+              // Cria o novo objeto de anexo
+              const novoAnexo: Attachment = {
+                name: nomeDoArquivoSalvo, // O nome retornado pelo backend
+                url: `http://localhost:4000/api/download/${nomeDoArquivoSalvo}`, // O link para download
+              };
+              // Adiciona o novo anexo à lista de anexos existentes
+              return { ...tx, anexos: [...(tx.anexos || []), novoAnexo] };
+            }
+            return tx;
+          })
+        );
+      } else {
+        // Se o upload falhou, informa o usuário
+        alert(`Ocorreu um erro ao enviar o arquivo: ${file.name}`);
+      }
+    }
   };
 
   const handleRemoveAttachment = async (
     transactionId: number,
-    attachmentIdentifier: string,
+    attachmentIdentifier: string, // Pode ser uma URL (antigo) ou um nome de arquivo (novo)
     isNew: boolean
   ) => {
+    // Se NÃO for um anexo novo, significa que ele existe no backend.
     if (!isNew) {
-      try {
-        const fileName = attachmentIdentifier.substring(
-          attachmentIdentifier.lastIndexOf("/") + 1
-        );
-        const response = await fetch(
-          `/api/anexos/${encodeURIComponent(fileName)}`,
-          { method: "DELETE" }
-        );
-
-        if (response.status !== 204 && response.status !== 200) {
-          const errorData = (await response.json()) as { message?: string };
-          alert(
-            `Erro ao remover anexo: ${errorData.message ?? "Erro desconhecido"}`
-          );
-          return;
-        }
-      } catch {
-        alert("Erro de rede ao tentar remover o anexo.");
-        return;
-      }
+      // Extrai o nome do arquivo da URL para enviar ao backend.
+      const fileName = attachmentIdentifier.substring(attachmentIdentifier.lastIndexOf("/") + 1);
+      
+      // Chama nosso serviço para deletar o arquivo físico.
+      const success = await deleteFile(fileName);
+      
+      // Se a exclusão no backend falhar, interrompemos a função.
+      if (!success) return;
     }
 
+    // Se a exclusão no backend deu certo (ou se era um anexo novo),
+    // atualizamos o estado local do React para remover o anexo da tela.
     setEditableTransactions((currentTxs) =>
       currentTxs.map((tx) => {
         if (tx._id !== transactionId) return tx;
+
+        // Se for um anexo novo (que só existe no frontend)
         if (isNew) {
           return {
             ...tx,
@@ -198,7 +222,7 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
               (f) => f.name !== attachmentIdentifier
             ),
           };
-        } else {
+        } else { // Se for um anexo antigo (que veio da API)
           return {
             ...tx,
             anexos: tx.anexos?.filter((a) => a.url !== attachmentIdentifier),
@@ -252,6 +276,7 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
   const loadingFirstPage = isPageLoading && editableTransactions.length === 0;
   const hasTransactions = !loadingFirstPage && editableTransactions.length > 0;
 
+  // --- JSX (sem alterações) ---
   return (
     <Box
       className="cardExtrato cardExtrato w-full min-h-[512px]"
@@ -287,27 +312,17 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
             <MenuItem value="entrada">Entrada</MenuItem>
             <MenuItem value="saida">Saída</MenuItem>
           </Select>
-
           <TextField
-            label="De"
-            type="date"
-            size="small"
-            value={startDate}
+            label="De" type="date" size="small" value={startDate}
             onChange={(e) => handleStartDateChange(e.target.value)}
-            error={dateError}
-            helperText={dateError ? "Data inválida" : ""}
+            error={dateError} helperText={dateError ? "Data inválida" : ""}
             InputLabelProps={{ shrink: true }}
             sx={{ flex: 1, minWidth: { xs: "calc(50% - 4px)", md: 120 } }}
           />
-
           <TextField
-            label="Até"
-            type="date"
-            size="small"
-            value={endDate}
+            label="Até" type="date" size="small" value={endDate}
             onChange={(e) => handleEndDateChange(e.target.value)}
-            error={dateError}
-            helperText={dateError ? "Data inválida" : ""}
+            error={dateError} helperText={dateError ? "Data inválida" : ""}
             InputLabelProps={{ shrink: true }}
             sx={{ flex: 1, minWidth: { xs: "calc(50% - 4px)", md: 120 } }}
           />
@@ -321,20 +336,9 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
       ) : dateError || !filteredTransactions.length ? (
         <Box className="flex flex-col items-center justify-center text-center gap-4 py-10">
           {dateError ? (
-            <>
-              <Typography variant="h6" color="error">Data inválida</Typography>
-              <Typography variant="body2" color="text.secondary">
-                Verifique o formato da data inserida.
-              </Typography>
-            </>
+            <><Typography variant="h6" color="error">Data inválida</Typography><Typography variant="body2" color="text.secondary">Verifique o formato da data inserida.</Typography></>
           ) : (
-            <>
-              <ReceiptLongOutlinedIcon sx={{ fontSize: 56, color: "text.secondary" }} />
-              <Typography variant="h6">Nenhuma transação encontrada</Typography>
-              <Typography variant="body2" color="text.secondary">
-                Ajuste os filtros ou adicione uma nova transação para começar.
-              </Typography>
-            </>
+            <><ReceiptLongOutlinedIcon sx={{ fontSize: 56, color: "text.secondary" }} /><Typography variant="h6">Nenhuma transação encontrada</Typography><Typography variant="body2" color="text.secondary">Ajuste os filtros ou adicione uma nova transação para começar.</Typography></>
           )}
         </Box>
       ) : (
@@ -343,16 +347,13 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
             {filteredTransactions.map((tx, idx) => {
               const hasExistingAttachment =
                 (tx.anexos?.length ?? 0) > 0 || (tx.novosAnexos?.length ?? 0) > 0;
-
               return (
                 <li key={tx._id ?? `tx-${idx}`}>
                   <Box className="extratoItem" style={{ gap: isEditing ? 0 : undefined }}>
                     <Box className="txRow">
                       {isEditing ? (
                         <Input
-                          disableUnderline
-                          className="txType"
-                          fullWidth
+                          disableUnderline className="txType" fullWidth
                           value={formatTipo(tx.tipo)}
                           onChange={(e) => handleTransactionChange(idx, "tipo", e.target.value)}
                           inputProps={{ style: { textAlign: "left" } }}
@@ -363,7 +364,6 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
                       )}
                       <span className="txDate">{formatDateBR(tx.createdAt)}</span>
                     </Box>
-
                     {isEditing ? (
                       <Box className="flex items-center gap-2 w-full">
                         <Input
@@ -378,13 +378,9 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
                           }
                           inputProps={{ inputMode: "decimal", title: "Até 999.999,99" }}
                         />
-
                         <input
-                          hidden
-                          multiple
-                          accept="image/*,application/pdf"
-                          id={`edit-anexos-${tx._id}`}
-                          type="file"
+                          hidden multiple accept="image/*,application/pdf"
+                          id={`edit-anexos-${tx._id}`} type="file"
                           aria-label="Selecionar arquivos para anexar"
                           disabled={hasExistingAttachment}
                           onChange={(e) => {
@@ -404,9 +400,7 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
                           >
                             <span>
                               <IconButton
-                                component="span"
-                                size="small"
-                                color="primary"
+                                component="span" size="small" color="primary"
                                 aria-label="Anexar arquivos"
                                 disabled={hasExistingAttachment}
                               >
@@ -450,7 +444,6 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
                       </Box>
                     )}
                   </Box>
-
                   {(tx.anexos?.length || tx.novosAnexos?.length) ? (
                     <Box className="flex flex-wrap gap-2 mt-2 ml-2">
                       {tx.anexos?.map((a: Attachment) => (
@@ -466,8 +459,8 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
                           onDelete={
                             isEditing
                               ? () => {
-                                  void handleRemoveAttachment(tx._id, a.url, false);
-                                }
+                                void handleRemoveAttachment(tx._id, a.url, false);
+                              }
                               : undefined
                           }
                           sx={{
@@ -476,7 +469,6 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
                           }}
                         />
                       ))}
-
                       {isEditing &&
                         tx.novosAnexos?.map((f, i) => (
                           <Chip
@@ -497,7 +489,6 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
               );
             })}
           </ul>
-
           <Box aria-busy={isPageLoading}>
             <InfiniteScrollSentinel
               onVisible={() => {
@@ -507,7 +498,6 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
               isLoading={isPageLoading}
             />
           </Box>
-
           {isPageLoading && editableTransactions.length > 0 && (
             <SkeletonListExtract rows={5} />
           )}
@@ -528,7 +518,6 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
           >
             {isEditing ? "Salvar" : isDeletingInProgress ? "Excluindo..." : "Excluir"}
           </Button>
-
           <Button
             onClick={isEditing ? handleCancelClick : handleCancelDeleteClick}
             className="botaoCancelar"
