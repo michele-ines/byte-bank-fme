@@ -108,7 +108,7 @@ export default function CardsOutrosServicos() {
               <Typography
                 variant="body1"
                 sx={{ fontWeight: 500 }}
-                className="serviceLabel"
+                className={tw`serviceLabel`}
               >
                 {title}
               </Typography>

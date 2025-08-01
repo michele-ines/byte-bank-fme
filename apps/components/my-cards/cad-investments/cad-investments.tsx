@@ -3,7 +3,6 @@
 import React from "react";
 import { Box, PieChart } from "../../ui";
 
-
 // Se estiver em TS, mantenha a interface. Caso contrário, ignore esta linha:
 // import { CadInvestmentsProps } from "interfaces/dashboard";
 
@@ -47,7 +46,7 @@ const CadInvestments: React.FC<CadInvestmentsProps> = ({
           })}
         </p>
 
-        <div className={tw`flex flex-col md:flex-row gap-6`}>
+        <div className={tw`flex flex-col lg:flex-row gap-6`}>
           {investments.map(({ id, label, value }) => {
             const formatted = value.toLocaleString("pt-BR", {
               style: "currency",
@@ -86,11 +85,16 @@ const CadInvestments: React.FC<CadInvestmentsProps> = ({
         <Box
           role="img"
           aria-label="Gráfico de pizza de investimentos"
-          className={tw`investmentBox styles.investmentBoxStats w-full md:max-w-[610px]`}
+          className={tw`investmentBox w-full md:max-w-full`}
         >
           <PieChart
             series={[{ data: chartData, innerRadius: 40, cornerRadius: 50 }]}
             {...chartSize}
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 4,
+            }}
           />
         </Box>
       </section>

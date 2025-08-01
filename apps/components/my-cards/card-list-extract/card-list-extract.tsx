@@ -65,13 +65,19 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
   onDelete,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editableTransactions, setEditableTransactions] = useState<TxWithFiles[]>([]);
+  const [editableTransactions, setEditableTransactions] = useState<
+    TxWithFiles[]
+  >([]);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [selectedTransactions, setSelectedTransactions] = useState<number[]>([]);
+  const [selectedTransactions, setSelectedTransactions] = useState<number[]>(
+    []
+  );
   const [isDeletingInProgress, setIsDeletingInProgress] = useState(false);
   const firstEditRef = useRef<HTMLInputElement>(null);
   const [statusMsg, setStatusMsg] = useState("");
-  const [typeFilter, setTypeFilter] = useState<"all" | "entrada" | "saida">("all");
+  const [typeFilter, setTypeFilter] = useState<"all" | "entrada" | "saida">(
+    "all"
+  );
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [dateError, setDateError] = useState(false);
@@ -99,7 +105,8 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
         (typeFilter === "entrada" && tiposEntrada.includes(tx.tipo)) ||
         (typeFilter === "saida" && tiposSaida.includes(tx.tipo));
       const txDate = new Date(tx.createdAt);
-      const matchesStart = !startDate || txDate >= new Date(`${startDate}T00:00`);
+      const matchesStart =
+        !startDate || txDate >= new Date(`${startDate}T00:00`);
       const matchesEnd = !endDate || txDate <= new Date(`${endDate}T23:59:59`);
       return matchesType && matchesStart && matchesEnd;
     });
@@ -130,7 +137,11 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
       prev.includes(id) ? prev.filter((n) => n !== id) : [...prev, id]
     );
 
-  const handleTransactionChange = (index: number, field: keyof Transaction, value: string) => {
+  const handleTransactionChange = (
+    index: number,
+    field: keyof Transaction,
+    value: string
+  ) => {
     setEditableTransactions((prev) =>
       prev.map((tx, i) => {
         if (i !== index) return tx;
@@ -155,14 +166,21 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
   ) => {
     if (!isNew) {
       try {
-        const fileName = attachmentIdentifier.substring(attachmentIdentifier.lastIndexOf("/") + 1);
-        const response = await fetch(`/api/anexos/${encodeURIComponent(fileName)}`, {
-          method: "DELETE",
-        });
+        const fileName = attachmentIdentifier.substring(
+          attachmentIdentifier.lastIndexOf("/") + 1
+        );
+        const response = await fetch(
+          `/api/anexos/${encodeURIComponent(fileName)}`,
+          {
+            method: "DELETE",
+          }
+        );
 
         if (response.status !== 204 && response.status !== 200) {
           const errorData = (await response.json()) as { message?: string };
-          alert(`Erro ao remover anexo: ${errorData.message ?? "Erro desconhecido"}`);
+          alert(
+            `Erro ao remover anexo: ${errorData.message ?? "Erro desconhecido"}`
+          );
           return;
         }
       } catch {
@@ -175,9 +193,17 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
       currentTxs.map((tx) => {
         if (tx._id !== transactionId) return tx;
         if (isNew) {
-          return { ...tx, novosAnexos: tx.novosAnexos?.filter((f) => f.name !== attachmentIdentifier) };
+          return {
+            ...tx,
+            novosAnexos: tx.novosAnexos?.filter(
+              (f) => f.name !== attachmentIdentifier
+            ),
+          };
         } else {
-          return { ...tx, anexos: tx.anexos?.filter((a) => a.url !== attachmentIdentifier) };
+          return {
+            ...tx,
+            anexos: tx.anexos?.filter((a) => a.url !== attachmentIdentifier),
+          };
         }
       })
     );
@@ -236,38 +262,77 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
         borderRadius: 2,
         boxShadow: 1,
         p: 3,
+        color: "#1f2937",
       }}
       role="region"
       aria-labelledby="extrato-heading"
     >
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-        <Typography id="extrato-heading" variant="h6" component="h3">
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
+        <Typography
+          id="extrato-heading"
+          variant="h6"
+          component="h3"
+          sx={{ color: "#1f2937" }}
+        >
           Extrato
         </Typography>
 
         {hasTransactions && !isEditing && !isDeleting && (
           <Box sx={{ display: "flex", gap: 1 }}>
-            <IconButton aria-label="editar" onClick={handleEditClick} size="small">
+            <IconButton
+              aria-label="editar"
+              onClick={handleEditClick}
+              size="small"
+            >
               <EditIcon fontSize="small" />
             </IconButton>
-            <IconButton aria-label="excluir" onClick={handleDeleteClick} size="small">
+            <IconButton
+              aria-label="excluir"
+              onClick={handleDeleteClick}
+              size="small"
+            >
               <DeleteIcon fontSize="small" />
             </IconButton>
           </Box>
         )}
 
         {(isEditing || isDeleting) && (
-          <Box>
-            <Button variant="outlined" onClick={handleCancelClick} disabled={isDeletingInProgress}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "end",
+              gap: 2,
+              maxWidth: "110px",
+            }}
+          >
+            <Button
+              variant="outlined"
+              onClick={handleCancelClick}
+              disabled={isDeletingInProgress}
+              sx={{ width: 100 }}
+            >
               Cancelar
             </Button>
             <Button
               variant="contained"
               onClick={handleSaveOrDeleteClick}
               disabled={isDeletingInProgress}
-              sx={{ ml: 2 }}
+              sx={{ width: 100 }}
             >
-              {isEditing ? "Salvar" : isDeletingInProgress ? "Excluindo..." : "Confirmar"}
+              {isEditing
+                ? "Salvar"
+                : isDeletingInProgress
+                ? "Excluindo..."
+                : "Confirmar"}
             </Button>
           </Box>
         )}
@@ -277,7 +342,9 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
       <Box sx={{ mb: 3, display: "flex", gap: 2, flexWrap: "wrap" }}>
         <Select
           value={typeFilter}
-          onChange={(e) => setTypeFilter(e.target.value as "all" | "entrada" | "saida")}
+          onChange={(e) =>
+            setTypeFilter(e.target.value as "all" | "entrada" | "saida")
+          }
           size="small"
           sx={{ minWidth: 140 }}
         >
@@ -334,7 +401,9 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
                 <Checkbox
                   checked={selectedTransactions.includes(tx._id)}
                   onChange={() => handleCheckboxChange(tx._id)}
-                  inputProps={{ "aria-label": `Selecionar transação ${tx._id}` }}
+                  inputProps={{
+                    "aria-label": `Selecionar transação ${tx._id}`,
+                  }}
                 />
               )}
 
@@ -346,14 +415,18 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
                       label="Tipo"
                       value={tx.tipo}
                       size="small"
-                      onChange={(e) => handleTransactionChange(index, "tipo", e.target.value)}
+                      onChange={(e) =>
+                        handleTransactionChange(index, "tipo", e.target.value)
+                      }
                       sx={{ mb: 1, maxWidth: 180 }}
                     />
                     <TextField
                       label="Valor"
                       value={formatBRL(tx.valor)}
                       size="small"
-                      onChange={(e) => handleTransactionChange(index, "valor", e.target.value)}
+                      onChange={(e) =>
+                        handleTransactionChange(index, "valor", e.target.value)
+                      }
                       sx={{ mb: 1, maxWidth: 150 }}
                     />
 
@@ -365,7 +438,9 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
                             key={idx}
                             icon={<AttachFileIcon />}
                             label={anexo.name ?? "Anexo"}
-                            onDelete={() => handleRemoveAttachment(tx._id, anexo.url, false)}
+                            onDelete={() =>
+                              handleRemoveAttachment(tx._id, anexo.url, false)
+                            }
                             sx={{ cursor: "pointer" }}
                           />
                         ))
@@ -388,7 +463,11 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
                         }}
                       />
                       <label htmlFor={`file-input-${tx._id}`}>
-                        <Button component="span" size="small" variant="outlined">
+                        <Button
+                          component="span"
+                          size="small"
+                          variant="outlined"
+                        >
                           Anexar
                         </Button>
                       </label>
@@ -405,7 +484,9 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
                     <Typography>
                       <strong>Data:</strong> {formatDateBR(tx.createdAt)}
                     </Typography>
-                    <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mt: 1 }}>
+                    <Box
+                      sx={{ display: "flex", gap: 1, flexWrap: "wrap", mt: 1 }}
+                    >
                       {Array.isArray(tx.anexos) && tx.anexos.length > 0 ? (
                         tx.anexos.map((anexo, idx) => (
                           <Tooltip key={idx} title={anexo.name ?? ""}>

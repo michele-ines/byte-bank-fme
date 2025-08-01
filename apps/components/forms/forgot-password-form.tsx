@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { tw } from 'twind';
+import { tw } from "twind";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Box, Button, Input } from "../ui";
 import { ROUTES } from "../../config-routes/routes";
 import { ForgotPasswordData } from "../../interfaces/dashboard";
 import { forgotPasswordValidations } from "../../utils/forms-validations/formValidations";
-import '../styles/globals.css'
+import "../../../styles/globals.css";
 // Style variables
 const inputBaseStyles = tw`w-full px-4 py-3 rounded-lg focus-within:ring-2`;
 const inputNormalStyles = tw`bg-gray-100 border border-gray-200 focus-within:ring-green-500`;
@@ -90,11 +90,7 @@ export default function ForgotPasswordForm() {
               {...register("email", forgotPasswordValidations.email)}
             />
             {errors.email && (
-              <span
-                id="email-error"
-                role="alert"
-                className={errorTextStyles}
-              >
+              <span id="email-error" role="alert" className={errorTextStyles}>
                 {errors.email.message}
               </span>
             )}

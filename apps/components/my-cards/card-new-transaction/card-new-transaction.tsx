@@ -13,7 +13,6 @@ import {
   NewTransactionData,
 } from "../../../interfaces/dashboard";
 import { useForm } from "react-hook-form";
-import clsx from "clsx";
 import { maskCurrency } from "../../../utils/currency-formatte/currency-formatte";
 import "./card-new-transaction.css";
 import { tw } from "twind";
@@ -155,21 +154,21 @@ export default function CardNewTransaction({
         </FormControl>
 
         {/* ---------- BOTÃO ---------- */}
-        <Box className={tw`mt-4`}>
-          <Button
-            type="submit"
-            /* 🆕 atributos de estado para leitores de tela */
-            aria-busy={isLoading ? "true" : undefined}
-            aria-disabled={isLoading ? "true" : undefined}
-            className={clsx("transacaoButton", {
-              "opacity-50 cursor-not-allowed bg-gray-400 hover:bg-gray-400":
-                isLoading,
-            })}
-            disabled={isLoading}
-          >
-            {isLoading ? "Concluindo…" : "Concluir Transação"}
-          </Button>
-        </Box>
+        <Button
+          type="submit"
+          /* 🆕 atributos de estado para leitores de tela */
+          aria-busy={isLoading ? "true" : undefined}
+          aria-disabled={isLoading ? "true" : undefined}
+          className={tw`transacaoButton mt-4 w-full max-w-[240px] ${
+            isLoading
+              ? "opacity-50 cursor-not-allowed bg-gray-400 hover:bg-gray-400"
+              : ""
+          }`}
+          disabled={isLoading}
+          sx={{ backgroundColor: "#004d61" }}
+        >
+          {isLoading ? "Concluindo…" : "Concluir Transação"}
+        </Button>
       </form>
     </Box>
   );

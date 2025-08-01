@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { tw } from 'twind';
+import { tw } from "twind";
 import { useForm } from "react-hook-form";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -8,7 +8,7 @@ import { ROUTES } from "../../config-routes/routes";
 import { LoginData } from "../../interfaces/dashboard";
 import { loginValidations } from "../../utils/forms-validations/formValidations";
 import clsx from "clsx";
-import '../styles/globals.css'
+import "../../../styles/globals.css";
 // 👇 Alternative to useId in React 17
 let globalId = 0;
 function generateId() {
@@ -84,10 +84,13 @@ export default function LoginForm() {
           Senha
         </label>
         <div
-          className={clsx(tw`flex items-center rounded-lg focus-within:ring-2`, {
-            [inputNormalStyles]: !errors.password,
-            [inputErrorStyles]: !!errors.password,
-          })}
+          className={clsx(
+            tw`flex items-center rounded-lg focus-within:ring-2`,
+            {
+              [inputNormalStyles]: !errors.password,
+              [inputErrorStyles]: !!errors.password,
+            }
+          )}
         >
           <Input
             id="password"
@@ -140,7 +143,9 @@ export default function LoginForm() {
         >
           {isSubmitting ? "Acessando..." : "Acessar"}
           {isSubmitting && (
-            <span className={tw`sr-only`}>O formulário está sendo enviado.</span>
+            <span className={tw`sr-only`}>
+              O formulário está sendo enviado.
+            </span>
           )}
         </Button>
       </Box>

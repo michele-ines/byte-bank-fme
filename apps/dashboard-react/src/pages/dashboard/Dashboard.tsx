@@ -93,9 +93,7 @@ const DashboardContent = () => {
   // Normaliza para o tipo com 'valor: number' que os componentes esperam
   const transactions: TransactionNum[] = useMemo(
     () =>
-      normalizeToTransaction(
-        transactionsRaw as unknown as TransactionLike[]
-      ),
+      normalizeToTransaction(transactionsRaw as unknown as TransactionLike[]),
     [transactionsRaw]
   );
 
@@ -131,14 +129,23 @@ const DashboardContent = () => {
   };
 
   return (
-    <Box className={tw`w-full min-h-screen flex flex-col justify-center px-4 py-6 lg:px-12 bg-[#E4EDE3]`}>
-      <Box className={tw`w-full md:max-w-screen-lg flex flex-col gap-6 mx-auto`}>
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+    <Box className={tw`w-full min-h-screen px-4 py-6 lg:px-12 bg-[#E4EDE3]`}>
+      <Box
+        className={tw`w-full md:max-w-screen-lg flex flex-col gap-6 mx-auto`}
+      >
+        {/* botão de personalização */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
           <WidgetPreferencesButton />
         </Box>
 
-        <Box className={tw`flex flex-col md:grid md:grid-cols-3 gap-6`}>
-          <Box className={tw`flex flex-col gap-6 w-full col-span-2`}>
+        <Box className={tw`grid grid-cols-3 gap-6`}>
+          {/* coluna esquerda */}
+          <Box className={tw`flex flex-col gap-6 w-ful col-span-2`}>
             <CardBalance
               user={data.user}
               balance={{ ...data.balance, value: balanceValue }}
@@ -165,7 +172,9 @@ const DashboardContent = () => {
               isPageLoading={transactionsStatus === "loading"}
               onSave={(txs) => {
                 // Converter para TxWithFiles[] antes de salvar
-                const normalized = normalizeToTxWithFiles(txs as TransactionNum[]);
+                const normalized = normalizeToTxWithFiles(
+                  txs as TransactionNum[]
+                );
                 void handleSaveTransactions(normalized);
               }}
               onDelete={handleDeleteTransactions}

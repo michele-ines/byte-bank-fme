@@ -119,9 +119,7 @@ function InvestimentosPage() {
   };
 
   return (
-    <Box
-      className={tw`w-full min-h-screen flex flex-col justify-center px-4 py-6 lg:px-12 bg-[#E4EDE3]`}
-    >
+    <Box className={tw`w-full min-h-screen px-4 py-6 lg:px-12 bg-[#E4EDE3]`}>
       <Box
         className={tw`w-full md:max-w-screen-lg flex flex-col gap-6 mx-auto`}
       >
@@ -135,7 +133,7 @@ function InvestimentosPage() {
           <WidgetPreferencesButton />
         </Box>
 
-        <Box className={tw`flex flex-col md:grid md:grid-cols-3 gap-6`}>
+        <Box className={tw`grid grid-cols-3 gap-6`}>
           {/* coluna esquerda */}
           <Box className={tw`flex flex-col gap-6 w-ful col-span-2`}>
             {/* Balance agora com valor do Redux */}

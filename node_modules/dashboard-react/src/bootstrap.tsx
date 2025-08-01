@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import './index.css';
 import '@global-styles'; 
+import { store } from '@store/store';
 
 
 const container = document.getElementById('root');

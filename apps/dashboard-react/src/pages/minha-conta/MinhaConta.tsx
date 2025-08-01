@@ -6,7 +6,7 @@ import { tw } from "twind";
 export default function MyAccountPage() {
   return (
     <Box
-      className={tw`flex items-center justify-center min-h-screen px-4`}
+      className={tw`flex items-start justify-center min-h-screen p-4`}
       sx={{ backgroundColor: "var(--byte-bg-dashboard)" }}
     >
       <Box

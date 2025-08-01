@@ -10,11 +10,11 @@ export default function PersonalCards() {
     <Box
       role="region"
       aria-labelledby="meus-cartoes-heading"
-      className={tw`cardPersonalCards cardTransacao w-full min-h-[478px]`}
+      className={tw`cardPersonalCards w-full min-h-[478px]`}
     >
       <h3
         id="meus-cartoes-heading"
-        className={tw`cardTitle w-full text-center md:text-start`}
+        className={tw`cardTitle w-full text-center lg:text-start`}
       >
         Meus cartões
       </h3>
@@ -23,7 +23,7 @@ export default function PersonalCards() {
         {/* ---------- Cartão físico ---------- */}
         <h4
           id="cartao-fisico-heading"
-          className={tw`descriptionCard text-center md:text-start`}
+          className={tw`descriptionCard text-center lg:text-start`}
         >
           Cartão físico
         </h4>
@@ -31,14 +31,14 @@ export default function PersonalCards() {
         <Box
           role="group"
           aria-labelledby="cartao-fisico-heading"
-          className={tw`w-full flex flex-col items-center md:flex-row gap-8`}
+          className={tw`w-full flex flex-col items-center lg:flex-row gap-8`}
         >
           <img
             src={CartaoFisicoImg}
             alt="Ilustração de um cartão bancário azul, frente do cartão com nome do banco e do titular"
             width={327}
             height={164}
-            className={tw`max-w-[280px] 2xl:max-w-none max-h-[148px] 2xl:max-h-none text-center`}
+            className={tw`max-w-[280px] lg:max-w-none max-h-[148px] lg:max-h-none text-center`}
           />
 
           <Box className={tw`flex flex-col items-center gap-4 w-full`}>
@@ -73,7 +73,7 @@ export default function PersonalCards() {
         {/* ---------- Cartão digital ---------- */}
         <h4
           id="cartao-digital-heading"
-          className={tw`descriptionCard text-center md:text-start`}
+          className={tw`descriptionCard text-center lg:text-start`}
         >
           Cartão digital
         </h4>
@@ -81,14 +81,14 @@ export default function PersonalCards() {
         <Box
           role="group"
           aria-labelledby="cartao-digital-heading"
-          className={tw`w-full flex flex-col items-center md:flex-row gap-8`}
+          className={tw`w-full flex flex-col items-center lg:flex-row gap-8`}
         >
           <img
             src={CartaoDigitalImg}
             alt="Ilustração de um cartão bancário cinza, frente do cartão com nome do banco e do titular"
             width={327}
             height={164}
-            className={tw`max-w-[280px] 2xl:max-w-none max-h-[148px] 2xl:max-h-none text-center`}
+            className={tw`max-w-[280px] lg:max-w-none max-h-[148px] lg:max-h-none text-center`}
           />
 
           <Box className={tw`flex flex-col items-center gap-4 w-full`}>
