@@ -103,9 +103,9 @@ RUN cp -r apps/home-react/dist/* apps/root/dist/home/ || true
 RUN cp -r apps/dashboard-react/dist/* apps/root/dist/dashboard/ || true
 RUN cp -r apps/footer-angular/dist/* apps/root/dist/footer/ || true
 
-# Copiar assets públicos do header (logo, etc.)
-RUN mkdir -p apps/root/dist/header/header
-RUN cp -r apps/header-react/public/header/* apps/root/dist/header/header/ || true
+# Copiar assets públicos do header (logo, etc.) diretamente para /header/
+RUN mkdir -p apps/root/dist/header
+RUN cp -r apps/header-react/public/header/* apps/root/dist/header/ || true
 
 # Mudar para usuário não-root
 USER appuser
