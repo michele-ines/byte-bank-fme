@@ -7,7 +7,10 @@
   ],
   "scripts": {
     "start": "npm run start:all",
-    "start:all": "concurrently -n \"ROOT,HEADER,HOME,DASH,FOOTER\" -c \"blue,magenta,green,yellow,cyan\" \"npm run start -w apps/root\" \"npm run start -w apps/header-react\" \"npm run start -w apps/home-react\" \"npm run start -w apps/dashboard-react\" \"npm run start -w apps/footer-angular\""
+    "start:all": "concurrently -n \"ROOT,HEADER,HOME,DASH,FOOTER\" -c \"blue,magenta,green,yellow,cyan\" \"npm run start -w apps/root\" \"npm run start -w apps/header-react\" \"npm run start -w apps/home-react\" \"npm run start -w apps/dashboard-react\" \"npm run start -w apps/footer-angular\"",
+
+    "build": "npm run build:all",
+    "build:all": "concurrently -n \"ROOT,HEADER,HOME,DASH,FOOTER\" -c \"blue,magenta,green,yellow,cyan\" \"npm run start -w apps/root\" \"npm run start -w apps/header-react\" \"npm run start -w apps/home-react\" \"npm run start -w apps/dashboard-react\" \"npm run start -w apps/footer-angular\""
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
