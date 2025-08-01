@@ -10,10 +10,24 @@ import {
   Checkbox,
   Select,
   MenuItem,
+  Input,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
+import clsx from "clsx";
+
+import {
+  formatBRL,
+  formatTipo,
+  maskCurrency,
+  parseBRL,
+} from "../../../utils/currency-formatte/currency-formatte";
+
+import "./card-list-extract.css";
+import SkeletonListExtract from "apps/components/skeleton-list-extract/skeleton-list-extract";
+import { ReceiptLongOutlinedIcon } from "apps/components/ui";
+import InfiniteScrollSentinel from "apps/components/infinite-scroll-sentinel/infinite-scroll-sentinel";
 
 interface Attachment {
   url: string;
@@ -37,20 +51,10 @@ interface CardListExtractProps {
   transactions: Transaction[];
   fetchPage: () => void;
   isPageLoading: boolean;
-  onSave?: (transactions: Transaction[]) => void;
+  onSave?: (transactions: Transaction[]) => Promise<void> | void;
   onDelete: (transactionIds: number[]) => Promise<void>;
+  hasMore?: boolean; // ← adicionado
 }
-
-const parseBRL = (value: string): number => {
-  const parsed = value.replace(/\./g, "").replace(",", ".");
-  return parseFloat(parsed) || 0;
-};
-
-const formatBRL = (value: number | string): string => {
-  const num = typeof value === "string" ? parseFloat(value) : value;
-  if (isNaN(num)) return "R$ 0,00";
-  return num.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-};
 
 const formatDateBR = (dateString: string): string => {
   const date = new Date(dateString);
@@ -63,21 +67,18 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
   isPageLoading,
   onSave,
   onDelete,
+  hasMore = false,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editableTransactions, setEditableTransactions] = useState<
-    TxWithFiles[]
-  >([]);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [selectedTransactions, setSelectedTransactions] = useState<number[]>(
+  const [editableTransactions, setEditableTransactions] = useState<TxWithFiles[]>(
     []
   );
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [selectedTransactions, setSelectedTransactions] = useState<number[]>([]);
   const [isDeletingInProgress, setIsDeletingInProgress] = useState(false);
   const firstEditRef = useRef<HTMLInputElement>(null);
   const [statusMsg, setStatusMsg] = useState("");
-  const [typeFilter, setTypeFilter] = useState<"all" | "entrada" | "saida">(
-    "all"
-  );
+  const [typeFilter, setTypeFilter] = useState<"all" | "entrada" | "saida">("all");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [dateError, setDateError] = useState(false);
@@ -88,7 +89,7 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
         transactions.map((tx) => ({
           ...tx,
           valor: typeof tx.valor === "string" ? parseFloat(tx.valor) : tx.valor,
-          anexos: Array.isArray(tx.anexos) ? tx.anexos : [], // garante array
+          anexos: Array.isArray(tx.anexos) ? tx.anexos : [],
         }))
       );
     }
@@ -171,9 +172,7 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
         );
         const response = await fetch(
           `/api/anexos/${encodeURIComponent(fileName)}`,
-          {
-            method: "DELETE",
-          }
+          { method: "DELETE" }
         );
 
         if (response.status !== 204 && response.status !== 200) {
@@ -214,7 +213,7 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
       if (onSave) {
         const transactionsToSave = editableTransactions.map((tx) => ({
           ...tx,
-          valor: typeof tx.valor === "string" ? parseBRL(tx.valor) : tx.valor,
+          valor: typeof tx.valor === "string" ? parseBRL(tx.valor as string) : tx.valor,
         }));
         setStatusMsg("Salvando transações...");
         await onSave(transactionsToSave);
@@ -255,276 +254,294 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
 
   return (
     <Box
-      sx={{
-        width: "100%",
-        minHeight: "512px",
-        bgcolor: "background.paper",
-        borderRadius: 2,
-        boxShadow: 1,
-        p: 3,
-        color: "#1f2937",
-      }}
+      className="cardExtrato cardExtrato w-full min-h-[512px]"
       role="region"
       aria-labelledby="extrato-heading"
     >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 2,
-        }}
-      >
-        <Typography
-          id="extrato-heading"
-          variant="h6"
-          component="h3"
-          sx={{ color: "#1f2937" }}
-        >
-          Extrato
-        </Typography>
-
+      <Box className="extratoHeader">
+        <h3 id="extrato-heading" className="extratoTitle">Extrato</h3>
         {hasTransactions && !isEditing && !isDeleting && (
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <IconButton
-              aria-label="editar"
-              onClick={handleEditClick}
-              size="small"
-            >
+          <Box className="extratoActions">
+            <IconButton aria-label="editar" className="actionBtn" onClick={handleEditClick}>
               <EditIcon fontSize="small" />
             </IconButton>
-            <IconButton
-              aria-label="excluir"
-              onClick={handleDeleteClick}
-              size="small"
-            >
+            <IconButton aria-label="excluir" className="actionBtn" onClick={handleDeleteClick}>
               <DeleteIcon fontSize="small" />
             </IconButton>
           </Box>
         )}
-
-        {(isEditing || isDeleting) && (
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "end",
-              gap: 2,
-              maxWidth: "110px",
-            }}
-          >
-            <Button
-              variant="outlined"
-              onClick={handleCancelClick}
-              disabled={isDeletingInProgress}
-              sx={{ width: 100 }}
-            >
-              Cancelar
-            </Button>
-            <Button
-              variant="contained"
-              onClick={handleSaveOrDeleteClick}
-              disabled={isDeletingInProgress}
-              sx={{ width: 100 }}
-            >
-              {isEditing
-                ? "Salvar"
-                : isDeletingInProgress
-                ? "Excluindo..."
-                : "Confirmar"}
-            </Button>
-          </Box>
-        )}
       </Box>
 
-      {/* FILTROS SIMPLES */}
-      <Box sx={{ mb: 3, display: "flex", gap: 2, flexWrap: "wrap" }}>
-        <Select
-          value={typeFilter}
-          onChange={(e) =>
-            setTypeFilter(e.target.value as "all" | "entrada" | "saida")
-          }
-          size="small"
-          sx={{ minWidth: 140 }}
+      {hasTransactions && (
+        <Box
+          className="flex flex-col md:flex-row gap-4 pb-2"
+          sx={{ borderBottom: "1px solid var(--byte-color-green-50)", flexWrap: "wrap" }}
         >
-          <MenuItem value="all">Todos os tipos</MenuItem>
-          <MenuItem value="entrada">Entradas</MenuItem>
-          <MenuItem value="saida">Saídas</MenuItem>
-        </Select>
+          <Select
+            size="small"
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value as "all" | "entrada" | "saida")}
+            sx={{ flex: 1, minWidth: { xs: "calc(50% - 4px)", md: 120 } }}
+          >
+            <MenuItem value="all">Todos</MenuItem>
+            <MenuItem value="entrada">Entrada</MenuItem>
+            <MenuItem value="saida">Saída</MenuItem>
+          </Select>
 
-        <TextField
-          label="Data início"
-          type="date"
-          size="small"
-          value={startDate}
-          onChange={(e) => handleStartDateChange(e.target.value)}
-          error={dateError}
-          sx={{ maxWidth: 150 }}
-          InputLabelProps={{ shrink: true }}
-        />
+          <TextField
+            label="De"
+            type="date"
+            size="small"
+            value={startDate}
+            onChange={(e) => handleStartDateChange(e.target.value)}
+            error={dateError}
+            helperText={dateError ? "Data inválida" : ""}
+            InputLabelProps={{ shrink: true }}
+            sx={{ flex: 1, minWidth: { xs: "calc(50% - 4px)", md: 120 } }}
+          />
 
-        <TextField
-          label="Data fim"
-          type="date"
-          size="small"
-          value={endDate}
-          onChange={(e) => handleEndDateChange(e.target.value)}
-          error={dateError}
-          sx={{ maxWidth: 150 }}
-          InputLabelProps={{ shrink: true }}
-        />
-      </Box>
-
-      {/* LISTA DE TRANSAÇÕES */}
-      {loadingFirstPage && <Typography>Carregando transações...</Typography>}
-
-      {!loadingFirstPage && filteredTransactions.length === 0 && (
-        <Typography>Nenhuma transação encontrada.</Typography>
-      )}
-
-      {!loadingFirstPage && filteredTransactions.length > 0 && (
-        <Box>
-          {filteredTransactions.map((tx, index) => (
-            <Box
-              key={tx._id}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                mb: 2,
-                gap: 2,
-                borderBottom: "1px solid #ccc",
-                pb: 1,
-              }}
-            >
-              {isDeleting && (
-                <Checkbox
-                  checked={selectedTransactions.includes(tx._id)}
-                  onChange={() => handleCheckboxChange(tx._id)}
-                  inputProps={{
-                    "aria-label": `Selecionar transação ${tx._id}`,
-                  }}
-                />
-              )}
-
-              <Box sx={{ flexGrow: 1 }}>
-                {isEditing ? (
-                  <>
-                    <TextField
-                      inputRef={index === 0 ? firstEditRef : undefined}
-                      label="Tipo"
-                      value={tx.tipo}
-                      size="small"
-                      onChange={(e) =>
-                        handleTransactionChange(index, "tipo", e.target.value)
-                      }
-                      sx={{ mb: 1, maxWidth: 180 }}
-                    />
-                    <TextField
-                      label="Valor"
-                      value={formatBRL(tx.valor)}
-                      size="small"
-                      onChange={(e) =>
-                        handleTransactionChange(index, "valor", e.target.value)
-                      }
-                      sx={{ mb: 1, maxWidth: 150 }}
-                    />
-
-                    {/* Anexos */}
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      {tx.anexos && tx.anexos.length > 0 ? (
-                        tx.anexos.map((anexo, idx) => (
-                          <Chip
-                            key={idx}
-                            icon={<AttachFileIcon />}
-                            label={anexo.name ?? "Anexo"}
-                            onDelete={() =>
-                              handleRemoveAttachment(tx._id, anexo.url, false)
-                            }
-                            sx={{ cursor: "pointer" }}
-                          />
-                        ))
-                      ) : (
-                        <Typography variant="caption" color="text.secondary">
-                          Sem anexos
-                        </Typography>
-                      )}
-
-                      {/* Input para anexar arquivos */}
-                      <input
-                        type="file"
-                        multiple
-                        style={{ display: "none" }}
-                        id={`file-input-${tx._id}`}
-                        onChange={(e) => {
-                          if (!e.target.files) return;
-                          handleAttachFiles(tx._id, Array.from(e.target.files));
-                          e.target.value = ""; // limpa o input para o mesmo arquivo poder ser selecionado de novo
-                        }}
-                      />
-                      <label htmlFor={`file-input-${tx._id}`}>
-                        <Button
-                          component="span"
-                          size="small"
-                          variant="outlined"
-                        >
-                          Anexar
-                        </Button>
-                      </label>
-                    </Box>
-                  </>
-                ) : (
-                  <>
-                    <Typography>
-                      <strong>Tipo:</strong> {tx.tipo}
-                    </Typography>
-                    <Typography>
-                      <strong>Valor:</strong> {formatBRL(tx.valor)}
-                    </Typography>
-                    <Typography>
-                      <strong>Data:</strong> {formatDateBR(tx.createdAt)}
-                    </Typography>
-                    <Box
-                      sx={{ display: "flex", gap: 1, flexWrap: "wrap", mt: 1 }}
-                    >
-                      {Array.isArray(tx.anexos) && tx.anexos.length > 0 ? (
-                        tx.anexos.map((anexo, idx) => (
-                          <Tooltip key={idx} title={anexo.name ?? ""}>
-                            <Chip
-                              icon={<AttachFileIcon />}
-                              label={anexo.name ?? "Anexo"}
-                              component="a"
-                              href={anexo.url}
-                              target="_blank"
-                              clickable
-                              size="small"
-                            />
-                          </Tooltip>
-                        ))
-                      ) : (
-                        <Typography variant="caption" color="text.secondary">
-                          Sem anexos
-                        </Typography>
-                      )}
-                    </Box>
-                  </>
-                )}
-              </Box>
-            </Box>
-          ))}
+          <TextField
+            label="Até"
+            type="date"
+            size="small"
+            value={endDate}
+            onChange={(e) => handleEndDateChange(e.target.value)}
+            error={dateError}
+            helperText={dateError ? "Data inválida" : ""}
+            InputLabelProps={{ shrink: true }}
+            sx={{ flex: 1, minWidth: { xs: "calc(50% - 4px)", md: 120 } }}
+          />
         </Box>
       )}
 
-      {statusMsg && (
-        <Typography
-          variant="body2"
-          sx={{ mt: 2, fontWeight: "bold", color: "primary.main" }}
-          role="alert"
-          aria-live="polite"
-        >
-          {statusMsg}
-        </Typography>
+      {loadingFirstPage ? (
+        <Box aria-busy="true" aria-label="Carregando">
+          <SkeletonListExtract rows={5} />
+        </Box>
+      ) : dateError || !filteredTransactions.length ? (
+        <Box className="flex flex-col items-center justify-center text-center gap-4 py-10">
+          {dateError ? (
+            <>
+              <Typography variant="h6" color="error">Data inválida</Typography>
+              <Typography variant="body2" color="text.secondary">
+                Verifique o formato da data inserida.
+              </Typography>
+            </>
+          ) : (
+            <>
+              <ReceiptLongOutlinedIcon sx={{ fontSize: 56, color: "text.secondary" }} />
+              <Typography variant="h6">Nenhuma transação encontrada</Typography>
+              <Typography variant="body2" color="text.secondary">
+                Ajuste os filtros ou adicione uma nova transação para começar.
+              </Typography>
+            </>
+          )}
+        </Box>
+      ) : (
+        <>
+          <ul role="list" aria-busy={isPageLoading} className="space-y-4">
+            {filteredTransactions.map((tx, idx) => {
+              const hasExistingAttachment =
+                (tx.anexos?.length ?? 0) > 0 || (tx.novosAnexos?.length ?? 0) > 0;
+
+              return (
+                <li key={tx._id ?? `tx-${idx}`}>
+                  <Box className="extratoItem" style={{ gap: isEditing ? 0 : undefined }}>
+                    <Box className="txRow">
+                      {isEditing ? (
+                        <Input
+                          disableUnderline
+                          className="txType"
+                          fullWidth
+                          value={formatTipo(tx.tipo)}
+                          onChange={(e) => handleTransactionChange(idx, "tipo", e.target.value)}
+                          inputProps={{ style: { textAlign: "left" } }}
+                          inputRef={idx === 0 ? firstEditRef : undefined}
+                        />
+                      ) : (
+                        <span className="txType">{formatTipo(tx.tipo)}</span>
+                      )}
+                      <span className="txDate">{formatDateBR(tx.createdAt)}</span>
+                    </Box>
+
+                    {isEditing ? (
+                      <Box className="flex items-center gap-2 w-full">
+                        <Input
+                          disableUnderline
+                          className={clsx("txValue txValueEditable")}
+                          sx={{ flex: 1 }}
+                          value={formatBRL(
+                            typeof tx.valor === "number" ? tx.valor : parseBRL(tx.valor)
+                          )}
+                          onChange={(e) =>
+                            handleTransactionChange(idx, "valor", maskCurrency(e.target.value))
+                          }
+                          inputProps={{ inputMode: "decimal", title: "Até 999.999,99" }}
+                        />
+
+                        <input
+                          hidden
+                          multiple
+                          accept="image/*,application/pdf"
+                          id={`edit-anexos-${tx._id}`}
+                          type="file"
+                          aria-label="Selecionar arquivos para anexar"
+                          disabled={hasExistingAttachment}
+                          onChange={(e) => {
+                            const files = e.target.files;
+                            if (files) {
+                              handleAttachFiles(tx._id, Array.from(files));
+                            }
+                          }}
+                        />
+                        <label htmlFor={`edit-anexos-${tx._id}`}>
+                          <Tooltip
+                            title={
+                              hasExistingAttachment
+                                ? "Remova o anexo atual para adicionar um novo"
+                                : "Anexar arquivos"
+                            }
+                          >
+                            <span>
+                              <IconButton
+                                component="span"
+                                size="small"
+                                color="primary"
+                                aria-label="Anexar arquivos"
+                                disabled={hasExistingAttachment}
+                              >
+                                <AttachFileIcon fontSize="inherit" aria-hidden="true" />
+                              </IconButton>
+                            </span>
+                          </Tooltip>
+                        </label>
+                      </Box>
+                    ) : (
+                      <Box className="flex items-center">
+                        {isDeleting && (
+                          <Checkbox
+                            aria-label={`Selecionar transação ${formatBRL(
+                              Math.abs(typeof tx.valor === "number" ? tx.valor : parseBRL(tx.valor))
+                            )}`}
+                            checked={selectedTransactions.includes(tx._id)}
+                            onChange={() => handleCheckboxChange(tx._id)}
+                            size="small"
+                            className="mr-2"
+                            sx={{
+                              color: "var(--byte-color-dash)",
+                              "&.Mui-checked": { color: "var(--byte-color-dash)" },
+                            }}
+                          />
+                        )}
+                        <span className="txValue">
+                          {typeof tx.valor === "number" && tx.valor < 0 && "-"}
+                          {formatBRL(
+                            typeof tx.valor === "number" ? tx.valor : parseBRL(tx.valor)
+                          )}
+                        </span>
+                        {tx.anexos?.length ? (
+                          <Tooltip title={`${tx.anexos.length} anexo(s)`}>
+                            <AttachFileIcon
+                              sx={{ fontSize: 16, ml: 0.5, color: "var(--byte-color-dash)" }}
+                              aria-hidden="true"
+                            />
+                          </Tooltip>
+                        ) : null}
+                      </Box>
+                    )}
+                  </Box>
+
+                  {(tx.anexos?.length || tx.novosAnexos?.length) ? (
+                    <Box className="flex flex-wrap gap-2 mt-2 ml-2">
+                      {tx.anexos?.map((a: Attachment) => (
+                        <Chip
+                          key={a.url}
+                          label={a.name}
+                          size="small"
+                          icon={<AttachFileIcon sx={{ fontSize: 14 }} />}
+                          component={!isEditing ? "a" : "div"}
+                          href={!isEditing ? a.url : undefined}
+                          target={!isEditing ? "_blank" : undefined}
+                          clickable={!isEditing}
+                          onDelete={
+                            isEditing
+                              ? () => {
+                                  void handleRemoveAttachment(tx._id, a.url, false);
+                                }
+                              : undefined
+                          }
+                          sx={{
+                            backgroundColor: "var(--byte-color-green-50)",
+                            ":hover": { bgcolor: "var(--byte-color-green-100)" },
+                          }}
+                        />
+                      ))}
+
+                      {isEditing &&
+                        tx.novosAnexos?.map((f, i) => (
+                          <Chip
+                            key={i}
+                            label={f.name}
+                            size="small"
+                            color="info"
+                            variant="outlined"
+                            icon={<AttachFileIcon sx={{ fontSize: 14 }} />}
+                            onDelete={() => {
+                              void handleRemoveAttachment(tx._id, f.name, true);
+                            }}
+                          />
+                        ))}
+                    </Box>
+                  ) : null}
+                </li>
+              );
+            })}
+          </ul>
+
+          <Box aria-busy={isPageLoading}>
+            <InfiniteScrollSentinel
+              onVisible={() => {
+                void fetchPage();
+              }}
+              disabled={!hasMore || isPageLoading}
+              isLoading={isPageLoading}
+            />
+          </Box>
+
+          {isPageLoading && editableTransactions.length > 0 && (
+            <SkeletonListExtract rows={5} />
+          )}
+        </>
       )}
+
+      {(isEditing || isDeleting) && (
+        <Box className="flex gap-2 justify-between mt-4">
+          <Button
+            onClick={() => {
+              void handleSaveOrDeleteClick();
+            }}
+            className={clsx(
+              "botaoSalvar",
+              isDeleting && (isDeletingInProgress || !selectedTransactions.length) && "opacity-50 cursor-not-allowed"
+            )}
+            disabled={isDeleting && (isDeletingInProgress || !selectedTransactions.length)}
+          >
+            {isEditing ? "Salvar" : isDeletingInProgress ? "Excluindo..." : "Excluir"}
+          </Button>
+
+          <Button
+            onClick={isEditing ? handleCancelClick : handleCancelDeleteClick}
+            className="botaoCancelar"
+            disabled={isDeleting && isDeletingInProgress}
+          >
+            Cancelar
+          </Button>
+        </Box>
+      )}
+
+      <Box role="status" aria-live="polite" sx={{ position: "absolute", left: -9999 }}>
+        {statusMsg}
+      </Box>
     </Box>
   );
 };

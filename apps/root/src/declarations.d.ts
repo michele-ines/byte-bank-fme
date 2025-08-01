@@ -45,9 +45,11 @@ declare module "footer/define" {
   export function defineFooter(): Promise<void>;
 }
 
-// apps/root/src/declarations.d.ts (versão mínima)
-declare module 'header/*';
-declare module 'home/*';
-declare module 'dashboard/*';
-declare module 'footer/*';
-
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'byte-footer': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & { 'data-theme'?: 'public' | 'private' };
+    }
+  }
+}
+export {};

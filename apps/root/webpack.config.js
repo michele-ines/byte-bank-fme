@@ -1,9 +1,11 @@
+// C:\Users\Mines\Music\byte-bank-fme\apps\root\webpack.config.js
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const {
   container: { ModuleFederationPlugin },
 } = require("webpack");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const webpack = require("webpack");
 
 module.exports = {
   entry: "./src/index.tsx",
@@ -15,40 +17,19 @@ module.exports = {
   },
   output: { publicPath: "auto" },
   resolve: {
-    extensions: [
-      ".tsx",
-      ".ts",
-      ".js",
-      ".jsx",
-      ".mjs",
-      ".json",
-      ".scss",
-      ".css",
-      ".svg",
-    ],
+    extensions: [".tsx", ".ts", ".js", ".jsx", ".mjs", ".json", ".scss", ".css", ".svg"],
     plugins: [
       new TsconfigPathsPlugin({
         configFile: path.resolve(__dirname, "../../tsconfig.json"),
-        extensions: [
-          ".ts",
-          ".tsx",
-          ".js",
-          ".jsx",
-          ".mjs",
-          ".json",
-          ".css",
-          ".scss",
-          ".svg",
-        ],
+        extensions: [".ts", ".tsx", ".js", ".jsx", ".mjs", ".json", ".css", ".scss", ".svg"],
       }),
     ],
     alias: {
-      // ajuste se você tiver o pacote/dir de store compartilhado
-      "@hooks": path.resolve(__dirname, "../hooks"),
-      "@interfaces": path.resolve(__dirname, "../interfaces"),
-      "@mocks": path.resolve(__dirname, "../mocks"),
       "@store": path.resolve(__dirname, "../store"),
       "@global-styles": path.resolve(__dirname, "../../styles/globals.css"),
+    },
+    fallback: {
+      process: require.resolve("process/browser"), // ← shim
     },
   },
   module: {
@@ -59,11 +40,7 @@ module.exports = {
         options: { transpileOnly: true },
         exclude: /node_modules/,
       },
-      {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader", "postcss-loader"],
-      },
-      // Habilite se o root importar SCSS
+      { test: /\.css$/i, use: ["style-loader", "css-loader", "postcss-loader"] },
       {
         test: /\.s[ac]ss$/i,
         use: [
@@ -79,7 +56,6 @@ module.exports = {
           },
         ],
       },
-      // Habilite se o root importar SVG
       {
         test: /\.svg$/i,
         type: "asset/resource",
@@ -98,20 +74,15 @@ module.exports = {
         footer: "footer@http://localhost:4200/remoteEntry.js",
       },
       shared: {
-        react: { singleton: true, eager: false, requiredVersion: "^17.0.2" },
-        "react-dom": {
-          singleton: true,
-          eager: false,
-          requiredVersion: "^17.0.2",
-        },
-        "react/jsx-runtime": {
-          singleton: true,
-          eager: false,
-          requiredVersion: "^17.0.2",
-        },
+        react: { singleton: true, eager: false, requiredVersion: "^18.2.0" },
+        "react-dom": { singleton: true, eager: false, requiredVersion: "^18.2.0" },
+        "react/jsx-runtime": { singleton: true, eager: false, requiredVersion: "^18.2.0" },
         "react-router-dom": { singleton: true, eager: false },
       },
     }),
     new HtmlWebpackPlugin({ template: "./public/index.html" }),
+    new webpack.ProvidePlugin({
+      process: "process/browser", // ← shim global para libs que usam process no client
+    }),
   ],
 };

@@ -8,7 +8,6 @@
   "scripts": {
     "start": "npm run start:all",
     "start:all": "concurrently -n \"ROOT,HEADER,HOME,DASH,FOOTER\" -c \"blue,magenta,green,yellow,cyan\" \"npm run start -w apps/root\" \"npm run start -w apps/header-react\" \"npm run start -w apps/home-react\" \"npm run start -w apps/dashboard-react\" \"npm run start -w apps/footer-angular\"",
-
     "build": "npm run build:all",
     "build:all": "concurrently -n \"ROOT,HEADER,HOME,DASH,FOOTER\" -c \"blue,magenta,green,yellow,cyan\" \"npm run start -w apps/root\" \"npm run start -w apps/header-react\" \"npm run start -w apps/home-react\" \"npm run start -w apps/dashboard-react\" \"npm run start -w apps/footer-angular\""
   },
@@ -27,6 +26,7 @@
     "jest": "^30.0.5",
     "postcss": "^8.4.31",
     "postcss-loader": "^7.3.3",
+    "process": "^0.11.10",
     "sass": "^1.89.2",
     "sass-loader": "^13.3.3",
     "style-loader": "^3.3.4",
