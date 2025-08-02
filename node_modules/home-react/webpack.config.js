@@ -3,6 +3,11 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { container: { ModuleFederationPlugin } } = require("webpack");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
+// → Declarar antes de usar no alias:
+const privateThemingPath = path.dirname(
+  require.resolve("@mui/private-theming/package.json")
+);
+
 module.exports = {
   entry: "./src/index.tsx",
   mode: "development",
@@ -30,6 +35,7 @@ module.exports = {
       }),
     ],
     alias: {
+      "@mui/private-theming": privateThemingPath,
       // ajuste se você tiver o pacote/dir de store compartilhado
       "@store": path.resolve(__dirname, "../store"),
       "@global-styles": path.resolve(__dirname, "../../styles/globals.css"),

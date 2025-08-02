@@ -5,6 +5,11 @@ const { ModuleFederationPlugin } = require("webpack").container;
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const webpack = require("webpack");
 
+// → Declarar antes de usar no alias:
+const privateThemingPath = path.dirname(
+  require.resolve("@mui/private-theming/package.json")
+);
+
 module.exports = {
   entry: "./src/index.tsx",
   mode: "development",
@@ -24,6 +29,7 @@ module.exports = {
       }),
     ],
     alias: {
+      "@mui/private-theming": privateThemingPath,
       "@store": path.resolve(__dirname, "../store"),
     },
     fallback: {
