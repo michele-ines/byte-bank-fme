@@ -16,6 +16,7 @@ import { Provider } from "react-redux";
 import { store } from "@store/store";
 import SnackbarProvider from "../../../store/SnackbarProvider";
 import { useAuth } from "../../../hooks/use-auth";
+import { LogoutOutlined } from "@mui/icons-material";
 
 const ROUTES = {
   ROOT: "/home",
@@ -34,7 +35,13 @@ function HeaderPrivateContent() {
     setAnchorEl(e.currentTarget);
   const closeMenu = () => setAnchorEl(null);
 
-  const { getCurrentUser } = useAuth();
+  const [anchorElMyAccount, setAnchorElMyAccount] =
+    useState<HTMLElement | null>(null);
+  const openMenuMyAccount = (e: React.MouseEvent<HTMLElement>) =>
+    setAnchorElMyAccount(e.currentTarget);
+  const closeMenuMyAccount = () => setAnchorElMyAccount(null);
+
+  const { getCurrentUser, logout } = useAuth();
 
   const isActive = (route: string) =>
     pathname === route || pathname.startsWith(route + "/");
@@ -169,14 +176,13 @@ function HeaderPrivateContent() {
               marginRight: 1,
               display: { xs: "none", md: "flex" },
             }}
-            onClick={() => navigate(ROUTES.MY_ACCOUNT)}
           >
             {getCurrentUser()?.name}
           </Typography>
           <IconButton
             size="large"
-            aria-label="user account"
-            onClick={() => navigate(ROUTES.MY_ACCOUNT)}
+            id="minha-conta-menu"
+            onClick={openMenuMyAccount}
             sx={{
               width: 32,
               height: 32,
@@ -194,6 +200,38 @@ function HeaderPrivateContent() {
           >
             <PermIdentityIcon fontSize="small" className="userIcon" />
           </IconButton>
+          <Menu
+            anchorEl={anchorElMyAccount}
+            open={Boolean(anchorElMyAccount)}
+            onClose={closeMenuMyAccount}
+          >
+            <MenuItem
+              onClick={() => {
+                closeMenuMyAccount();
+                navigate(ROUTES.MY_ACCOUNT);
+              }}
+              sx={{
+                display: "flex",
+                gap: 1,
+              }}
+            >
+              <PermIdentityIcon />
+              Minha conta
+            </MenuItem>
+            <MenuItem
+              sx={{
+                display: "flex",
+                gap: 1,
+              }}
+              onClick={() => {
+                closeMenuMyAccount();
+                logout();
+              }}
+            >
+              <LogoutOutlined />
+              Sair
+            </MenuItem>
+          </Menu>
         </Box>
       </Toolbar>
     </AppBar>
