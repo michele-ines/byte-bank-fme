@@ -83,11 +83,24 @@ export function useAuth() {
   const login = useCallback(
     (email: string, password: string) => {
       const users = getUsers();
-      const found = users.find(
+
+      const hasUser = users.find((u) => u.email === email);
+
+      if (!hasUser) {
+        dispatch(
+          showSnackbar({
+            message: "Conta não cadastrada.",
+            severity: "error",
+          })
+        );
+        return false;
+      }
+
+      const validateUser = users.find(
         (u) => u.email === email && u.password === password
       );
 
-      if (!found) {
+      if (!validateUser) {
         dispatch(
           showSnackbar({
             message: "E-mail ou senha inválidos.",
@@ -117,7 +130,7 @@ export function useAuth() {
 
   const logout = useCallback(() => {
     localStorage.removeItem(STORAGE_TOKEN_KEY);
-    navigate("/login");
+    navigate("/home");
   }, [navigate]);
 
   const isAuthenticated = useCallback(() => {
@@ -145,6 +158,60 @@ export function useAuth() {
     }
   }, []);
 
+  const updateUser = useCallback(
+    (updatedData: Partial<Omit<RegisterData, "confirmPassword" | "terms">>) => {
+      const raw = localStorage.getItem(STORAGE_TOKEN_KEY);
+      if (!raw) return;
+
+      const session = decode(raw);
+      const users = getUsers();
+
+      const userIndex = users.findIndex((u) => u.email === session.email);
+      if (userIndex === -1) return;
+
+      const currentUser = users[userIndex];
+
+      // Verifica se novo email já existe (evita duplicação)
+      if (
+        updatedData.email &&
+        updatedData.email !== currentUser.email &&
+        users.some((u) => u.email === updatedData.email)
+      ) {
+        dispatch(
+          showSnackbar({
+            message: "Este e-mail já está em uso.",
+            severity: "error",
+          })
+        );
+        return;
+      }
+
+      const updatedUser = {
+        ...currentUser,
+        ...updatedData,
+      };
+
+      users[userIndex] = updatedUser;
+      setUsers(users);
+
+      // Atualiza sessão se email foi alterado
+      if (updatedData.email) {
+        localStorage.setItem(
+          STORAGE_TOKEN_KEY,
+          encode({ email: updatedData.email })
+        );
+      }
+      navigate("/minha-conta");
+      dispatch(
+        showSnackbar({
+          message: "Dados atualizados com sucesso!",
+          severity: "success",
+        })
+      );
+    },
+    []
+  );
+
   return {
     handleRegister,
     login,
@@ -152,5 +219,6 @@ export function useAuth() {
     isAuthenticated,
     getCurrentUser,
     loadingAuth,
+    updateUser,
   };
 }
