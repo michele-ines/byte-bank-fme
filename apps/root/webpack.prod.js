@@ -1,11 +1,14 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ModuleFederationPlugin = require('webpack').container.ModuleFederationPlugin;
+const path = require('path');
 
 module.exports = {
   entry: './src/index.tsx',
   mode: 'production',
   output: {
     publicPath: "auto",
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].[contenthash].js',
     clean: true
   },
   resolve: {
@@ -35,10 +38,10 @@ module.exports = {
 
       },
       remotes: {
-        "header": "header@http://header:3001/remoteEntry.js",
-        "home": "home@http://home:3002/remoteEntry.js", 
-        "dashboard": "dashboard@http://dashboard:3003/remoteEntry.js",
-        "footer": "footer@http://footer:4200/remoteEntry.js"
+        "header": "header@/header/remoteEntry.js",
+        "home": "home@/home/remoteEntry.js", 
+        "dashboard": "dashboard@/dashboard/remoteEntry.js",
+        "footer": "footer@/footer/remoteEntry.js"
       },
       shared: {
         react: { singleton: true, eager: false, requiredVersion: '^17.0.2' },
@@ -47,24 +50,7 @@ module.exports = {
       }
     }),
     new HtmlWebpackPlugin({
-      template: './public/index.html',
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      }
+      template: './public/index.html'
     })
-  ],
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-    },
-  }
+  ]
 };
