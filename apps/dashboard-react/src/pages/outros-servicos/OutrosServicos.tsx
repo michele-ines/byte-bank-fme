@@ -136,10 +136,7 @@ function OutrosServicosContent() {
           {/* coluna esquerda */}
           <Box className={tw`flex flex-col gap-6 w-ful col-span-2`}>
             {/* Balance agora vem do Redux */}
-            <CardBalance
-              user={data.user}
-              balance={{ ...data.balance, value: balanceValue }}
-            />
+            <CardBalance balance={{ ...data.balance, value: balanceValue }} />
             <FinancialChart />
             {preferences.spendingAlert && (
               <SpendingAlertWidget limit={2000} transactions={transactions} />

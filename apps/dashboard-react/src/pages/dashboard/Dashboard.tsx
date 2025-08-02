@@ -146,10 +146,7 @@ const DashboardContent = () => {
         <Box className={tw`grid grid-cols-3 gap-6`}>
           {/* coluna esquerda */}
           <Box className={tw`flex flex-col gap-6 w-ful col-span-2`}>
-            <CardBalance
-              user={data.user}
-              balance={{ ...data.balance, value: balanceValue }}
-            />
+            <CardBalance balance={{ ...data.balance, value: balanceValue }} />
             <Box className="relative h-64 md:h-80">
               <FinancialChart />
             </Box>
