@@ -12,7 +12,14 @@ module.exports = {
     clean: true
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js']
+    extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      "@store": path.resolve(__dirname, "../store"),
+      "@global-styles": path.resolve(__dirname, "../../styles/globals.css"),
+    },
+    fallback: {
+      process: require.resolve("process/browser"), // ← shim
+    },
   },
   module: {
     rules: [
