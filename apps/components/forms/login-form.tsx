@@ -13,7 +13,6 @@ import { Provider } from "react-redux";
 import { store } from "@store/store";
 import SnackbarProvider from "@store/SnackbarProvider";
 import { useAuth } from "@hooks/use-auth";
-import { useNavigate } from "react-router-dom";
 
 // 👇 Alternative to useId in React 17
 let globalId = 0;
@@ -37,7 +36,6 @@ function LoginFormContent() {
   const passwordErrorId = useRef(generateId()).current;
 
   const { login, loadingAuth } = useAuth();
-  const navigate = useNavigate();
 
   const {
     register,
@@ -161,18 +159,12 @@ function LoginFormContent() {
             </span>
           )}
         </Button>
-        <Button
-          type="button"
-          variant="outlined"
-          className={returnButtonStyles}
-          sx={{
-            borderColor: "#17803D",
-            color: "#17803D",
-          }}
-          onClick={() => navigate("/home")}
+        <a
+          href={ROUTES.HOME}
+          className={tw`w-full text-center text-sm text-green-600 underline`}
         >
-          Voltar
-        </Button>
+          Voltar à página inicial
+        </a>
       </Box>
     </form>
   );

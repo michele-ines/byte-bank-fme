@@ -3,7 +3,6 @@ import { tw } from "twind";
 import React, { useState, useRef } from "react";
 import clsx from "clsx";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -16,12 +15,16 @@ import { RegisterData } from "../../interfaces/dashboard";
 import { registerValidations } from "../../utils/forms-validations/formValidations";
 import "../../../styles/globals.css";
 import { useAuth } from "@hooks/use-auth";
+import { Provider } from "react-redux";
+import { store } from "@store/store";
+import SnackbarProvider from "@store/SnackbarProvider";
+import { ROUTES } from "apps/config-routes/routes";
 
 // Função auxiliar para gerar IDs únicos
 let globalId = 0;
 const generateId = () => `form-id-${++globalId}`;
 
-export default function RegisterForm() {
+function RegisterFormContent() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -32,7 +35,6 @@ export default function RegisterForm() {
   const termsId = useRef(generateId()).current;
 
   const { handleRegister, loadingAuth } = useAuth();
-  const navigate = useNavigate();
 
   const {
     register,
@@ -257,19 +259,22 @@ export default function RegisterForm() {
         >
           Criar conta
         </Button>
-        <Button
-          type="button"
-          variant="outlined"
-          className={buttonStyles}
-          onClick={() => navigate("/home")}
-          sx={{
-            borderColor: "var(--byte-color-orange-500)",
-            color: "var(--byte-color-orange-500)",
-          }}
+        <a
+          href={ROUTES.HOME}
+          className={tw`w-full text-center text-sm text-[#FF5131] underline`}
         >
-          Voltar
-        </Button>
+          Voltar à página inicial
+        </a>{" "}
       </Box>
     </form>
+  );
+}
+
+export default function RegisterForm() {
+  return (
+    <Provider store={store}>
+      <SnackbarProvider />
+      <RegisterFormContent />
+    </Provider>
   );
 }

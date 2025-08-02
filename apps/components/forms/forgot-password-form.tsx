@@ -57,14 +57,19 @@ export default function ForgotPasswordForm() {
   return (
     <Box className={tw`max-w-md`}>
       {submitted ? (
-        <div
-          ref={successRef}
-          tabIndex={-1}
-          role="alert"
-          aria-live="assertive"
-          className={successMessageStyles}
-        >
-          Um link para redefinição de senha foi enviado para seu e-mail.
+        <div className={tw`flex flex-col gap-4 justify-center items-center`}>
+          <div
+            ref={successRef}
+            tabIndex={-1}
+            role="alert"
+            aria-live="assertive"
+            className={successMessageStyles}
+          >
+            Um link para redefinição de senha foi enviado para seu e-mail.
+          </div>
+          <a href={ROUTES.HOME} className={backLinkStyles}>
+            Voltar à página inicial
+          </a>
         </div>
       ) : (
         <form
@@ -111,7 +116,7 @@ export default function ForgotPasswordForm() {
 
           <Box className={tw`text-center my-6`}>
             <a href={ROUTES.HOME} className={backLinkStyles}>
-              Voltar ao login
+              Voltar à página inicial
             </a>
           </Box>
         </form>
