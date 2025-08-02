@@ -222,7 +222,7 @@ export default function CardNewTransaction({
               Selecione o tipo de transação
             </MenuItem>
             <MenuItem value="cambio">Câmbio (Entrada)</MenuItem>
-            <MenuItem value="deposito">Depósito (Saída)</MenuItem>
+            <MenuItem value="deposito">Depósito (Entrada)</MenuItem>
             <MenuItem value="transferencia">Transferência (Saída)</MenuItem>
           </Select>
           {errors.tipo && (

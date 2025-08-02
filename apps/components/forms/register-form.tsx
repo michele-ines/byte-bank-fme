@@ -51,6 +51,7 @@ function RegisterFormContent() {
 
   const onSubmit = (data: RegisterData) => {
     handleRegister(data);
+    // navigate('/dashboard');
   };
 
   // Classes Twind para estilos reutilizáveis

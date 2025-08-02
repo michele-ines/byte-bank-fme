@@ -19,6 +19,7 @@ import {
   type TxWithFiles,
   type Transaction,
   type Attachment,
+  type TransactionType,
 } from "@interfaces/dashboard";
 
 import { Box } from "@mui/material";
@@ -50,13 +51,11 @@ const toNumber = (v: number | string): number => {
   return Number.isFinite(n) ? n : 0;
 };
 
-// Tipo auxiliar: o que pode estar vindo do estado/API
 type TransactionLike = Omit<Transaction, "valor"> & {
   valor: number | string;
   anexos?: Attachment[];
 };
 
-// Tipo com 'valor' já garantido como number (o que os componentes esperam)
 type TransactionNum = Omit<Transaction, "valor"> & { valor: number };
 
 const normalizeToTransaction = (txs: TransactionLike[]): TransactionNum[] =>
@@ -65,12 +64,26 @@ const normalizeToTransaction = (txs: TransactionLike[]): TransactionNum[] =>
     valor: toNumber(tx.valor),
   }));
 
-const normalizeToTxWithFiles = (txs: TransactionNum[]): TxWithFiles[] =>
-  txs.map((tx) => ({
-    ...tx,
-    // se seu TxWithFiles exige 'novosAnexos', garanta default:
-    novosAnexos: (tx as unknown as { novosAnexos?: File[] }).novosAnexos ?? [],
-  }));
+// ✅ Corrigido: Garantir todos os campos obrigatórios para o tipo TxWithFiles
+const normalizeToTxWithFiles = (
+  txs: Partial<TxWithFiles>[]
+): TxWithFiles[] => {
+  return txs.map((tx) => {
+    if (tx._id === undefined) throw new Error("Transação sem _id");
+    if (tx.valor === undefined) throw new Error("Transação sem valor");
+    if (tx.tipo === undefined) throw new Error("Transação sem tipo");
+
+    return {
+      _id: tx._id,
+      valor: tx.valor,
+      tipo: tx.tipo,
+      createdAt: tx.createdAt ?? new Date().toISOString(),
+      updatedAt: tx.updatedAt ?? new Date().toISOString(),
+      anexos: tx.anexos ?? [],
+      novosAnexos: tx.novosAnexos ?? [],
+    };
+  });
+};
 
 function InvestimentosPage() {
   const data: DashboardData = dashboardData as DashboardData;
@@ -79,7 +92,7 @@ function InvestimentosPage() {
   useDashboardData();
 
   const {
-    items: transactionsRaw, // <- pode ter valor string | number
+    items: transactionsRaw,
     status: transactionsStatus,
   } = useSelector((state: RootState) => state.transactions);
 
@@ -89,7 +102,6 @@ function InvestimentosPage() {
 
   const { preferences } = useWidgetPreferences();
 
-  // Normaliza para o tipo com 'valor: number' que os componentes esperam
   const transactions: TransactionNum[] = useMemo(
     () =>
       normalizeToTransaction(transactionsRaw as unknown as TransactionLike[]),
@@ -98,7 +110,7 @@ function InvestimentosPage() {
 
   const fetchNextPage = useCallback(() => {
     if (transactionsStatus !== "loading") {
-      void dispatch(fetchTransactions()); // sua thunk não recebe args
+      void dispatch(fetchTransactions());
     }
   }, [dispatch, transactionsStatus]);
 
@@ -124,7 +136,6 @@ function InvestimentosPage() {
       <Box
         className={tw`w-full md:max-w-screen-lg flex flex-col gap-6 mx-auto`}
       >
-        {/* botão de personalização */}
         <Box
           sx={{
             display: "flex",
@@ -135,9 +146,7 @@ function InvestimentosPage() {
         </Box>
 
         <Box className={tw`grid grid-cols-3 gap-6`}>
-          {/* coluna esquerda */}
           <Box className={tw`flex flex-col gap-6 w-ful col-span-2`}>
-            {/* Balance agora com valor do Redux */}
             <CardBalance balance={{ ...data.balance, value: balanceValue }} />
             <FinancialChart />
             {preferences.spendingAlert && (
@@ -156,16 +165,17 @@ function InvestimentosPage() {
             />
           </Box>
 
-          {/* coluna direita – extrato com scroll */}
           <Box className={tw`w-full overflow-y-auto max-h-[800px]`}>
             <CardListExtract
               transactions={transactions}
               fetchPage={fetchNextPage}
               isPageLoading={transactionsStatus === "loading"}
               onSave={(txs) => {
+                console.log("Antes da normalização:", txs);
                 const normalized = normalizeToTxWithFiles(
-                  txs as TransactionNum[]
+                  txs as Partial<TxWithFiles>[]
                 );
+                console.log("Depois da normalização:", normalized);
                 void handleSaveTransactions(normalized);
               }}
               onDelete={handleDeleteTransactions}
@@ -177,15 +187,10 @@ function InvestimentosPage() {
   );
 }
 
-//
-// 2) Wrapper que provê o Redux Store via Provider:
-//
 export default function Investimentos() {
   return (
-    <Provider store={store}>
       <ProtectedRoute>
         <InvestimentosPage />
       </ProtectedRoute>
-    </Provider>
   );
 }

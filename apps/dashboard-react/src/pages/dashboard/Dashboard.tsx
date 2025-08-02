@@ -32,7 +32,7 @@ import SpendingAlertWidget from "../../../../components/widgets/spending-alert-w
 import FinancialChart from "../../../../components/charts/financialChart";
 import WidgetPreferencesButton from "../../../../components/widgets/widget-preferences-button";
 import { ProtectedRoute } from "../../ProtectedRoute";
-
+import { fetchBalance } from "@store/slices/balanceSlice";
 /* -----------------------------------------------------------
  * Helpers para garantir que 'valor' seja sempre number
  * ----------------------------------------------------------*/
@@ -107,6 +107,7 @@ const DashboardContent = () => {
   const onSubmit = async (form: NewTransactionData) => {
     try {
       await dispatch(createNewTransaction(form)).unwrap();
+        dispatch(fetchBalance());
     } catch (error) {
       console.error("Falha ao criar a transação:", error);
     }
@@ -189,11 +190,9 @@ const DashboardContent = () => {
 // =================================================================================
 const DashboardPage = () => {
   return (
-    <Provider store={store}>
       <ProtectedRoute>
         <DashboardContent />
       </ProtectedRoute>
-    </Provider>
   );
 };
 

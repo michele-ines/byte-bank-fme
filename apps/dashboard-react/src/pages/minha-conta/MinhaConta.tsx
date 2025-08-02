@@ -40,10 +40,8 @@ function MyAccountPageContent() {
 
 export default function MyAccountPage() {
   return (
-    <Provider store={store}>
-      <ProtectedRoute>
-        <MyAccountPageContent />
-      </ProtectedRoute>
-    </Provider>
+    <ProtectedRoute>
+      <MyAccountPageContent />
+    </ProtectedRoute>
   );
 }

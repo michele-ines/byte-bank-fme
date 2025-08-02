@@ -1,41 +1,39 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { BalanceState } from "../../interfaces/dashboard";
+import { BalanceState, Transaction } from "../../interfaces/dashboard";
 
-// Utilitários de tipo
-interface BalanceResponse {
-  total: number;
-}
+// 1. Importamos o RootState para que o thunk saiba como é a "forma" do nosso estado geral
+import { RootState } from "../store"; 
 
+// =================================================================
+// A ÚNICA MUDANÇA REAL ACONTECE DENTRO DO SEU THUNK
+// =================================================================
 export const fetchBalance = createAsyncThunk<
   number,
   void,
-  { rejectValue: string }
->("balance/fetchBalance", async (_, { rejectWithValue }) => {
+  { state: RootState; rejectValue: string } // Adicionamos o 'state' aqui
+>("balance/fetchBalance", async (_, { getState, rejectWithValue }) => {
   try {
-    const res = await fetch("/api/transacao/soma-depositos");
+    // 2. Em vez de 'fetch', usamos 'getState()' para pegar o estado atual do Redux
+    const state = getState();
+    const transactions = state.transactions.items; // Pega a lista de transações
+    
+    // 3. A lógica de cálculo que você queria
+    const total = transactions
+      .filter(tx => tx.tipo === 'deposito' || tx.tipo === 'cambio')
+      .reduce((sum, tx) => {
+        const value = typeof tx.valor === 'string' ? parseFloat(tx.valor) : tx.valor;
+        return sum + (isNaN(value) ? 0 : value);
+      }, 0);
+      
+    return total; // 4. Retorna o valor calculado
 
-    if (!res.ok) {
-      return rejectWithValue("Falha ao buscar o saldo");
-    }
-
-    const raw: unknown = await res.json();
-
-    if (
-      typeof raw === "object" &&
-      raw !== null &&
-      "total" in raw &&
-      typeof (raw as { total: unknown }).total === "number"
-    ) {
-      return (raw as BalanceResponse).total;
-    }
-
-    return rejectWithValue("Resposta da API em formato inesperado");
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Erro inesperado";
+    const message = err instanceof Error ? err.message : "Erro inesperado ao calcular o saldo";
     return rejectWithValue(message);
   }
 });
 
+// O resto do seu slice continua EXATAMENTE IGUAL.
 const initialState: BalanceState = {
   value: 0,
   status: "idle",
@@ -53,7 +51,7 @@ const balanceSlice = createSlice({
       })
       .addCase(fetchBalance.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.value = action.payload;
+        state.value = action.payload; // O payload agora é o total calculado
       })
       .addCase(fetchBalance.rejected, (state, action) => {
         state.status = "failed";

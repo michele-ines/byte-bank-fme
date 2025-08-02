@@ -1,35 +1,26 @@
-import { useEffect } from 'react';
-import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-import { AppDispatch, RootState } from '../store/store';
-import { fetchTransactions } from '../store/slices/transactionsSlice';
-import { fetchBalance } from '../store/slices/balanceSlice';
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchTransactions } from "@store/slices/transactionsSlice";
+import { fetchBalance } from "@store/slices/balanceSlice";
+import { AppDispatch } from "@store/store";
 
-/**
- * Hook responsável por carregar os dados iniciais do dashboard
- * (transações e saldo) caso ainda não tenham sido buscados.
- */
-export const useDashboardData = (): void => {
+export const useDashboardData = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  // ────────────────────────────────────────────────────────────────
-  // ✅ shallowEqual compara cada propriedade individualmente,
-  //    impedindo que o retorno mude de referência a cada render.
-  // ────────────────────────────────────────────────────────────────
-  const { transactionsStatus, balanceStatus } = useSelector(
-    (state: RootState) => ({
-      transactionsStatus: state.transactions.status,
-      balanceStatus: state.balance.status,
-    }),
-    shallowEqual, // <= evita o warning: "returned a different result…"
-  );
-
   useEffect(() => {
-    if (transactionsStatus === 'idle') {
-      void dispatch(fetchTransactions()); // <-- sem argumentos
-    }
+    const loadInitialData = async () => {
+      try {
+        // 1. Busca as transações e ESPERA a conclusão.
+        await dispatch(fetchTransactions()).unwrap();
+        
+        // 2. SÓ DEPOIS que as transações terminaram, dispara o cálculo do saldo.
+        dispatch(fetchBalance());
 
-    if (balanceStatus === 'idle') {
-      void dispatch(fetchBalance());
-    }
-  }, [transactionsStatus, balanceStatus, dispatch]);
+      } catch (error) {
+        console.error("Falha ao carregar dados iniciais:", error);
+      }
+    };
+
+    void loadInitialData();
+  }, [dispatch]);
 };

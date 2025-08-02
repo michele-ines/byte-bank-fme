@@ -172,10 +172,8 @@ function OutrosServicosContent() {
 
 export default function OutrosServicos() {
   return (
-    <Provider store={store}>
-      <ProtectedRoute>
-        <OutrosServicosContent />
-      </ProtectedRoute>
-    </Provider>
+    <ProtectedRoute>
+      <OutrosServicosContent />
+    </ProtectedRoute>
   );
 }
