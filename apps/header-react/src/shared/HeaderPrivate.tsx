@@ -12,6 +12,10 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import { Provider } from "react-redux";
+import { store } from "@store/store";
+import SnackbarProvider from "../../../store/SnackbarProvider";
+import { useAuth } from "../../../hooks/use-auth";
 
 const ROUTES = {
   ROOT: "/home",
@@ -22,13 +26,15 @@ const ROUTES = {
   OTHER_SERVICES: "/outros-servicos",
 };
 
-export default function HeaderPrivate() {
+function HeaderPrivateContent() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const openMenu = (e: React.MouseEvent<HTMLElement>) =>
     setAnchorEl(e.currentTarget);
   const closeMenu = () => setAnchorEl(null);
+
+  const { getCurrentUser } = useAuth();
 
   const isActive = (route: string) =>
     pathname === route || pathname.startsWith(route + "/");
@@ -164,9 +170,8 @@ export default function HeaderPrivate() {
               display: { xs: "none", md: "flex" },
             }}
             onClick={() => navigate(ROUTES.MY_ACCOUNT)}
-
           >
-            Joana da Silva Oliveira
+            {getCurrentUser()?.name}
           </Typography>
           <IconButton
             size="large"
@@ -192,5 +197,14 @@ export default function HeaderPrivate() {
         </Box>
       </Toolbar>
     </AppBar>
+  );
+}
+
+export default function HeaderPrivate() {
+  return (
+    <Provider store={store}>
+      <SnackbarProvider />
+      <HeaderPrivateContent />
+    </Provider>
   );
 }

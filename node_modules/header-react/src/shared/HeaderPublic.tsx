@@ -9,7 +9,6 @@ import {
   Menu,
   MenuItem,
   Toolbar,
-  Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -39,18 +38,18 @@ export default function HeaderPublic() {
     [pathname]
   );
 
-  const isActive = (route: string) =>
-    pathname === route || pathname.startsWith(route + "/");
+  // const isActive = (route: string) =>
+  //   pathname === route || pathname.startsWith(route + "/");
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const openMenu = (e: React.MouseEvent<HTMLElement>) =>
     setAnchorEl(e.currentTarget);
   const closeMenu = () => setAnchorEl(null);
 
-  const underlineStyle: React.CSSProperties = {
-    borderBottom: "2px solid #47a138",
-    paddingBottom: 4,
-  };
+  // const underlineStyle: React.CSSProperties = {
+  //   borderBottom: "2px solid #47a138",
+  //   paddingBottom: 4,
+  // };
 
   return (
     <AppBar
@@ -96,7 +95,7 @@ export default function HeaderPublic() {
         </NavLink>
 
         {/* Desktop nav */}
-        <Box
+        {/* <Box
           sx={{
             flexGrow: 1,
             display: { xs: "none", md: "flex" },
@@ -104,16 +103,6 @@ export default function HeaderPublic() {
             ml: 4,
           }}
         >
-          {showDashboardBtn && (
-            <Button
-              component={NavLink}
-              to={ROUTES.DASHBOARD}
-              sx={{ color: "#47a138" }}
-              style={isActive(ROUTES.DASHBOARD) ? underlineStyle : undefined}
-            >
-              Dashboard
-            </Button>
-          )}
           {showPublicLinks && (
             <>
               <Button
@@ -134,7 +123,7 @@ export default function HeaderPublic() {
               </Button>
             </>
           )}
-        </Box>
+        </Box> */}
 
         {/* Actions */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2, mr: 2 }}>
@@ -147,7 +136,7 @@ export default function HeaderPublic() {
                   display: { xs: "none", md: "inline-flex" },
                 }}
               >
-                Abrir Conta
+                Abrir conta
               </Button>
               <Button
                 className="loginButton"
@@ -176,7 +165,7 @@ export default function HeaderPublic() {
             <MenuItem
               onClick={() => {
                 closeMenu();
-                navigate(ROUTES.DASHBOARD);
+                navigate(ROUTES.ROOT);
               }}
             >
               Início
@@ -184,7 +173,7 @@ export default function HeaderPublic() {
           )}
           {showPublicLinks && (
             <>
-              <MenuItem
+              {/* <MenuItem
                 onClick={() => {
                   closeMenu();
                   window.location.hash = "sobre";
@@ -199,14 +188,14 @@ export default function HeaderPublic() {
                 }}
               >
                 Serviços
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem
                 onClick={() => {
                   closeMenu();
                   navigate(ROUTES.REGISTER);
                 }}
               >
-                Abrir Conta
+                Abrir conta
               </MenuItem>
               <MenuItem
                 onClick={() => {
