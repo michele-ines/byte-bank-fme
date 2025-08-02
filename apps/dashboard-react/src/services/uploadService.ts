@@ -42,7 +42,6 @@ export const deleteFile = async (fileName: string): Promise<boolean> => {
       throw new Error(errorData.mensagem || 'Falha ao deletar o arquivo no servidor.');
     }
     
-    console.log(`Arquivo ${fileName} deletado com sucesso do servidor.`);
     return true; 
 
   } catch (error) {

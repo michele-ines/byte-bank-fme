@@ -31,7 +31,7 @@ import SavingsGoalWidget from "../../../../components/widgets/savings-goal-widge
 import SpendingAlertWidget from "../../../../components/widgets/spending-alert-widget";
 import FinancialChart from "../../../../components/charts/financialChart";
 import WidgetPreferencesButton from "../../../../components/widgets/widget-preferences-button";
-
+import { fetchBalance } from "@store/slices/balanceSlice";
 /* -----------------------------------------------------------
  * Helpers para garantir que 'valor' seja sempre number
  * ----------------------------------------------------------*/
@@ -106,6 +106,7 @@ const DashboardContent = () => {
   const onSubmit = async (form: NewTransactionData) => {
     try {
       await dispatch(createNewTransaction(form)).unwrap();
+        dispatch(fetchBalance());
     } catch (error) {
       console.error("Falha ao criar a transação:", error);
     }

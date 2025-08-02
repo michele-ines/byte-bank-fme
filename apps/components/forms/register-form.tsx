@@ -44,7 +44,6 @@ export default function RegisterForm() {
   const confirmValue = watch("confirmPassword", "");
 
   const onSubmit = (data: RegisterData) => {
-    console.log("Cadastro:", data);
     // navigate('/dashboard');
   };
 

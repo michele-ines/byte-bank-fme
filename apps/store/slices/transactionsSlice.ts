@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { NewTransactionData, Transaction } from "../../interfaces/dashboard";
 import { parseBRL } from "../../utils/currency-formatte/currency-formatte";
 import { fetchBalance } from "./balanceSlice";
-
 // ===============================================================
 // 1. TIPOS AUXILIARES E THUNKS
 // ===============================================================
@@ -13,7 +12,7 @@ export interface SavePayload {
 
 export const fetchTransactions = createAsyncThunk<Transaction[], void, { rejectValue: string }>(
   "transactions/fetchTransactions",
-  async (_, { rejectWithValue }) => {
+  async (_, {dispatch, rejectWithValue }) => {
     try {
       const response = await fetch(`https://6888d5f9adf0e59551bb9b6c.mockapi.io/transacoes`);
       if (!response.ok) return rejectWithValue("Falha ao buscar transações.");
@@ -73,6 +72,7 @@ export const saveTransactions = createAsyncThunk<void, SavePayload, { rejectValu
         })
       );
       await dispatch(fetchTransactions()).unwrap();
+       dispatch(fetchBalance());
     } catch (err: unknown) {
       return rejectWithValue("Falha ao salvar as transações." + (err instanceof Error ? `: ${err.message}` : ""));
     }
@@ -89,6 +89,7 @@ export const deleteTransactions = createAsyncThunk<number[], number[], { rejectV
         })
       );
       await dispatch(fetchTransactions()).unwrap();
+      dispatch(fetchBalance());
       return transactionIds;
     } catch (err: unknown) {
       return rejectWithValue("Falha ao excluir as transações." + (err instanceof Error ? `: ${err.message}` : ""));
