@@ -33,6 +33,7 @@ import FinancialChart from "../../../../components/charts/financialChart";
 import WidgetPreferencesButton from "../../../../components/widgets/widget-preferences-button";
 import { tw } from "twind";
 import CardListExtract from "@my-cards/card-list-extract/card-list-extract";
+import { ProtectedRoute } from "../../ProtectedRoute";
 
 /* -----------------------------------------------------------
  * Helpers para garantir que 'valor' seja sempre number
@@ -137,10 +138,7 @@ function InvestimentosPage() {
           {/* coluna esquerda */}
           <Box className={tw`flex flex-col gap-6 w-ful col-span-2`}>
             {/* Balance agora com valor do Redux */}
-            <CardBalance
-              user={data.user}
-              balance={{ ...data.balance, value: balanceValue }}
-            />
+            <CardBalance balance={{ ...data.balance, value: balanceValue }} />
             <FinancialChart />
             {preferences.spendingAlert && (
               <SpendingAlertWidget limit={2000} transactions={transactions} />
@@ -185,7 +183,9 @@ function InvestimentosPage() {
 export default function Investimentos() {
   return (
     <Provider store={store}>
-      <InvestimentosPage />
+      <ProtectedRoute>
+        <InvestimentosPage />
+      </ProtectedRoute>
     </Provider>
   );
 }

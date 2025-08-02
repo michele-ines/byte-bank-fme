@@ -9,19 +9,17 @@ import {
   VisibilityOff,
 } from "@mui/icons-material";
 import { registerValidations } from "../../../utils/forms-validations/formValidations";
-import { RegisterData, UserInfo } from "../../../interfaces/dashboard";
+import { RegisterData } from "../../../interfaces/dashboard";
 import { useForm } from "react-hook-form";
 import { tw } from "twind";
 
 import "./card-my-accout.css";
+import { store } from "@store/store";
+import { Provider } from "react-redux";
+import { useAuth } from "@hooks/use-auth";
+import SnackbarProvider from "@store/SnackbarProvider";
 
-const initialUser: UserInfo = {
-  name: "Joana da Silva Oliveira",
-  email: "joanadasilvaoliveira@email.com.br",
-  password: "(@79Tp6840)",
-};
-
-export function CardMyAccount() {
+function CardMyAccountContent() {
   const [showPassword, setShowPassword] = useState(false);
   const [isEditable, setIsEditable] = useState({
     name: false,
@@ -29,13 +27,15 @@ export function CardMyAccount() {
     password: false,
   });
 
+  const { getCurrentUser, updateUser } = useAuth();
+
   const {
     register,
     watch,
     formState: { errors },
   } = useForm<RegisterData>({
     mode: "onBlur",
-    defaultValues: initialUser,
+    defaultValues: getCurrentUser() ?? {},
   });
 
   const passwordValue = watch("password", "");
@@ -268,13 +268,20 @@ export function CardMyAccount() {
             {/* Botão Salvar */}
             <Box>
               <Button
-                type="submit"
+                type="button"
                 variant="contained"
                 className={tw`w-full py-3 font-medium text-base`}
                 style={{
                   background: "var(--byte-color-orange-500)",
                   color: "var(--byte-bg-default)",
                 }}
+                onClick={() =>
+                  updateUser({
+                    name: watch("name"),
+                    email: watch("email"),
+                    password: watch("password"),
+                  })
+                }
               >
                 Salvar alterações
               </Button>
@@ -283,5 +290,14 @@ export function CardMyAccount() {
         </Box>
       </section>
     </Box>
+  );
+}
+
+export function CardMyAccount() {
+  return (
+    <Provider store={store}>
+      <SnackbarProvider />
+      <CardMyAccountContent />
+    </Provider>
   );
 }

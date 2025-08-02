@@ -9,14 +9,19 @@ import { tw } from "twind";
 // import { CardBalanceProps } from "interfaces/dashboard";
 // Ou então defina localmente:
 type CardBalanceProps = {
-  user: { name: string };
   balance: { account: string; value: number | null };
 };
 
 import { formatBRL } from "../../../utils/currency-formatte/currency-formatte";
+import { Provider } from "react-redux";
+import { store } from "@store/store";
+import SnackbarProvider from "@store/SnackbarProvider";
+import { useAuth } from "@hooks/use-auth";
 
-const CardBalance: React.FC<CardBalanceProps> = ({ user, balance }) => {
+const CardBalanceContent: React.FC<CardBalanceProps> = ({ balance }) => {
   const [showBalance, setShowBalance] = useState<boolean>(true);
+
+  const { getCurrentUser } = useAuth();
 
   const handleToggleBalance = () => setShowBalance((prev) => !prev);
 
@@ -41,7 +46,9 @@ const CardBalance: React.FC<CardBalanceProps> = ({ user, balance }) => {
     <Box className={tw`cardSaldo`}>
       {/* Saudação e data */}
       <Box>
-        <h1 className={tw`nameTitle`}>Olá, {user.name.split(" ")[0]} 😊</h1>
+        <h1 className={tw`nameTitle`}>
+          Olá, {getCurrentUser()?.name.split(" ")[0]} 😊
+        </h1>
         <p className={tw`dateText`}>{getCurrentDate()}</p>
       </Box>
 
@@ -79,6 +86,15 @@ const CardBalance: React.FC<CardBalanceProps> = ({ user, balance }) => {
         </p>
       </Box>
     </Box>
+  );
+};
+
+const CardBalance: React.FC<CardBalanceProps> = ({ balance }) => {
+  return (
+    <Provider store={store}>
+      <SnackbarProvider />
+      <CardBalanceContent balance={balance} />
+    </Provider>
   );
 };
 

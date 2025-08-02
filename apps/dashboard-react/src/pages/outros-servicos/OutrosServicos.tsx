@@ -32,6 +32,7 @@ import { tw } from "twind";
 import CardListExtract from "@my-cards/card-list-extract/card-list-extract";
 
 import { useDashboardData } from "@hooks/use-dashboard-data";
+import { ProtectedRoute } from "../../ProtectedRoute";
 
 /* -----------------------------------------------------------
  * Helpers para garantir que 'valor' seja sempre number
@@ -136,10 +137,7 @@ function OutrosServicosContent() {
           {/* coluna esquerda */}
           <Box className={tw`flex flex-col gap-6 w-ful col-span-2`}>
             {/* Balance agora vem do Redux */}
-            <CardBalance
-              user={data.user}
-              balance={{ ...data.balance, value: balanceValue }}
-            />
+            <CardBalance balance={{ ...data.balance, value: balanceValue }} />
             <FinancialChart />
             {preferences.spendingAlert && (
               <SpendingAlertWidget limit={2000} transactions={transactions} />
@@ -175,7 +173,9 @@ function OutrosServicosContent() {
 export default function OutrosServicos() {
   return (
     <Provider store={store}>
-      <OutrosServicosContent />
+      <ProtectedRoute>
+        <OutrosServicosContent />
+      </ProtectedRoute>
     </Provider>
   );
 }

@@ -52,7 +52,6 @@ export interface TxWithFiles extends Transaction {
 export interface Investment extends Entity, Labelled, ValueField {}
 
 export interface DashboardData {
-  user: User;
   balance: Balance;
   transactions: Transaction[];
   investments: Investment[];
@@ -114,13 +113,11 @@ export interface UserInfo {
   password: string;
 }
 
-
 export interface BalanceState {
   value: number;
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
-
 
 /* ---------- FORM DATA ------------------------------------------------------ */
 export interface NewTransactionData {

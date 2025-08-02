@@ -9,6 +9,11 @@ import { LoginData } from "../../interfaces/dashboard";
 import { loginValidations } from "../../utils/forms-validations/formValidations";
 import clsx from "clsx";
 import "../../../styles/globals.css";
+import { Provider } from "react-redux";
+import { store } from "@store/store";
+import SnackbarProvider from "@store/SnackbarProvider";
+import { useAuth } from "@hooks/use-auth";
+
 // 👇 Alternative to useId in React 17
 let globalId = 0;
 function generateId() {
@@ -23,11 +28,14 @@ const labelStyles = tw`mb-2 text-sm font-medium text-gray-700`;
 const errorTextStyles = tw`text-red-500 text-sm mt-1`;
 const passwordToggleStyles = tw`px-4 focus:outline-none`;
 const submitButtonStyles = tw`w-full py-3 rounded-lg bg-green-600 hover:bg-green-700 text-white`;
+const returnButtonStyles = tw`w-full py-3 rounded-lg`;
 
-export default function LoginForm() {
+function LoginFormContent() {
   const [showPassword, setShowPassword] = useState(false);
   const emailErrorId = useRef(generateId()).current;
   const passwordErrorId = useRef(generateId()).current;
+
+  const { login, loadingAuth } = useAuth();
 
   const {
     register,
@@ -40,8 +48,10 @@ export default function LoginForm() {
 
   const passwordValue = watch("password", "");
 
-  const processSubmit = async (): Promise<void> => {
-    await new Promise((r) => setTimeout(r, 1000)); // API simulation
+  const processSubmit = async (data: LoginData) => {
+    const { email, password } = data;
+
+    login(email, password);
   };
 
   return (
@@ -133,11 +143,12 @@ export default function LoginForm() {
         </a>
       </Box>
 
-      <Box className={tw`mt-6`}>
+      <Box className={tw`mt-6 flex flex-col gap-4`}>
         <Button
           variant="contained"
           color="success"
           type="submit"
+          loading={loadingAuth}
           disabled={isSubmitting}
           className={submitButtonStyles}
         >
@@ -148,7 +159,22 @@ export default function LoginForm() {
             </span>
           )}
         </Button>
+        <a
+          href={ROUTES.HOME}
+          className={tw`w-full text-center text-sm text-green-600 underline`}
+        >
+          Voltar à página inicial
+        </a>
       </Box>
     </form>
+  );
+}
+
+export default function LoginForm() {
+  return (
+    <Provider store={store}>
+      <SnackbarProvider />
+      <LoginFormContent />
+    </Provider>
   );
 }

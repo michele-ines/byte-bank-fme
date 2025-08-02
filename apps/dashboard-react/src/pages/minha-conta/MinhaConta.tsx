@@ -1,9 +1,12 @@
+import { Provider } from "react-redux";
 import { CardMyAccount } from "../../../../components/my-cards/card-my-account/card-my-account";
 import { Box } from "../../../../components/ui";
 import bannerIlustracao from "../../../../components/ui/imgs/dash-card-my-account/ilustracao-card-accout.svg";
 import { tw } from "twind";
+import { store } from "@store/store";
+import { ProtectedRoute } from "../../ProtectedRoute";
 
-export default function MyAccountPage() {
+function MyAccountPageContent() {
   return (
     <Box
       className={tw`flex items-start justify-center min-h-screen p-4`}
@@ -32,5 +35,15 @@ export default function MyAccountPage() {
         </Box>
       </Box>
     </Box>
+  );
+}
+
+export default function MyAccountPage() {
+  return (
+    <Provider store={store}>
+      <ProtectedRoute>
+        <MyAccountPageContent />
+      </ProtectedRoute>
+    </Provider>
   );
 }

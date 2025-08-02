@@ -12,6 +12,11 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import { Provider } from "react-redux";
+import { store } from "@store/store";
+import SnackbarProvider from "../../../store/SnackbarProvider";
+import { useAuth } from "../../../hooks/use-auth";
+import { LogoutOutlined } from "@mui/icons-material";
 
 const ROUTES = {
   ROOT: "/home",
@@ -22,13 +27,21 @@ const ROUTES = {
   OTHER_SERVICES: "/outros-servicos",
 };
 
-export default function HeaderPrivate() {
+function HeaderPrivateContent() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const openMenu = (e: React.MouseEvent<HTMLElement>) =>
     setAnchorEl(e.currentTarget);
   const closeMenu = () => setAnchorEl(null);
+
+  const [anchorElMyAccount, setAnchorElMyAccount] =
+    useState<HTMLElement | null>(null);
+  const openMenuMyAccount = (e: React.MouseEvent<HTMLElement>) =>
+    setAnchorElMyAccount(e.currentTarget);
+  const closeMenuMyAccount = () => setAnchorElMyAccount(null);
+
+  const { getCurrentUser, logout } = useAuth();
 
   const isActive = (route: string) =>
     pathname === route || pathname.startsWith(route + "/");
@@ -163,15 +176,13 @@ export default function HeaderPrivate() {
               marginRight: 1,
               display: { xs: "none", md: "flex" },
             }}
-            onClick={() => navigate(ROUTES.MY_ACCOUNT)}
-
           >
-            Joana da Silva Oliveira
+            {getCurrentUser()?.name}
           </Typography>
           <IconButton
             size="large"
-            aria-label="user account"
-            onClick={() => navigate(ROUTES.MY_ACCOUNT)}
+            id="minha-conta-menu"
+            onClick={openMenuMyAccount}
             sx={{
               width: 32,
               height: 32,
@@ -189,8 +200,49 @@ export default function HeaderPrivate() {
           >
             <PermIdentityIcon fontSize="small" className="userIcon" />
           </IconButton>
+          <Menu
+            anchorEl={anchorElMyAccount}
+            open={Boolean(anchorElMyAccount)}
+            onClose={closeMenuMyAccount}
+          >
+            <MenuItem
+              onClick={() => {
+                closeMenuMyAccount();
+                navigate(ROUTES.MY_ACCOUNT);
+              }}
+              sx={{
+                display: "flex",
+                gap: 1,
+              }}
+            >
+              <PermIdentityIcon />
+              Minha conta
+            </MenuItem>
+            <MenuItem
+              sx={{
+                display: "flex",
+                gap: 1,
+              }}
+              onClick={() => {
+                closeMenuMyAccount();
+                logout();
+              }}
+            >
+              <LogoutOutlined />
+              Sair
+            </MenuItem>
+          </Menu>
         </Box>
       </Toolbar>
     </AppBar>
+  );
+}
+
+export default function HeaderPrivate() {
+  return (
+    <Provider store={store}>
+      <SnackbarProvider />
+      <HeaderPrivateContent />
+    </Provider>
   );
 }

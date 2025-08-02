@@ -31,6 +31,7 @@ import SavingsGoalWidget from "../../../../components/widgets/savings-goal-widge
 import SpendingAlertWidget from "../../../../components/widgets/spending-alert-widget";
 import FinancialChart from "../../../../components/charts/financialChart";
 import WidgetPreferencesButton from "../../../../components/widgets/widget-preferences-button";
+import { ProtectedRoute } from "../../ProtectedRoute";
 
 /* -----------------------------------------------------------
  * Helpers para garantir que 'valor' seja sempre number
@@ -146,10 +147,7 @@ const DashboardContent = () => {
         <Box className={tw`grid grid-cols-3 gap-6`}>
           {/* coluna esquerda */}
           <Box className={tw`flex flex-col gap-6 w-ful col-span-2`}>
-            <CardBalance
-              user={data.user}
-              balance={{ ...data.balance, value: balanceValue }}
-            />
+            <CardBalance balance={{ ...data.balance, value: balanceValue }} />
             <Box className="relative h-64 md:h-80">
               <FinancialChart />
             </Box>
@@ -192,7 +190,9 @@ const DashboardContent = () => {
 const DashboardPage = () => {
   return (
     <Provider store={store}>
-      <DashboardContent />
+      <ProtectedRoute>
+        <DashboardContent />
+      </ProtectedRoute>
     </Provider>
   );
 };

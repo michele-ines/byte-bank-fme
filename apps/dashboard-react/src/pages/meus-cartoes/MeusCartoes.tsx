@@ -30,14 +30,13 @@ import PersonalCards from "../../../../components/my-cards/personal-cards/person
 import SavingsGoalWidget from "../../../../components/widgets/savings-goal-widget";
 import SpendingAlertWidget from "../../../../components/widgets/spending-alert-widget";
 
-
 import CardListExtract from "@my-cards/card-list-extract/card-list-extract";
-
 
 import dashboardData from "../../../../mocks/dashboard-data.json";
 import FinancialChart from "../../../../components/charts/financialChart";
 import WidgetPreferencesButton from "../../../../components/widgets/widget-preferences-button";
 import { tw } from "twind";
+import { ProtectedRoute } from "../../ProtectedRoute";
 
 /* -----------------------------------------------------------
  * Helpers para garantir que 'valor' seja sempre number
@@ -75,7 +74,6 @@ const normalizeToTxWithFiles = (txs: TransactionNum[]): TxWithFiles[] =>
     // se seu TxWithFiles exige 'novosAnexos', garanta default:
     novosAnexos: (tx as unknown as { novosAnexos?: File[] }).novosAnexos ?? [],
   }));
-
 
 function MeusCartoes() {
   const data: DashboardData = dashboardData as DashboardData;
@@ -147,10 +145,7 @@ function MeusCartoes() {
           {/* coluna esquerda */}
           <Box className={tw`flex flex-col gap-6 w-ful col-span-2`}>
             {/* 1) Balance agora usa o valor do Redux */}
-            <CardBalance
-              user={data.user}
-              balance={{ ...data.balance, value: balanceValue }}
-            />
+            <CardBalance balance={{ ...data.balance, value: balanceValue }} />
             <FinancialChart />
             {preferences.spendingAlert && (
               <SpendingAlertWidget limit={2000} transactions={transactions} />
@@ -189,7 +184,9 @@ function MeusCartoes() {
 export default function MeusCartoesPage() {
   return (
     <Provider store={store}>
-      <MeusCartoes />
+      <ProtectedRoute>
+        <MeusCartoes />
+      </ProtectedRoute>
     </Provider>
   );
 }

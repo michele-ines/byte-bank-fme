@@ -3,7 +3,6 @@ import { tw } from "twind";
 import React, { useState, useRef } from "react";
 import clsx from "clsx";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -15,12 +14,17 @@ import {
 import { RegisterData } from "../../interfaces/dashboard";
 import { registerValidations } from "../../utils/forms-validations/formValidations";
 import "../../../styles/globals.css";
+import { useAuth } from "@hooks/use-auth";
+import { Provider } from "react-redux";
+import { store } from "@store/store";
+import SnackbarProvider from "@store/SnackbarProvider";
+import { ROUTES } from "apps/config-routes/routes";
+
 // Função auxiliar para gerar IDs únicos
 let globalId = 0;
 const generateId = () => `form-id-${++globalId}`;
 
-export default function RegisterForm() {
-  const navigate = useNavigate();
+function RegisterFormContent() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -29,6 +33,8 @@ export default function RegisterForm() {
   const passwordId = useRef(generateId()).current;
   const confirmPasswordId = useRef(generateId()).current;
   const termsId = useRef(generateId()).current;
+
+  const { handleRegister, loadingAuth } = useAuth();
 
   const {
     register,
@@ -44,8 +50,7 @@ export default function RegisterForm() {
   const confirmValue = watch("confirmPassword", "");
 
   const onSubmit = (data: RegisterData) => {
-    console.log("Cadastro:", data);
-    // navigate('/dashboard');
+    handleRegister(data);
   };
 
   // Classes Twind para estilos reutilizáveis
@@ -241,9 +246,10 @@ export default function RegisterForm() {
       </Box>
 
       {/* Botão de Submit */}
-      <Box className={tw`mt-6`}>
+      <Box className={tw`mt-6 flex flex-col gap-4`}>
         <Button
           type="submit"
+          loading={loadingAuth}
           variant="contained"
           style={{
             background: "var(--byte-color-orange-500)",
@@ -253,7 +259,22 @@ export default function RegisterForm() {
         >
           Criar conta
         </Button>
+        <a
+          href={ROUTES.HOME}
+          className={tw`w-full text-center text-sm text-[#FF5131] underline`}
+        >
+          Voltar à página inicial
+        </a>{" "}
       </Box>
     </form>
+  );
+}
+
+export default function RegisterForm() {
+  return (
+    <Provider store={store}>
+      <SnackbarProvider />
+      <RegisterFormContent />
+    </Provider>
   );
 }
