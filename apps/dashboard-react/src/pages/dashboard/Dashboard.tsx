@@ -31,6 +31,7 @@ import SavingsGoalWidget from "../../../../components/widgets/savings-goal-widge
 import SpendingAlertWidget from "../../../../components/widgets/spending-alert-widget";
 import FinancialChart from "../../../../components/charts/financialChart";
 import WidgetPreferencesButton from "../../../../components/widgets/widget-preferences-button";
+import { ProtectedRoute } from "../../ProtectedRoute";
 
 /* -----------------------------------------------------------
  * Helpers para garantir que 'valor' seja sempre number
@@ -189,7 +190,9 @@ const DashboardContent = () => {
 const DashboardPage = () => {
   return (
     <Provider store={store}>
-      <DashboardContent />
+      <ProtectedRoute>
+        <DashboardContent />
+      </ProtectedRoute>
     </Provider>
   );
 };

@@ -32,6 +32,7 @@ import { tw } from "twind";
 import CardListExtract from "@my-cards/card-list-extract/card-list-extract";
 
 import { useDashboardData } from "@hooks/use-dashboard-data";
+import { ProtectedRoute } from "../../ProtectedRoute";
 
 /* -----------------------------------------------------------
  * Helpers para garantir que 'valor' seja sempre number
@@ -172,7 +173,9 @@ function OutrosServicosContent() {
 export default function OutrosServicos() {
   return (
     <Provider store={store}>
-      <OutrosServicosContent />
+      <ProtectedRoute>
+        <OutrosServicosContent />
+      </ProtectedRoute>
     </Provider>
   );
 }

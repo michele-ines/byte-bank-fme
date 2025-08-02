@@ -33,6 +33,7 @@ import FinancialChart from "../../../../components/charts/financialChart";
 import WidgetPreferencesButton from "../../../../components/widgets/widget-preferences-button";
 import { tw } from "twind";
 import CardListExtract from "@my-cards/card-list-extract/card-list-extract";
+import { ProtectedRoute } from "../../ProtectedRoute";
 
 /* -----------------------------------------------------------
  * Helpers para garantir que 'valor' seja sempre number
@@ -182,7 +183,9 @@ function InvestimentosPage() {
 export default function Investimentos() {
   return (
     <Provider store={store}>
-      <InvestimentosPage />
+      <ProtectedRoute>
+        <InvestimentosPage />
+      </ProtectedRoute>
     </Provider>
   );
 }

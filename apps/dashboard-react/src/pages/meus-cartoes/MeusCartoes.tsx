@@ -36,6 +36,7 @@ import dashboardData from "../../../../mocks/dashboard-data.json";
 import FinancialChart from "../../../../components/charts/financialChart";
 import WidgetPreferencesButton from "../../../../components/widgets/widget-preferences-button";
 import { tw } from "twind";
+import { ProtectedRoute } from "../../ProtectedRoute";
 
 /* -----------------------------------------------------------
  * Helpers para garantir que 'valor' seja sempre number
@@ -183,7 +184,9 @@ function MeusCartoes() {
 export default function MeusCartoesPage() {
   return (
     <Provider store={store}>
-      <MeusCartoes />
+      <ProtectedRoute>
+        <MeusCartoes />
+      </ProtectedRoute>
     </Provider>
   );
 }
