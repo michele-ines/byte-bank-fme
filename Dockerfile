@@ -107,6 +107,12 @@ RUN cp -r apps/footer-angular/dist/* apps/root/dist/footer/ || true
 RUN mkdir -p apps/root/dist/header
 RUN cp -r apps/header-react/public/header/* apps/root/dist/header/ || true
 
+# Criar diretório tmp com permissões corretas antes de mudar para usuário não-root
+RUN mkdir -p tmp && chown -R appuser:nodejs tmp && chmod 755 tmp
+
+# Dar permissões de escrita para o usuário appuser no diretório de trabalho
+RUN chown -R appuser:nodejs /app
+
 # Mudar para usuário não-root
 USER appuser
 
