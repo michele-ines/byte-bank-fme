@@ -9,6 +9,7 @@ module.exports = {
 
   devServer: {
     port: 3002,
+    host: '0.0.0.0',
     historyApiFallback: true,
     headers: { "Access-Control-Allow-Origin": "*" },
     static: { directory: path.resolve(__dirname, "public") },

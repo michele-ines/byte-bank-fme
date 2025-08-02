@@ -30,6 +30,8 @@
     "apps/**/*.ts",
     "apps/**/*.tsx",
     "apps/**/*.d.ts",
+    "apps/**/*",
+     "**/*.d.ts",
     // "store/**/*",
     // "styles/**/*"
   ]
