@@ -183,10 +183,8 @@ function MeusCartoes() {
 //
 export default function MeusCartoesPage() {
   return (
-    <Provider store={store}>
-      <ProtectedRoute>
-        <MeusCartoes />
-      </ProtectedRoute>
-    </Provider>
+    <ProtectedRoute>
+      <MeusCartoes />
+    </ProtectedRoute>
   );
 }
