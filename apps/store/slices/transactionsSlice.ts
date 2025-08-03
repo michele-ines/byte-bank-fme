@@ -37,7 +37,15 @@ export const createNewTransaction = createAsyncThunk<Transaction, NewTransaction
   "transactions/createNew",
   async (transactionData, { dispatch, rejectWithValue }) => {
     try {
-      const payload = { ...transactionData, valor: parseBRL(transactionData.valor) };
+      const now = new Date().toISOString();
+
+      const payload = {
+        ...transactionData,
+        valor: parseBRL(transactionData.valor),
+        createdAt: now,
+        updatedAt: now,
+      };
+
       const res = await fetch("https://6888d5f9adf0e59551bb9b6c.mockapi.io/transacoes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
