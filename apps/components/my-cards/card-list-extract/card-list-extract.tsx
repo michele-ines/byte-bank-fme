@@ -176,7 +176,7 @@ const CardListExtract: React.FC<CardListExtractProps> = ({
               // Cria o novo objeto de anexo
               const novoAnexo: Attachment = {
                 name: nomeDoArquivoSalvo, // O nome retornado pelo backend
-                url: `http://localhost:4000/api/download/${nomeDoArquivoSalvo}`, // O link para download
+                url: `http://localhost:3000/api/download/${nomeDoArquivoSalvo}`, // O link para download
               };
               // Adiciona o novo anexo à lista de anexos existentes
               return { ...tx, anexos: [...(tx.anexos || []), novoAnexo] };
