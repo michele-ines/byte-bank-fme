@@ -17,7 +17,7 @@ export const uploadFile = async (file: File): Promise<string | null> => {
   formData.append('anexo', arquivoRenomeado);
 
   try {
-    const response = await fetch('http://localhost:3000/api/upload', {
+    const response = await fetch('http://localhost:8080/api/upload', {
       method: 'POST',
       body: formData,
     });
@@ -33,7 +33,7 @@ export const uploadFile = async (file: File): Promise<string | null> => {
 
 export const deleteFile = async (fileName: string): Promise<boolean> => {
   try {
-    const response = await fetch(`http://localhost:3000/api/delete/${fileName}`, {
+    const response = await fetch(`http://localhost:8080/api/delete/${fileName}`, {
       method: 'DELETE',
     });
 
