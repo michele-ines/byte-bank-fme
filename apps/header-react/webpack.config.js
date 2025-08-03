@@ -16,6 +16,7 @@ module.exports = {
 
   devServer: {
     port: 3001, // ← header roda na 3001 (confere com o root)
+    host: '0.0.0.0',
     historyApiFallback: true,
     headers: { "Access-Control-Allow-Origin": "*" },
     static: { directory: path.resolve(__dirname, "public") },

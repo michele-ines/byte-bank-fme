@@ -1,4 +1,3 @@
-import "./styles.scss";
 import { Component, Input } from "@angular/core";
 const logoUrl = new URL("../../../components/ui/imgs/footer/ft-logo.svg", import.meta.url).href;
 const instaUrl = new URL("../../../components/ui/imgs/footer/ft-instagram.svg", import.meta.url)  .href;
@@ -45,7 +44,66 @@ const waUrl = new URL("../../../components/ui/imgs/footer/ft-whatsapp.svg", impo
       </div>
     </footer>
   `,
-  styles: [],
+  styles: [`
+    :host {
+      display: block;
+      width: 100%;
+    }
+
+    footer {
+      color: #ffffff;
+      padding: 32px 0;
+    }
+
+    .footer-public {
+      background: #000000;
+    }
+
+    .footer-private {
+      background: #004D61;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+
+    h4 {
+      margin: 0 0 12px 0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li + li {
+      margin-top: 4px;
+    }
+
+    .brand {
+      margin-top: 4px;
+      color: #47a138;
+      font-weight: 700;
+    }
+
+    .social {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+      font-size: 1.2rem;
+    }  
+`]
 })
 export class FooterComponent {
   @Input("data-theme") theme: "public" | "private" = "public";
