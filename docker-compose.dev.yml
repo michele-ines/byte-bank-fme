@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  byte-bank-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: byte-bank-dev
+    ports:
+      - "3000:3000"  # ROOT - host principal
+      - "3001:3001"  # HEADER - cabeçalho
+      - "3002:3002"  # HOME - página inicial
+      - "3003:3003"  # DASHBOARD - dashboard
+      - "4200:4200"  # FOOTER - rodapé (Angular)
+    volumes:
+      # Mapear código fonte para hot reload
+      - .:/app
+      # Preservar node_modules do container (evita conflitos)
+      - /app/node_modules
+      - /app/apps/root/node_modules
+      - /app/apps/header-react/node_modules
+      - /app/apps/home-react/node_modules
+      - /app/apps/dashboard-react/node_modules
+      - /app/apps/footer-angular/node_modules
+      # Mapear diretório de uploads
+      - ./tmp:/app/tmp
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true    # Para hot reload funcionar no Docker
+      - WATCHPACK_POLLING=true      # Para webpack watch funcionar
+      - FAST_REFRESH=true           # Para React Fast Refresh
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s

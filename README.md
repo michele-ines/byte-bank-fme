@@ -31,6 +31,111 @@ byte-bank-fme/
 
 ---
 
+## Docker
+
+Este projeto inclui dois Dockerfiles para diferentes cenários de uso:
+
+### 🐳 Dockerfile (Produção)
+
+O `Dockerfile` principal é otimizado para **produção** e deploy na **Railway Cloud**:
+
+- **Multi-stage build** para otimização de tamanho
+- **Node.js 22-alpine** como base
+- **Build completo** de todos os 5 microfrontends
+- **Express server** (`server.js`) para servir arquivos estáticos
+- **Health check** integrado
+- **Usuário não-root** para segurança
+- **Graceful shutdown** para Railway
+
+#### Como usar (Produção):
+
+```bash
+# Build da imagem de produção
+docker build -t byte-bank-prod .
+
+# Executar container de produção
+docker run -p 3000:3000 byte-bank-prod
+```
+
+### 🔧 Dockerfile.dev (Desenvolvimento)
+
+O `Dockerfile.dev` é otimizado para **desenvolvimento local** com **hot reload**:
+
+- **Single-stage build** mais simples
+- **Todas as portas expostas** (3000, 3001, 3002, 3003, 4200)
+- **Hot reload** via volumes mapeados
+- **Ferramentas de desenvolvimento** incluídas
+- **npm run start:dev** executa todos os MFEs simultaneamente
+
+#### Como usar (Desenvolvimento):
+
+**🚀 Opção 1: Docker Compose (RECOMENDADO)**
+```bash
+# Executar com hot reload (um comando apenas!)
+docker-compose -f docker-compose.dev.yml up
+
+# Para rebuild da imagem (quando mudar dependências)
+docker-compose -f docker-compose.dev.yml up --build
+
+# Para parar
+docker-compose -f docker-compose.dev.yml down
+```
+
+**⚡ Opção 2: Docker Run com Hot Reload**
+```bash
+# Build da imagem primeiro
+docker build -f Dockerfile.dev -t byte-bank-dev .
+
+# Windows (PowerShell)
+docker run -v ${PWD}:/app -v /app/node_modules -p 3000:3000 -p 3001:3001 -p 3002:3002 -p 3003:3003 -p 4200:4200 byte-bank-dev
+
+# Linux/Mac
+docker run -v $(pwd):/app -v /app/node_modules -p 3000:3000 -p 3001:3001 -p 3002:3002 -p 3003:3003 -p 4200:4200 byte-bank-dev
+```
+
+**🔧 Opção 3: Docker Run (básico, sem hot reload)**
+```bash
+docker build -f Dockerfile.dev -t byte-bank-dev .
+docker run -p 3000:3000 -p 3001:3001 -p 3002:3002 -p 3003:3003 -p 4200:4200 byte-bank-dev
+```
+
+### 🔍 Diferenças entre Produção e Desenvolvimento
+
+| Aspecto | Dockerfile (Prod) | Dockerfile.dev (Dev) |
+|---------|-------------------|----------------------|
+| **Build** | Multi-stage otimizado | Single-stage simples |
+| **Tamanho** | ~200MB (otimizado) | ~500MB (com dev tools) |
+| **Hot Reload** | ❌ Não | ✅ Sim (com volumes) |
+| **Portas** | Apenas 3000 | Todas (3000-3003, 4200) |
+| **Uso** | Deploy/Produção | Desenvolvimento local |
+| **Comando** | `node server.js` | `npm run start:dev` |
+
+### 🚀 URLs dos Microfrontends (Desenvolvimento)
+
+Quando usar o `Dockerfile.dev`, todos os MFEs ficam disponíveis:
+
+- **ROOT (Host)**: http://localhost:3000
+- **HEADER**: http://localhost:3001  
+- **HOME**: http://localhost:3002
+- **DASHBOARD**: http://localhost:3003
+- **FOOTER**: http://localhost:4200
+
+### 🔧 Troubleshooting Docker
+
+**Hot reload não funciona?**
+- Certifique-se de usar os volumes corretos
+- No Windows, pode ser necessário habilitar file sharing no Docker Desktop
+
+**Porta já em uso?**
+- Pare outros processos: `npm run start:dev` local
+- Ou mude as portas no comando docker run
+
+**Build muito lento?**
+- Use `.dockerignore` para excluir `node_modules` e `dist/`
+- O cache do Docker ajuda em builds subsequentes
+
+---
+
 ## Pré‑requisitos
 
 1. **Node.js ≥ 18** e **npm ≥ 9** instalados.  

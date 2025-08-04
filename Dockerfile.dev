@@ -1,0 +1,56 @@
+# ================================
+# Dockerfile.dev para Desenvolvimento Local
+# Microfrontend com Module Federation
+# Com suporte a Hot Reload
+# ================================
+
+# Base image
+FROM node:22-alpine
+
+# Definir diretório de trabalho
+WORKDIR /app
+
+# Instalar dependências do sistema (Alpine)
+RUN apk add --no-cache libc6-compat curl git
+
+# Definir variáveis de ambiente para desenvolvimento
+ENV NODE_ENV=development
+ENV npm_config_yes=true
+ENV CHOKIDAR_USEPOLLING=true
+ENV WATCHPACK_POLLING=true
+
+# Instalar webpack e webpack-cli globalmente
+RUN npm install -g webpack webpack-cli
+
+# Copiar apenas os arquivos de dependências primeiro (para cache do Docker)
+COPY package*.json ./
+
+# Instalar dependências do workspace root
+RUN npm install
+
+# Copiar arquivos de dependências de cada workspace
+COPY apps/root/package*.json ./apps/root/
+COPY apps/header-react/package*.json ./apps/header-react/
+COPY apps/home-react/package*.json ./apps/home-react/
+COPY apps/dashboard-react/package*.json ./apps/dashboard-react/
+COPY apps/footer-angular/package*.json ./apps/footer-angular/
+
+# Instalar dependências de cada workspace
+RUN cd apps/root && npm install
+RUN cd apps/header-react && npm install
+RUN cd apps/home-react && npm install
+RUN cd apps/dashboard-react && npm install
+RUN cd apps/footer-angular && npm install
+
+# Criar diretório tmp para uploads
+RUN mkdir -p tmp && chmod 755 tmp
+
+# Expor todas as portas dos microfrontends
+EXPOSE 3000 3001 3002 3003 4200
+
+# Health check para desenvolvimento
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
+
+# Comando para desenvolvimento - roda todos os MFEs simultaneamente
+CMD ["npm", "run", "start:dev"]
